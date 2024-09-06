@@ -6,15 +6,15 @@ import org.springframework.stereotype.*;
 public class ProductMapper {
     public ProductDto mapProductEntityToDto(Product entity) {
         return new ProductDto(
-                entity.getId(),
+                entity.getProductId(),
                 entity.getProductName(),
                 entity.getDescription(),
                 entity.getPrice(),
                 entity.getCurrency(),
-                entity.getImageUrl(),
-                entity.getCategory(),
+                entity.getImageId(),
+                entity.getCategoryId(),
                 entity.getSupplier(),
-                entity.getQuantity(),
+                entity.getStock(),
                 entity.getSize()
         );
     }
@@ -25,10 +25,10 @@ public class ProductMapper {
                 dto.description(),
                 dto.price(),
                 dto.currency(),
-                dto.imageUrl(),
-                dto.category(),
+                dto.imageId(),
+                dto.categoryId(),
                 dto.supplier(),
-                dto.quantity(),
+                dto.stock(),
                 dto.size()
         );
     }

@@ -15,13 +15,13 @@ public record NewProductDto(
         BigDecimal price,
         @NotBlank(message = "Currency cannot be empty")
         String currency,
-        String imageUrl,
-        @NotBlank(message = "Category cannot be empty")
-        String category,
+        int imageId,
+        @NotNull(message = "Category cannot be empty")
+        int categoryId,
         @NotBlank(message = "Supplier field cannot be empty")
         String supplier,
         @NotNull(message = "Quantity cannot be empty")
-        long quantity,
+        long stock,
         @NotNull
         Sizes size
 ) {

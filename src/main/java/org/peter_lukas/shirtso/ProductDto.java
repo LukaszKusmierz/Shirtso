@@ -4,16 +4,16 @@ import java.math.*;
 import java.util.*;
 
 public record ProductDto (
-    UUID id,
-    String productName,
-    String description,
-    BigDecimal price,
-    String currency,
-    String imageUrl,
-    String category,
-    String supplier,
-    long quantity,
-    Sizes size
+        UUID id,
+        String productName,
+        String description,
+        BigDecimal price,
+        String currency,
+        int imageId,
+        int category,
+        String supplier,
+        long quantity,
+        Sizes size
 ) {
 
 }

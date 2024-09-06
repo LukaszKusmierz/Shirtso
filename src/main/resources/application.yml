@@ -1,1 +1,14 @@
-
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/shirtso
+    username: postgres
+    password: 12345
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    open-in-view: false
+    database: postgresql
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+  flyway:
+    locations: db/migration

@@ -14,6 +14,4 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     List<Product> findAllByOrderByProductNameAsc(Pageable pageable);
 
-    @Query("SELECT p FROM Product p WHERE p.category = :category")
-    List<Product> findAllByCategory(Sizes category);
 }
