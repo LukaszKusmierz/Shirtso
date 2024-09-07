@@ -4,15 +4,15 @@ import java.math.*;
 import java.util.*;
 
 public record ProductDto (
-        UUID id,
+        UUID productId,
         String productName,
         String description,
         BigDecimal price,
         String currency,
         int imageId,
-        int category,
+        int categoryId,
         String supplier,
-        long quantity,
+        long stock,
         Sizes size
 ) {
 

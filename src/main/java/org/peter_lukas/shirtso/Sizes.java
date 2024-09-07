@@ -1,5 +1,5 @@
 package org.peter_lukas.shirtso;
 
 public enum Sizes {
-    S, M, L, XL, XXL
+    XS, S, M, L, XL, XXL, XXXL
 }
