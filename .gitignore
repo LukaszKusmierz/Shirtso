@@ -1,8 +1,9 @@
 HELP.md
 target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+.mvn/wrapper/maven-wrapper.jar
+**/src/main/**/target/
+**/src/test/**/target/
+
 
 ### STS ###
 .apt_generated
@@ -18,6 +19,11 @@ target/
 *.iws
 *.iml
 *.ipr
+
+### YAML ###
+src/main/resources/application.yml
+
+
 
 ### NetBeans ###
 /nbproject/private/
