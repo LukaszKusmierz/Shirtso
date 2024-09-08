@@ -1,4 +1,4 @@
-package org.peter_lukas.shirtso;
+package org.peter_lukas.shirtso.product;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
@@ -14,4 +14,5 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     List<Product> findAllByOrderByProductNameAsc(Pageable pageable);
 
+    List<Product> findAllByCategoryId(int categoryId);
 }

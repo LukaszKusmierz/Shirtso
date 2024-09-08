@@ -1,0 +1,11 @@
+### wszystkie
+
+GET localhost:8080/api/products
+
+### podzielone na strony
+
+GET localhost:8080/api/products?page=0&size=5
+
+### wg categoryId
+
+GET localhost:8080/api/products?categoryId=8

@@ -1,4 +1,4 @@
-package org.peter_lukas.shirtso;
+package org.peter_lukas.shirtso.product;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,13 +15,13 @@ public class ProductService {
         this.productMapper = productMapper;
     }
 
-    public List<ProductDto> getAllProducts() {
+    public List<ProductDto> getAllProductsPage() {
         return productRepository.findAllByOrderByProductNameAsc().stream()
                 .map(productMapper::mapProductEntityToDto)
                 .toList();
     }
 
-    public List<ProductDto> getAllProducts(Pageable pageable) {
+    public List<ProductDto> getAllProductsPage(Pageable pageable) {
         return productRepository.findAllByOrderByProductNameAsc(pageable).stream()
                 .map(productMapper::mapProductEntityToDto)
                 .toList();
@@ -30,5 +30,11 @@ public class ProductService {
     public ProductDto addNewProduct(NewProductDto newProduct) {
         Product addedProduct = productRepository.save(productMapper.mapNewProductDtoToEntity(newProduct));
         return productMapper.mapProductEntityToDto(addedProduct);
+    }
+
+    public List<ProductDto> getProductByCategoryId(int categoryId) {
+        return productRepository.findAllByCategoryId(categoryId).stream()
+                .map(productMapper::mapProductEntityToDto)
+                .toList();
     }
 }

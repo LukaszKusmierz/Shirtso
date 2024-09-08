@@ -1,6 +1,5 @@
-package org.peter_lukas.shirtso;
+package org.peter_lukas.shirtso.product;
 
-import jakarta.validation.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,12 +16,12 @@ public class ProductController {
     }
     @GetMapping
     public List<ProductDto> getProducts() {
-        return productService.getAllProducts();
+        return productService.getAllProductsPage();
     }
 
     @GetMapping(params = {"page", "size"})
     public List<ProductDto>getProducts(Pageable pageable) {
-        return productService.getAllProducts(pageable);
+        return productService.getAllProductsPage(pageable);
     }
 
     @PostMapping
@@ -30,4 +29,8 @@ public class ProductController {
         return productService.addNewProduct(newProduct);
     }
 
+    @GetMapping(params = {"categoryId"})
+    public List<ProductDto> getProducts(@RequestParam int categoryId) {
+        return productService.getProductByCategoryId(categoryId);
+    }
 }

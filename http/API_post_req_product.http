@@ -1,0 +1,458 @@
+### product_spodnie
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Spodnie",
+  "description": "Dżinsowe spodnie męskie, 'rurki'",
+  "price": 519.99,
+  "currency": "PLN",
+  "imageId": 112,
+  "categoryId": 1,
+  "supplier": "Kros-jeans Polska",
+  "stock": 2,
+  "size": "XXXL"
+}
+
+###
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Spodnie",
+  "description": "Dżinsowe spodnie męskie, 'rurki'",
+  "price": 519.99,
+  "currency": "PLN",
+  "imageId": 562,
+  "categoryId": 1,
+  "supplier": "Kros-jeans Polska",
+  "stock": 37,
+  "size": "XXL"
+}
+
+###
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Spodnie",
+  "description": "Dżinsowe spodnie męskie, 'rurki'",
+  "price": 519.99,
+  "currency": "PLN",
+  "imageId": 86,
+  "categoryId": 1,
+  "supplier": "Kros-jeans Polska",
+  "stock": 317,
+  "size": "XL"
+}
+
+###
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Spodnie",
+  "description": "Dżinsowe spodnie męskie, 'rurki'",
+  "price": 519.99,
+  "currency": "PLN",
+  "imageId": 88,
+  "categoryId": 1,
+  "supplier": "Kros-jeans Polska",
+  "stock": 107,
+  "size": "L"
+}
+
+###
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Spodnie",
+  "description": "Dżinsowe spodnie męskie, 'rurki'",
+  "price": 519.99,
+  "currency": "PLN",
+  "imageId": 62,
+  "categoryId": 1,
+  "supplier": "Kros-jeans Polska",
+  "stock": 70,
+  "size": "M"
+}
+
+###
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Spodnie",
+  "description": "Dżinsowe spodnie męskie, 'rurki'",
+  "price": 519.99,
+  "currency": "PLN",
+  "imageId": 2212,
+  "categoryId": 1,
+  "supplier": "Kros-jeans Polska",
+  "stock": 9,
+  "size": "S"
+}
+
+###
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Spodnie",
+  "description": "Dżinsowe spodnie męskie, 'rurki'",
+  "price": 519.99,
+  "currency": "PLN",
+  "imageId": 712,
+  "categoryId": 1,
+  "supplier": "Kros-jeans Polska",
+  "stock": 1,
+  "size": "XS"
+}
+
+### product_sweter
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Sweter",
+  "description": "Bawełniany sweter męski z długim rękawem, dostępny w różnych kolorach.",
+  "price": 119.99,
+  "currency": "PLN",
+  "imageId": 9,
+  "categoryId": 3,
+  "supplier": "Best Clothes Ltd",
+  "stock": 2,
+  "size": "XXXL"
+}
+
+###
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Sweter",
+  "description": "Bawełniany sweter męski z długim rękawem, dostępny w różnych kolorach.",
+  "price": 119.99,
+  "currency": "PLN",
+  "imageId": 3,
+  "categoryId": 3,
+  "supplier": "Best Clothes Ltd",
+  "stock": 10,
+  "size": "XXL"
+}
+
+###
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Sweter",
+  "description": "Bawełniany sweter męski z długim rękawem, dostępny w różnych kolorach.",
+  "price": 119.99,
+  "currency": "PLN",
+  "imageId": 4,
+  "categoryId": 3,
+  "supplier": "Best Clothes Ltd",
+  "stock": 22,
+  "size": "XL"
+}
+
+###
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Sweter",
+  "description": "Bawełniany sweter męski z długim rękawem, dostępny w różnych kolorach.",
+  "price": 119.99,
+  "currency": "PLN",
+  "imageId": 38,
+  "categoryId": 3,
+  "supplier": "Best Clothes Ltd",
+  "stock": 41,
+  "size": "L"
+}
+
+###
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Sweter",
+  "description": "Bawełniany sweter męski z długim rękawem, dostępny w różnych kolorach.",
+  "price": 119.99,
+  "currency": "PLN",
+  "imageId": 1,
+  "categoryId": 3,
+  "supplier": "Best Clothes Ltd",
+  "stock": 58,
+  "size": "M"
+}
+
+###
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Sweter",
+  "description": "Bawełniany sweter męski z długim rękawem, dostępny w różnych kolorach.",
+  "price": 119.99,
+  "currency": "PLN",
+  "imageId": 16,
+  "categoryId": 3,
+  "supplier": "Best Clothes Ltd",
+  "stock": 9,
+  "size": "S"
+}
+
+###
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Sweter",
+  "description": "Bawełniany sweter męski z długim rękawem, dostępny w różnych kolorach.",
+  "price": 119.99,
+  "currency": "PLN",
+  "imageId": 79,
+  "categoryId": 3,
+  "supplier": "Best Clothes Ltd",
+  "stock": 17,
+  "size": "XS"
+}
+
+### product_marynarka
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Marynarka",
+  "description": "Marynarka męska, bawełniana w 'szkocką kratę', dostępna w różnych kolorach",
+  "price": 630.00,
+  "currency": "PLN",
+  "imageId": 308,
+  "categoryId": 8,
+  "supplier": "Dobler-Fashion",
+  "stock": 1,
+  "size": "XXL"
+}
+
+###
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Marynarka",
+  "description": "Marynarka męska, bawełniana w 'szkocką kratę', dostępna w różnych kolorach",
+  "price": 630.00,
+  "currency": "PLN",
+  "imageId": 309,
+  "categoryId": 8,
+  "supplier": "Dobler-Fashion",
+  "stock": 12,
+  "size": "XL"
+}
+
+###
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Marynarka",
+  "description": "Marynarka męska, bawełniana w 'szkocką kratę', dostępna w różnych kolorach",
+  "price": 630.00,
+  "currency": "PLN",
+  "imageId": 310,
+  "categoryId": 8,
+  "supplier": "Dobler-Fashion",
+  "stock": 6,
+  "size": "L"
+}
+
+###
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Marynarka",
+  "description": "Marynarka męska, bawełniana w 'szkocką kratę', dostępna w różnych kolorach",
+  "price": 630.00,
+  "currency": "PLN",
+  "imageId": 311,
+  "categoryId": 8,
+  "supplier": "Dobler-Fashion",
+  "stock": 4,
+  "size": "M"
+}
+
+###
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Marynarka",
+  "description": "Dżinsowe spodnie męskie, 'rurki'",
+  "price": 630.00,
+  "currency": "PLN",
+  "imageId": 312,
+  "categoryId": 8,
+  "supplier": "Dobler-Fashion",
+  "stock": 2,
+  "size": "S"
+}
+
+###
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Marynarka",
+  "description": "Marynarka męska, bawełniana w 'szkocką kratę', dostępna w różnych kolorach",
+  "price": 630.00,
+  "currency": "PLN",
+  "imageId": 313,
+  "categoryId": 8,
+  "supplier": "Dobler-Fashion",
+  "stock": 1,
+  "size": "XS"
+}
+
+### product_plaszcz
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Płaszcz",
+  "description": "Wełniany płaszcz męski do kolan z długim rękawem, dostępny w różnych kolorach.",
+  "price": 1119.99,
+  "currency": "PLN",
+  "imageId": 43,
+  "categoryId": 13,
+  "supplier": "Bytomianka",
+  "stock": 3,
+  "size": "XXXL"
+}
+
+###
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Płaszcz",
+  "description": "Wełniany płaszcz męski do kolan z długim rękawem, dostępny w różnych kolorach.",
+  "price": 1119.99,
+  "currency": "PLN",
+  "imageId": 44,
+  "categoryId": 13,
+  "supplier": "Bytomianka",
+  "stock": 1,
+  "size": "XXL"
+}
+
+###
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Płaszcz",
+  "description": "Wełniany płaszcz męski do kolan z długim rękawem, dostępny w różnych kolorach.",
+  "price": 1119.99,
+  "currency": "PLN",
+  "imageId": 45,
+  "categoryId": 13,
+  "supplier": "Bytomianka",
+  "stock": 4,
+  "size": "XL"
+}
+
+###
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Płaszcz",
+  "description": "Wełniany płaszcz męski do kolan z długim rękawem, dostępny w różnych kolorach.",
+  "price": 1119.99,
+  "currency": "PLN",
+  "imageId": 46,
+  "categoryId": 13,
+  "supplier": "Bytomianka",
+  "stock": 5,
+  "size": "L"
+}
+
+###
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Płaszcz",
+  "description": "Wełniany płaszcz męski do kolan z długim rękawem, dostępny w różnych kolorach.",
+  "price": 1119.99,
+  "currency": "PLN",
+  "imageId": 47,
+  "categoryId": 13,
+  "supplier": "Bytomianka",
+  "stock": 6,
+  "size": "M"
+}
+
+###
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Płaszcz",
+  "description": "Wełniany płaszcz męski do kolan z długim rękawem, dostępny w różnych kolorach.",
+  "price": 1119.99,
+  "currency": "PLN",
+  "imageId": 48,
+  "categoryId": 13,
+  "supplier": "Bytomianka",
+  "stock": 3,
+  "size": "S"
+}
+
+###
+
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Płaszcz",
+  "description": "Wełniany płaszcz męski do kolan z długim rękawem, dostępny w różnych kolorach.",
+  "price": 1119.99,
+  "currency": "PLN",
+  "imageId": 49,
+  "categoryId": 13,
+  "supplier": "Bytomianka",
+  "stock": 7,
+  "size": "XS"
+}
