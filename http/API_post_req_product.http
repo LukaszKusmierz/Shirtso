@@ -237,6 +237,22 @@ content-type: application/json
 }
 
 ### product_marynarka
+POST localhost:8080/api/products
+content-type: application/json
+
+{
+  "productName": "Marynarka",
+  "description": "Marynarka męska, bawełniana w 'szkocką kratę', dostępna w różnych kolorach",
+  "price": 630.00,
+  "currency": "PLN",
+  "imageId": 307,
+  "categoryId": 8,
+  "supplier": "Dobler-Fashion",
+  "stock": 2,
+  "size": "XXXL"
+}
+
+###
 
 POST localhost:8080/api/products
 content-type: application/json
@@ -311,7 +327,7 @@ content-type: application/json
 
 {
   "productName": "Marynarka",
-  "description": "Dżinsowe spodnie męskie, 'rurki'",
+  "description": "Marynarka męska, bawełniana w 'szkocką kratę', dostępna w różnych kolorach",
   "price": 630.00,
   "currency": "PLN",
   "imageId": 312,

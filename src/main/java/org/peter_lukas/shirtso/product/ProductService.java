@@ -37,4 +37,10 @@ public class ProductService {
                 .map(productMapper::mapProductEntityToDto)
                 .toList();
     }
+
+    public List<ProductDto> getProductBySize(Sizes size) {
+        return productRepository.findAllBySize(size).stream()
+                .map(productMapper::mapProductEntityToDto)
+                .toList();
+    }
 }

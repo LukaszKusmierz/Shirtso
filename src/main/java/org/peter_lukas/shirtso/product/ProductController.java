@@ -30,7 +30,12 @@ public class ProductController {
     }
 
     @GetMapping(params = {"categoryId"})
-    public List<ProductDto> getProducts(@RequestParam int categoryId) {
+    public List<ProductDto> getProductsByCategoryId(@RequestParam int categoryId) {
         return productService.getProductByCategoryId(categoryId);
+    }
+
+    @GetMapping(params = {"size"})
+    public List<ProductDto>getProductsBySize(@RequestParam Sizes size) {
+        return productService.getProductBySize(size);
     }
 }

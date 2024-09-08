@@ -15,4 +15,6 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     List<Product> findAllByOrderByProductNameAsc(Pageable pageable);
 
     List<Product> findAllByCategoryId(int categoryId);
+
+    List<Product> findAllBySize(Sizes size);
 }

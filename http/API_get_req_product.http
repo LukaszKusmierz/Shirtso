@@ -9,3 +9,7 @@ GET localhost:8080/api/products?page=0&size=5
 ### wg categoryId
 
 GET localhost:8080/api/products?categoryId=8
+
+### wg size
+
+GET localhost:8080/api/products?size=L
