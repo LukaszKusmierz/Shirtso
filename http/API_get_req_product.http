@@ -13,3 +13,15 @@ GET localhost:8080/api/products?categoryId=8
 ### wg size
 
 GET localhost:8080/api/products?size=L
+
+### wg stock niezerowy
+
+GET localhost:8080/api/products/api/products/in-stock
+
+### wg stock zerowy
+
+GET localhost:8080/api/products/api/products/not-in-stock
+
+### wg stock do zamowienia
+
+GET localhost:8080/api/products/api/products/top-up-stock

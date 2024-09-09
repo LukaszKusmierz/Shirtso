@@ -316,7 +316,7 @@ content-type: application/json
   "imageId": 311,
   "categoryId": 8,
   "supplier": "Dobler-Fashion",
-  "stock": 4,
+  "stock": 0,
   "size": "M"
 }
 
@@ -469,6 +469,6 @@ content-type: application/json
   "imageId": 49,
   "categoryId": 13,
   "supplier": "Bytomianka",
-  "stock": 7,
+  "stock": 0,
   "size": "XS"
 }

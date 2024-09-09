@@ -15,7 +15,7 @@ public class ProductService {
         this.productMapper = productMapper;
     }
 
-    public List<ProductDto> getAllProductsPage() {
+    public List<ProductDto> getAllProducts() {
         return productRepository.findAllByOrderByProductNameAsc().stream()
                 .map(productMapper::mapProductEntityToDto)
                 .toList();
@@ -40,6 +40,24 @@ public class ProductService {
 
     public List<ProductDto> getProductBySize(Sizes size) {
         return productRepository.findAllBySize(size).stream()
+                .map(productMapper::mapProductEntityToDto)
+                .toList();
+    }
+
+    public List<ProductDto> getProductsInStock() {
+        return productRepository.findAllInStock().stream()
+                .map(productMapper::mapProductEntityToDto)
+                .toList();
+    }
+
+    public List<ProductDto> getProductsNotInStock() {
+        return productRepository.findAllZeroStock().stream()
+                .map(productMapper::mapProductEntityToDto)
+                .toList();
+    }
+
+    public List<ProductDto> getProductsTopUpStock() {
+        return productRepository.findAllLessThan3Stock().stream()
                 .map(productMapper::mapProductEntityToDto)
                 .toList();
     }

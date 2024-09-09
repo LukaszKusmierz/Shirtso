@@ -17,4 +17,13 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     List<Product> findAllByCategoryId(int categoryId);
 
     List<Product> findAllBySize(Sizes size);
+
+    @Query("SELECT p FROM Product p WHERE p.stock > 0")
+    List<Product> findAllInStock();
+
+    @Query("SELECT p FROM Product p WHERE p.stock = 0")
+    List<Product> findAllZeroStock();
+
+    @Query("SELECT p FROM Product p WHERE p.stock > 0 AND p.stock < 3")
+    List<Product> findAllLessThan3Stock();
 }
