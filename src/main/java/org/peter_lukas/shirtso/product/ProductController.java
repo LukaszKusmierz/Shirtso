@@ -40,15 +40,20 @@ public class ProductController {
         return productService.getProductBySize(size);
     }
 
-    @GetMapping("/api/products/in-stock")
+    @GetMapping("/in-stock")
     public List<ProductDto> getProductsInStock() { return productService.getProductsInStock();
     }
 
-    @GetMapping("/api/products/not-in-stock")
+    @GetMapping("/not-in-stock")
     public List<ProductDto> getProductsNotInStock() { return productService.getProductsNotInStock();}
 
-    @GetMapping("/api/products/top-up-stock")
+    @GetMapping("/top-up-stock")
     public List<ProductDto> getProductsTopUpStock() {
         return productService.getProductsTopUpStock();
+    }
+
+    @GetMapping(params = {"productName"})
+    public List<ProductDto> getProductsByProductName(@RequestParam String productName) {
+        return productService.getProductsByProductName(productName);
     }
 }

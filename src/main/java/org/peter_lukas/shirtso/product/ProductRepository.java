@@ -26,4 +26,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     @Query("SELECT p FROM Product p WHERE p.stock > 0 AND p.stock < 3")
     List<Product> findAllLessThan3Stock();
+
+    @Query("SELECT p FROM Product p WHERE p.productName = :productName")
+    List<Product> findAllByProductName(String productName);
 }

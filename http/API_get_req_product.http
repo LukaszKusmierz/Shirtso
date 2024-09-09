@@ -16,12 +16,16 @@ GET localhost:8080/api/products?size=L
 
 ### wg stock niezerowy
 
-GET localhost:8080/api/products/api/products/in-stock
+GET localhost:8080/api/products/in-stock
 
 ### wg stock zerowy
 
-GET localhost:8080/api/products/api/products/not-in-stock
+GET localhost:8080/api/products/not-in-stock
 
 ### wg stock do zamowienia
 
-GET localhost:8080/api/products/api/products/top-up-stock
+GET localhost:8080/api/products/top-up-stock
+
+### wg nazwy produktu
+
+GET localhost:8080/api/products?productName=Marynarka

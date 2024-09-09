@@ -61,4 +61,10 @@ public class ProductService {
                 .map(productMapper::mapProductEntityToDto)
                 .toList();
     }
+
+    public List<ProductDto> getProductsByProductName(String productName) {
+        return productRepository.findAllByProductName(productName).stream()
+                .map(productMapper::mapProductEntityToDto)
+                .toList();
+    }
 }
