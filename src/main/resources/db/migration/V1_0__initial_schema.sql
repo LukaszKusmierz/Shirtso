@@ -10,9 +10,7 @@ CREATE TABLE users (
 
 CREATE TABLE categories (
                             category_id SERIAL PRIMARY KEY,
-                            category_name VARCHAR(100) NOT NULL UNIQUE,
-                            parent_category_id INT,
-                            FOREIGN KEY (parent_category_id) REFERENCES categories(category_id)
+                            category_name VARCHAR(100) NOT NULL UNIQUE
 );
 
 CREATE TABLE product (
@@ -33,50 +31,41 @@ CREATE TABLE product_images (
                                 image_id SERIAL PRIMARY KEY,
                                 product_id uuid,
                                 image_url VARCHAR(255) NOT NULL,
-                                FOREIGN KEY (product_id) REFERENCES product(product_id)
+                                FOREIGN KEY (product_id) REFERENCES product (product_id)
 );
 
 CREATE TABLE orders (
                         order_id SERIAL PRIMARY KEY,
                         user_id INT,
+                        product_id uuid,
+                        quantity INT NOT NULL,
+                        price NUMERIC(10, 2) NOT NULL,
                         order_status VARCHAR(50) NOT NULL,
                         total_amount NUMERIC(10, 2) NOT NULL,
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                        FOREIGN KEY (user_id) REFERENCES users(user_id)
-);
-
-CREATE TABLE order_items (
-                             order_item_id SERIAL PRIMARY KEY,
-                             order_id INT,
-                             product_id uuid,
-                             quantity INT NOT NULL,
-                             price NUMERIC(10, 2) NOT NULL,
-                             FOREIGN KEY (order_id) REFERENCES orders(order_id),
-                             FOREIGN KEY (product_id) REFERENCES product(product_id)
+                        FOREIGN KEY (user_id) REFERENCES users(user_id),
+                        FOREIGN KEY (order_id) REFERENCES orders(order_id),
+                        FOREIGN KEY (product_id) REFERENCES product(product_id)
 );
 
 CREATE TABLE shopping_cart (
                                cart_id SERIAL PRIMARY KEY,
                                user_id INT,
+                               product_id uuid,
+                               quantity INT NOT NULL,
+                               total_amount NUMERIC(10, 2) NOT NULL,
                                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                               FOREIGN KEY (user_id) REFERENCES users(user_id)
-);
-
-CREATE TABLE cart_items (
-                            cart_item_id SERIAL PRIMARY KEY,
-                            cart_id INT,
-                            product_id uuid,
-                            quantity INT NOT NULL,
-                            FOREIGN KEY (cart_id) REFERENCES shopping_cart(cart_id),
-                            FOREIGN KEY (product_id) REFERENCES product(product_id)
+                               FOREIGN KEY (user_id) REFERENCES users(user_id),
+                               FOREIGN KEY (cart_id) REFERENCES shopping_cart(cart_id),
+                               FOREIGN KEY (product_id) REFERENCES product(product_id)
 );
 
 CREATE TABLE reviews (
-                         review_id SERIAL PRIMARY KEY,
+                         review_id  SERIAL PRIMARY KEY,
                          product_id uuid,
-                         user_id INT,
-                         rating INT CHECK (rating >= 1 AND rating <= 5),
-                         comment TEXT,
+                         user_id    INT,
+                         rating     INT CHECK (rating >= 1 AND rating <= 5),
+                         comment    TEXT,
                          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                          FOREIGN KEY (product_id) REFERENCES product(product_id),
                          FOREIGN KEY (user_id) REFERENCES users(user_id)
