@@ -8,7 +8,7 @@ CREATE TABLE users (
                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE categories (
+CREATE TABLE category (
                             category_id SERIAL PRIMARY KEY,
                             category_name VARCHAR(100) NOT NULL UNIQUE
 );
@@ -24,7 +24,7 @@ CREATE TABLE product (
                          supplier VARCHAR(50),
                          stock INT DEFAULT 0,
                          size VARCHAR(255),
-                         FOREIGN KEY (category_id) REFERENCES categories(category_id)
+                         FOREIGN KEY (category_id) REFERENCES category(category_id)
 );
 
 CREATE TABLE product_images (
@@ -45,7 +45,7 @@ CREATE TABLE orders (
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         FOREIGN KEY (user_id) REFERENCES users(user_id),
                         FOREIGN KEY (order_id) REFERENCES orders(order_id),
-                        FOREIGN KEY (product_id) REFERENCES product(product_id)
+                        FOREIGN KEY (product_id) REFERENCES product (product_id)
 );
 
 CREATE TABLE shopping_cart (
@@ -57,7 +57,7 @@ CREATE TABLE shopping_cart (
                                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                FOREIGN KEY (user_id) REFERENCES users(user_id),
                                FOREIGN KEY (cart_id) REFERENCES shopping_cart(cart_id),
-                               FOREIGN KEY (product_id) REFERENCES product(product_id)
+                               FOREIGN KEY (product_id) REFERENCES product (product_id)
 );
 
 CREATE TABLE reviews (
@@ -67,6 +67,6 @@ CREATE TABLE reviews (
                          rating     INT CHECK (rating >= 1 AND rating <= 5),
                          comment    TEXT,
                          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                         FOREIGN KEY (product_id) REFERENCES product(product_id),
+                         FOREIGN KEY (product_id) REFERENCES product (product_id),
                          FOREIGN KEY (user_id) REFERENCES users(user_id)
 );

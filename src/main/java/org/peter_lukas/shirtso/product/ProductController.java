@@ -1,5 +1,6 @@
 package org.peter_lukas.shirtso.product;
 
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ProductDto addNewProduct(@RequestBody NewProductDto newProduct) {
+    public ProductDto addNewProduct(@Valid @RequestBody NewProductDto newProduct) {
         return productService.addNewProduct(newProduct);
     }
 
