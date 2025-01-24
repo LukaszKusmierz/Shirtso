@@ -32,6 +32,15 @@ public class ProductService {
         return productMapper.mapProductEntityToDto(addedProduct);
     }
 
+//    public ProductDto addNewProduct(NewProductDto newProduct) {
+//        boolean exists = productRepository.exists(newProduct);
+//        if (exists) {
+//            throw new DuplicationException("Product with the same attributes already exists.");
+//        }
+//        Product addedProduct = productRepository.save(productMapper.mapNewProductDtoToEntity(newProduct));
+//        return productMapper.mapProductEntityToDto(addedProduct);
+//    }
+
     public List<ProductDto> getProductByCategoryId(int categoryId) {
         return productRepository.findAllByCategoryId(categoryId).stream()
                 .map(productMapper::mapProductEntityToDto)

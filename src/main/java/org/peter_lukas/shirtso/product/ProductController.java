@@ -27,7 +27,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ProductDto addNewProduct(@Valid @RequestBody NewProductDto newProduct) {
+    public ProductDto addNewProduct(@RequestBody @Valid NewProductDto newProduct) {
         return productService.addNewProduct(newProduct);
     }
 

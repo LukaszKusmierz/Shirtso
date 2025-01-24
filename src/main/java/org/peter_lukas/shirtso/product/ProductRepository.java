@@ -2,8 +2,10 @@ package org.peter_lukas.shirtso.product;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,4 +31,39 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     @Query("SELECT p FROM Product p WHERE p.productName = :productName")
     List<Product> findAllByProductName(String productName);
+
+//    @Query("SELECT COUNT(p) > 0 FROM Product p WHERE " +
+//            "p.productName = :#{#product.productName} AND " +
+//            "p.description = :#{#product.description} AND " +
+//            "p.price = :#{#product.price} AND " +
+//            "p.currency = :#{#product.currency} AND " +
+//            "p.imageId = :#{#product.imageId} AND " +
+//            "p.categoryId = :#{#product.categoryId} AND " +
+//            "p.supplier = :#{#product.supplier} AND " +
+//            "p.stock = :#{#product.stock} AND " +
+//            "p.size = :#{#product.size}")
+//    boolean exists(@Param("product") Product product);
+
+    @Query("SELECT COUNT(p) > 0 FROM Product p WHERE " +
+            "(:productName IS NULL OR p.productName = :productName) AND " +
+            "(:description IS NULL OR p.description = :description) AND " +
+            "(:price IS NULL OR p.price = :price) AND " +
+            "(:currency IS NULL OR p.currency = :currency) AND " +
+            "(:imageId IS NULL OR p.imageId = :imageId) AND " +
+            "(:categoryId IS NULL OR p.categoryId = :categoryId) AND " +
+            "(:supplier IS NULL OR p.supplier = :supplier) AND " +
+            "(:stock IS NULL OR p.stock = :stock) AND " +
+            "(:size IS NULL OR p.size = :size)")
+    boolean existsByAttributes(
+            @Param("productName") String productName,
+            @Param("description") String description,
+            @Param("price") BigDecimal price,
+            @Param("currency") String currency,
+            @Param("imageId") Integer imageId,
+            @Param("categoryId") Integer categoryId,
+            @Param("supplier") String supplier,
+            @Param("stock") Long stock,
+            @Param("size") Sizes size
+    );
+
 }

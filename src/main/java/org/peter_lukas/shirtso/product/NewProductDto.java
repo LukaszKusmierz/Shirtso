@@ -1,9 +1,11 @@
 package org.peter_lukas.shirtso.product;
 
 import jakarta.validation.constraints.*;
+import org.peter_lukas.shirtso.product.validation.UniqueProduct;
 
 import java.math.*;
 
+@UniqueProduct
 public record NewProductDto(
         @NotBlank(message = "This field can't be empty.")
         @NotNull

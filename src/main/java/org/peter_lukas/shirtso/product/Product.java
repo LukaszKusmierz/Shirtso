@@ -12,31 +12,54 @@ import java.util.UUID;
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
+@Table(name = "product", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {
+                "productName",
+                "description",
+                "price",
+                "currency",
+                "imageId",
+                "categoryId",
+                "supplier",
+                "stock",
+                "size"
+        })
+})
 public class Product {
 
     @Id
     @EqualsAndHashCode.Include
     private UUID productId = UUID.randomUUID();
+
     @NotBlank(message = "This field can't be empty.")
     @NotNull
     @Size(min = 3, max = 20, message = "Title must be between 3 and 20 characters")
     private String productName;
+
     @NotBlank(message = "Description cannot be empty")
     private String description;
+
     @NotNull(message = "Price cannot be empty")
     private BigDecimal price;
+
     @NotBlank(message = "Currency cannot be empty")
     private String currency;
+
     private int imageId;
+
     @NotNull(message = "Category_Id cannot be empty")
     private int categoryId;
+
     @NotBlank(message = "Supplier field cannot be empty")
     private String supplier;
+
     @NotNull(message = "Quantity cannot be empty")
     private long stock;
+
     @NotNull(message = "Size cannot be empty")
     @Enumerated(EnumType.STRING)
     private Sizes size;
+
     @Version
     private Integer version;
 
