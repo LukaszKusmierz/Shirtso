@@ -1,6 +1,8 @@
 package org.peter_lukas.shirtso.product;
 
 import jakarta.validation.constraints.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.peter_lukas.shirtso.product.validation.UniqueProduct;
 
 import java.math.*;

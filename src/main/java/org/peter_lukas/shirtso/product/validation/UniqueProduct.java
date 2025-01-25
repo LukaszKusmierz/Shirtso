@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UniqueProduct {
-    String message() default "A product with the same attributes already exists";
+    String message() default "A product with the same attributes already exists!!";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

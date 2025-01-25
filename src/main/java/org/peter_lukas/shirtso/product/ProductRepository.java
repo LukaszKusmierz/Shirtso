@@ -32,18 +32,6 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     @Query("SELECT p FROM Product p WHERE p.productName = :productName")
     List<Product> findAllByProductName(String productName);
 
-//    @Query("SELECT COUNT(p) > 0 FROM Product p WHERE " +
-//            "p.productName = :#{#product.productName} AND " +
-//            "p.description = :#{#product.description} AND " +
-//            "p.price = :#{#product.price} AND " +
-//            "p.currency = :#{#product.currency} AND " +
-//            "p.imageId = :#{#product.imageId} AND " +
-//            "p.categoryId = :#{#product.categoryId} AND " +
-//            "p.supplier = :#{#product.supplier} AND " +
-//            "p.stock = :#{#product.stock} AND " +
-//            "p.size = :#{#product.size}")
-//    boolean exists(@Param("product") Product product);
-
     @Query("SELECT COUNT(p) > 0 FROM Product p WHERE " +
             "(:productName IS NULL OR p.productName = :productName) AND " +
             "(:description IS NULL OR p.description = :description) AND " +
