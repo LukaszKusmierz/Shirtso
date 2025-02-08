@@ -4,7 +4,7 @@ GET localhost:8080/api/products
 
 ### podzielone na strony
 
-GET localhost:8080/api/products?page=0&size=5
+GET localhost:8080/api/products?page=1&size=5
 
 ### wg categoryId
 
