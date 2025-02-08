@@ -29,3 +29,7 @@ GET localhost:8080/api/products/top-up-stock
 ### wg nazwy produktu
 
 GET localhost:8080/api/products?productName=Marynarka
+
+###
+
+GET localhost:8080/v3/api-docs
