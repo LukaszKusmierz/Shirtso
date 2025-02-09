@@ -1,6 +1,7 @@
 package org.peter_lukas.shirtso.product;
 
 import jakarta.validation.Valid;
+import org.peter_lukas.shirtso.analytics.LogExecutionTime;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,7 @@ public class ProductController {
         this.productService = productService;
     }
 
+    @LogExecutionTime
     @GetMapping
     public List<ProductDto> getProducts() {
         return productService.getAllProducts();

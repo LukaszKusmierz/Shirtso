@@ -30,6 +30,6 @@ GET localhost:8080/api/products/top-up-stock
 
 GET localhost:8080/api/products?productName=Marynarka
 
-###
+### Swagger API Docs
 
 GET localhost:8080/v3/api-docs

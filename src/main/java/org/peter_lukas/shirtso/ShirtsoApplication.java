@@ -1,4 +1,4 @@
-package org.peter_lukas.shirtso.product;
+package org.peter_lukas.shirtso;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
