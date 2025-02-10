@@ -12,9 +12,9 @@ spring:
     show-sql: true
   flyway:
     locations: db/migration
-#app:
-#  security:
-#    jwt:
-#      token:
-#        secret: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.VFb0qJ1LRg_4ujbZoRMXnVkUgiuKq5KxWqNdbKq_G9Vvz-S1zZa9LPxtHWKa64zDl2ofkT8F6jBt_K4riU-fPg
-#        validity: 60m
+app:
+  security:
+    jwt:
+      token:
+        secret: 4b60420cee6cd26c870a2e1a8cad4bff46f7e13cfd8c4bf9dcc3d60871e06739124aa3096973c16ca89b33901d8bc7132492969a58442e26dc6f94b8bf885074
+        validity: 60m
