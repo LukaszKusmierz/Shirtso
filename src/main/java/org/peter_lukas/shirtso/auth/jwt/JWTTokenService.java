@@ -8,6 +8,7 @@ import org.peter_lukas.shirtso.auth.config.AuthConfigProperties;
 import javax.crypto.SecretKey;
 import java.util.Date;
 
+
 public class JWTTokenService {
 
     private final AuthConfigProperties authConfigProperties;
