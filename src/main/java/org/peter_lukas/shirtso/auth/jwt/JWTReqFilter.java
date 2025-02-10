@@ -18,7 +18,7 @@ import java.io.IOException;
 public class JWTReqFilter extends OncePerRequestFilter {
 
     private static final String AUTHORIZATION = "Authorization";
-    private static final String BEARER = "Bearer ";
+    private static final String BEARER = "Bearer";
 
     private final JWTTokenService jwtTokenService;
     private final UserDetailsService userDetailsService;
