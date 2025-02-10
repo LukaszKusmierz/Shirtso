@@ -17,4 +17,4 @@ app:
     jwt:
       token:
         secret: 4b60420cee6cd26c870a2e1a8cad4bff46f7e13cfd8c4bf9dcc3d60871e06739124aa3096973c16ca89b33901d8bc7132492969a58442e26dc6f94b8bf885074
-        validity: 60m
+        validity: 60
