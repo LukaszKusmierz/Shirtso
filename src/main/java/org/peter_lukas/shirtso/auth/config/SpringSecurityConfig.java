@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.peter_lukas.shirtso.auth.jwt.JWTReqFilter;
 import org.peter_lukas.shirtso.auth.jwt.JWTTokenService;
+import org.peter_lukas.shirtso.utils.DateAdapter;
+import org.peter_lukas.shirtso.utils.LocalDateTimeToDateAdapter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -89,12 +91,17 @@ public class SpringSecurityConfig {
     }
 
     @Bean
-    public JWTTokenService jwtTokenService(AuthConfigProperties authConfigProperties) {
-        return new JWTTokenService(authConfigProperties);
+    public JWTTokenService jwtTokenService(AuthConfigProperties authConfigProperties, DateAdapter dateAdapter) {
+        return new JWTTokenService(authConfigProperties, dateAdapter);
     }
 
     @Bean
     public JWTReqFilter jwtFilter(UserDetailsService userDetailsService, JWTTokenService jwtTokenService) {
         return new JWTReqFilter(jwtTokenService, userDetailsService);
+    }
+
+    @Bean
+    public DateAdapter dateAdapter() {
+        return new LocalDateTimeToDateAdapter();
     }
 }

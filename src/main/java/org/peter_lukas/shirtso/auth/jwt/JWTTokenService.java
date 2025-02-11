@@ -15,10 +15,11 @@ import java.util.Date;
 public class JWTTokenService {
 
     private final AuthConfigProperties authConfigProperties;
-    private final DateAdapter dateAdapter = new LocalDateTimeToDateAdapter();
+    private final DateAdapter dateAdapter;
 
-    public JWTTokenService(AuthConfigProperties authConfigProperties) {
+    public JWTTokenService(AuthConfigProperties authConfigProperties, DateAdapter dateAdapter) {
         this.authConfigProperties = authConfigProperties;
+        this.dateAdapter = dateAdapter;
     }
 
     public String createToken(String username) {
