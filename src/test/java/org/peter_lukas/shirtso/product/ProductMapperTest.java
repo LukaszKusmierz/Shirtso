@@ -13,13 +13,13 @@ class ProductMapperTest {
     @Test
     void shouldMapProductEntityToDto() {
 //        given:
+
         Product entity = new Product("test-productname", "test-description",
                 new BigDecimal(180), Currencies.PLN, 4, 45, "test-supplier",
                 50L, Sizes.XL);
-
 //        when:
-        ProductDto actualDto = testedProductMapper.mapProductEntityToDto(entity);
 
+        ProductDto actualDto = testedProductMapper.mapProductEntityToDto(entity);
 //        then:
         assertThat(actualDto).isNotNull();
         assertThat(actualDto.productId()).isEqualTo(entity.getProductId());
@@ -37,14 +37,14 @@ class ProductMapperTest {
     @Test
     void shouldMapNewProductDtoToEntity() {
 //        given:
+
         NewProductDto dto = new NewProductDto("test-productname", "test-description",
                 new BigDecimal(100), Currencies.EUR, 1, 2, "test-supplier",
                 50L, Sizes.S
         );
-
 //        when:
-        Product actualEntity = testedProductMapper.mapNewProductDtoToEntity(dto);
 
+        Product actualEntity = testedProductMapper.mapNewProductDtoToEntity(dto);
 //        then:
         assertThat(actualEntity).isNotNull();
         assertThat(actualEntity.getProductName()).isEqualTo(dto.productName());

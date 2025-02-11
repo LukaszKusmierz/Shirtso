@@ -28,11 +28,6 @@ public class ProductService {
                 .toList();
     }
 
-//    public ProductDto addNewProduct(NewProductDto newProduct) {
-//        Product addedProduct = productRepository.save(productMapper.mapNewProductDtoToEntity(newProduct));
-//        return productMapper.mapProductEntityToDto(addedProduct);
-//    }
-
     public ProductDto addNewProduct(NewProductDto newProduct) {
         boolean exists = productRepository.existsByAttributes(
                 newProduct.productName(),
