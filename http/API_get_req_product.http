@@ -3,14 +3,15 @@
 GET localhost:8080/api/products
 authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE3MzkyMjQ2NzAsImV4cCI6MTc3MDc2MDY3MCwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoiYWRtaW5AbWFpbC5jb20ifQ.Z45WcAqTsnQQN26Vft4WnCHknQ_eriSlnyIjpTsqiA0
 
-
 ### podzielone na strony
 
 GET localhost:8080/api/products?page=1&size=5
+Authorization: Bearer {{auth-token}}
 
 ### wg categoryId
 
-GET localhost:8080/api/products?categoryId=8
+GET localhost:8080/api/products?categoryId=7
+Authorization: Bearer {{auth-token}}
 
 ### wg size
 

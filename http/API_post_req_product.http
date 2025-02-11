@@ -472,3 +472,19 @@ content-type: application/json
   "stock": 0,
   "size": "XS"
 }
+
+### Authorization
+
+
+### Login as user
+
+POST localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "user@mail.com",
+  "password": "usersecret"
+}
+> {% client.global.set("auth-token", response.body.token); %}
+
+### Login as admin

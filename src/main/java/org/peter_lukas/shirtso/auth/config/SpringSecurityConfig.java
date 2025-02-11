@@ -41,7 +41,7 @@ public class SpringSecurityConfig {
 
     public static final String DEVELOPER_READ = "DEVELOPER_READ";
     public static final String DEVELOPER_WRITE = "DEVELOPER_WRITE";
-    private static final String[] URL_WHITELIST = {"/api/register", "/api/login", "/swagger-ui/**", "/v3/api-docs/**", "/error"};
+    private static final String[] URL_WHITELIST = {"/api/auth/register", "/api/auth/login", "/swagger-ui/**", "/v3/api-docs/**", "/error"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationEntryPoint authenticationEntryPoint, JWTReqFilter jwtFilter) throws Exception {
