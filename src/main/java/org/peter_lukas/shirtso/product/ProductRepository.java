@@ -46,7 +46,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             @Param("productName") String productName,
             @Param("description") String description,
             @Param("price") BigDecimal price,
-            @Param("currency") String currency,
+            @Param("currency") Currencies currency,
             @Param("imageId") Integer imageId,
             @Param("categoryId") Integer categoryId,
             @Param("supplier") String supplier,

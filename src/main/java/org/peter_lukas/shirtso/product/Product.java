@@ -5,6 +5,7 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.Currency;
 import java.util.UUID;
 
 @Entity
@@ -43,7 +44,8 @@ public class Product {
     private BigDecimal price;
 
     @NotBlank(message = "Currency cannot be empty")
-    private String currency;
+    @Enumerated(EnumType.STRING)
+    private Currencies currency;
 
     private int imageId;
 
@@ -63,7 +65,7 @@ public class Product {
     @Version
     private Integer version;
 
-    public Product(String productName, String description, BigDecimal price, String currency, int imageId,
+    public Product(String productName, String description, BigDecimal price, Currencies currency, int imageId,
                    int categoryId, String supplier, long stock, Sizes size) {
         this.productName = productName;
         this.description = description;

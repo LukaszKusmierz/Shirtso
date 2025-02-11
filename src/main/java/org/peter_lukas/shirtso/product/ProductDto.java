@@ -8,7 +8,7 @@ public record ProductDto (
         String productName,
         String description,
         BigDecimal price,
-        String currency,
+        Currencies currency,
         int imageId,
         int categoryId,
         String supplier,
