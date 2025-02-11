@@ -1,5 +1,6 @@
 package org.peter_lukas.shirtso.auth.jwt;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,8 +35,14 @@ public class JWTReqFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith(BEARER)) {
             String jwtToken = authHeader.substring(BEARER.length() + 1);
 
-            String userName = jwtTokenService.getUserNameFromToken(jwtToken);
-            authenticateUser(request, jwtToken, userName);
+            try {
+                String userName = jwtTokenService.getUserNameFromToken(jwtToken);
+                authenticateUser(request, jwtToken, userName);
+            } catch (IllegalArgumentException e) {
+                log.warn("Parsing JWT failed", e);
+            } catch (ExpiredJwtException ex) {
+                log.warn("JWT {} expired", jwtToken);
+            }
         }
         filterChain.doFilter(request, response);
     }
