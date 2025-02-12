@@ -43,7 +43,7 @@ public class Product {
     @NotNull(message = "Price cannot be empty")
     private BigDecimal price;
 
-    @NotBlank(message = "Currency cannot be empty")
+    @NotNull(message = "Currency cannot be empty")
     @Enumerated(EnumType.STRING)
     private Currencies currency;
 

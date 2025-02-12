@@ -17,7 +17,7 @@ public record NewProductDto(
         String description,
         @NotNull(message = "Price cannot be empty")
         BigDecimal price,
-        @NotBlank(message = "Currency cannot be empty")
+        @NotNull(message = "Currency cannot be empty")
         Currencies currency,
         int imageId,
         @NotNull(message = "Category cannot be empty")
