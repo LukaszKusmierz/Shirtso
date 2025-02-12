@@ -7,11 +7,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageRequest;
+import org.peter_lukas.shirtso.product.validation.ProductDuplicationException;
 import org.springframework.data.domain.Pageable;
-
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -80,15 +80,67 @@ class ProductServiceTest {
         when(mockedMapper.mapProductEntityToDto(testProduct2)).thenReturn(testProductDto2);
 
 //        when:
-        List<ProductDto> testedProductDtos = testedProductService.getAllProductsPage(pageable);
+        List<ProductDto> results = testedProductService.getAllProductsPage(pageable);
 
 //        then:
-        assertThat(testedProductDtos)
+        assertThat(results)
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(testProductDtos.size())
                 .isEqualTo(testProductDtos);
 
         verify(mockedRepository).findAllByOrderByProductNameAsc(pageable);
+    }
+
+    @Test
+    void addNewProduct_Success() {
+//        given:
+        NewProductDto newProductDto = Instancio.create(NewProductDto.class);
+
+        when(mockedRepository.existsByAttributes(
+                newProductDto.productName(),
+                newProductDto.description(),
+                newProductDto.price(),
+                newProductDto.currency(),
+                newProductDto.imageId(),
+                newProductDto.categoryId(),
+                newProductDto.supplier(),
+                newProductDto.stock(),
+                newProductDto.size()
+        )).thenReturn(false);
+
+        when(mockedMapper.mapNewProductDtoToEntity(newProductDto)).thenReturn(testProduct1);
+        when(mockedRepository.save(testProduct1)).thenReturn(testProduct1);
+        when(mockedMapper.mapProductEntityToDto(testProduct1)).thenReturn(testProductDto1);
+
+//        when:
+        ProductDto result = testedProductService.addNewProduct(newProductDto);
+
+//        then:
+        assertThat(result).isEqualTo(testProductDto1);
+    }
+
+    @Test
+    void addNewProduct_Failure() {
+//        given:
+        NewProductDto newProductDto = Instancio.create(NewProductDto.class);
+
+        when(mockedRepository.existsByAttributes(
+                newProductDto.productName(),
+                newProductDto.description(),
+                newProductDto.price(),
+                newProductDto.currency(),
+                newProductDto.imageId(),
+                newProductDto.categoryId(),
+                newProductDto.supplier(),
+                newProductDto.stock(),
+                newProductDto.size()
+        )).thenReturn(true);
+
+//        when:
+        assertThatThrownBy(() -> testedProductService.addNewProduct(newProductDto))
+        .isInstanceOf(ProductDuplicationException.class)
+        .hasMessage("Product with the same attributes already exists.");
+//TODO export messages to utils or config
     }
 }

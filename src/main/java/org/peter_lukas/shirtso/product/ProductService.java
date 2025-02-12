@@ -40,6 +40,7 @@ public class ProductService {
                 newProduct.stock(),
                 newProduct.size()
         );
+//TODO export messages to utils or config
         if (exists) {
             throw new ProductDuplicationException("Product with the same attributes already exists.");
         }
