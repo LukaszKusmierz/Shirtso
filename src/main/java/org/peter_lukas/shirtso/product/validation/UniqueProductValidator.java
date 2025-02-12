@@ -15,10 +15,9 @@ public class UniqueProductValidator implements ConstraintValidator<UniqueProduct
 
     @Override
     public boolean isValid(NewProductDto newProductDto, ConstraintValidatorContext context) {
-        if (newProductDto == null) {
-            return true;
-        }
-        return !productRepository.existsByAttributes(
+
+        return newProductDto != null &&
+                !productRepository.existsByAttributes(
                 newProductDto.productName(),
                 newProductDto.description(),
                 newProductDto.price(),

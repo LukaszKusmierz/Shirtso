@@ -9,7 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.peter_lukas.shirtso.product.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
 
@@ -43,17 +43,73 @@ class UniqueProductValidatorTest {
         boolean result = validator.isValid(null, context);
 
 //        then:
-        assertThat(result).isTrue();
+        assertThat(result).isFalse();
         verifyNoInteractions(productRepository);
     }
 
     @Test
     void shouldReturnTrueWhenProductDoesNotExistInRepository() {
 //        given:
+        when(productRepository.existsByAttributes(
+                testProductDto.productName(),
+                testProductDto.description(),
+                testProductDto.price(),
+                testProductDto.currency(),
+                testProductDto.imageId(),
+                testProductDto.categoryId(),
+                testProductDto.supplier(),
+                testProductDto.stock(),
+                testProductDto.size()
+        )).thenReturn(Boolean.FALSE);
 
 //        when:
+        boolean result = validator.isValid(testProductDto, context);
 
 //        then
+        assertThat(result).isTrue();
+        verify(productRepository).existsByAttributes(
+                testProductDto.productName(),
+                testProductDto.description(),
+                testProductDto.price(),
+                testProductDto.currency(),
+                testProductDto.imageId(),
+                testProductDto.categoryId(),
+                testProductDto.supplier(),
+                testProductDto.stock(),
+                testProductDto.size()
+        );
+    }
+
+    @Test
+    void shouldReturnFalseWhenProductAlreadyExistsInRepository() {
+//        given:
+        when(productRepository.existsByAttributes(
+                testProductDto.productName(),
+                testProductDto.description(),
+                testProductDto.price(),
+                testProductDto.currency(),
+                testProductDto.imageId(),
+                testProductDto.categoryId(),
+                testProductDto.supplier(),
+                testProductDto.stock(),
+                testProductDto.size()
+        )).thenReturn(Boolean.TRUE);
+
+//        when:
+        boolean result = validator.isValid(testProductDto, context);
+
+//        then:
+        assertThat(result).isFalse();
+        verify(productRepository).existsByAttributes(
+                testProductDto.productName(),
+                testProductDto.description(),
+                testProductDto.price(),
+                testProductDto.currency(),
+                testProductDto.imageId(),
+                testProductDto.categoryId(),
+                testProductDto.supplier(),
+                testProductDto.stock(),
+                testProductDto.size()
+        );
     }
 }
-//TODO finish tests for validator
