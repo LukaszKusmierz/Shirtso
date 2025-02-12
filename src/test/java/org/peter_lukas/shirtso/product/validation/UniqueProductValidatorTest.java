@@ -17,13 +17,13 @@ import java.math.BigDecimal;
 class UniqueProductValidatorTest {
 
     @Mock
-    private ProductRepository productRepository;
+    private ProductRepository mockedProductRepository;
 
     @Mock
-    private ConstraintValidatorContext context;
+    private ConstraintValidatorContext mockedContext;
 
     @InjectMocks
-    private UniqueProductValidator validator;
+    private UniqueProductValidator testedValidator;
 
     private NewProductDto testProductDto;
 
@@ -40,17 +40,17 @@ class UniqueProductValidatorTest {
 //        given:
 
 //        when:
-        boolean result = validator.isValid(null, context);
+        boolean result = testedValidator.isValid(null, mockedContext);
 
 //        then:
         assertThat(result).isFalse();
-        verifyNoInteractions(productRepository);
+        verifyNoInteractions(mockedProductRepository);
     }
 
     @Test
     void shouldReturnTrueWhenProductDoesNotExistInRepository() {
 //        given:
-        when(productRepository.existsByAttributes(
+        when(mockedProductRepository.existsByAttributes(
                 testProductDto.productName(),
                 testProductDto.description(),
                 testProductDto.price(),
@@ -63,11 +63,11 @@ class UniqueProductValidatorTest {
         )).thenReturn(Boolean.FALSE);
 
 //        when:
-        boolean result = validator.isValid(testProductDto, context);
+        boolean result = testedValidator.isValid(testProductDto, mockedContext);
 
 //        then
         assertThat(result).isTrue();
-        verify(productRepository).existsByAttributes(
+        verify(mockedProductRepository).existsByAttributes(
                 testProductDto.productName(),
                 testProductDto.description(),
                 testProductDto.price(),
@@ -83,7 +83,7 @@ class UniqueProductValidatorTest {
     @Test
     void shouldReturnFalseWhenProductAlreadyExistsInRepository() {
 //        given:
-        when(productRepository.existsByAttributes(
+        when(mockedProductRepository.existsByAttributes(
                 testProductDto.productName(),
                 testProductDto.description(),
                 testProductDto.price(),
@@ -96,11 +96,11 @@ class UniqueProductValidatorTest {
         )).thenReturn(Boolean.TRUE);
 
 //        when:
-        boolean result = validator.isValid(testProductDto, context);
+        boolean result = testedValidator.isValid(testProductDto, mockedContext);
 
 //        then:
         assertThat(result).isFalse();
-        verify(productRepository).existsByAttributes(
+        verify(mockedProductRepository).existsByAttributes(
                 testProductDto.productName(),
                 testProductDto.description(),
                 testProductDto.price(),
