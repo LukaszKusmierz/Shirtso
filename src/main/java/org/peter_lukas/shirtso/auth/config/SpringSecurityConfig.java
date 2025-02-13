@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.peter_lukas.shirtso.auth.jwt.JWTReqFilter;
 import org.peter_lukas.shirtso.auth.jwt.JWTTokenService;
+import org.peter_lukas.shirtso.auth.user.UserRepository;
 import org.peter_lukas.shirtso.utils.DateAdapter;
 import org.peter_lukas.shirtso.utils.LocalDateTimeToDateAdapter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -18,17 +19,18 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.util.Collection;
 
 @Configuration
 @EnableConfigurationProperties(AuthConfigProperties.class)
@@ -77,9 +79,28 @@ public class SpringSecurityConfig {
 //    }
 
     @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
+    public UserDetailsService userDetailsService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 
-        return username -> null;
+        return username -> userRepository.findByEmail(username)
+                .map(u -> new UserDetails() {
+                    @Override
+                    public Collection<? extends GrantedAuthority> getAuthorities() {
+                        return u.getRoles().stream()
+                                .map(r -> new SimpleGrantedAuthority("ROLE_" + r.getName()))
+                                .toList();
+                    }
+
+                    @Override
+                    public String getPassword() {
+                        return u.getPassword();
+                    }
+
+                    @Override
+                    public String getUsername() {
+                        return u.getUserName();
+                    }
+                })
+                .orElseThrow(() -> new RuntimeException("Unexpected error!"));
     }
 
     @Bean

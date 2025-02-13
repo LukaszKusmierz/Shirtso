@@ -16,7 +16,7 @@ import java.util.UUID;
 public class Role {
 
     @Id
-    private UUID id = UUID.randomUUID();
+    private UUID roleId = UUID.randomUUID();
 
     @EqualsAndHashCode.Include
     private String name;

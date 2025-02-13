@@ -9,8 +9,8 @@ CREATE TABLE users (
 );
 
 CREATE TABLE category (
-                            category_id SERIAL PRIMARY KEY,
-                            category_name VARCHAR(100) NOT NULL UNIQUE
+                          category_id SERIAL PRIMARY KEY,
+                          category_name VARCHAR(100) NOT NULL UNIQUE
 );
 
 CREATE TABLE product (
@@ -19,7 +19,7 @@ CREATE TABLE product (
                          description TEXT,
                          price NUMERIC(10, 2) NOT NULL,
                          currency VARCHAR NOT NULL,
-                         imageId INT,
+                         image_id INT,
                          category_id INT,
                          supplier VARCHAR(50),
                          stock INT DEFAULT 0,
@@ -27,7 +27,7 @@ CREATE TABLE product (
                          FOREIGN KEY (category_id) REFERENCES category(category_id)
 );
 
-CREATE TABLE product_images (
+CREATE TABLE product_image (
                                 image_id SERIAL PRIMARY KEY,
                                 product_id uuid,
                                 image_url VARCHAR(255) NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE shopping_cart (
                                FOREIGN KEY (product_id) REFERENCES product (product_id)
 );
 
-CREATE TABLE reviews (
+CREATE TABLE review (
                          review_id  SERIAL PRIMARY KEY,
                          product_id uuid,
                          user_id    INT,
