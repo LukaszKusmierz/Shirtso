@@ -1,5 +1,6 @@
 package org.peter_lukas.shirtso.product;
 
+import org.peter_lukas.shirtso.messages.Alerts;
 import org.peter_lukas.shirtso.product.validation.ProductDuplicationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -40,9 +41,9 @@ public class ProductService {
                 newProduct.stock(),
                 newProduct.size()
         );
-//TODO export messages to utils or config
+
         if (exists) {
-            throw new ProductDuplicationException("Product with the same attributes already exists.");
+            throw new ProductDuplicationException(Alerts.DUPLICATE_PRODUCT);
         }
         Product addedProduct = productRepository.save(productMapper.mapNewProductDtoToEntity(newProduct));
         return productMapper.mapProductEntityToDto(addedProduct);
