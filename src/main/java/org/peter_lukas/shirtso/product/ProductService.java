@@ -18,13 +18,13 @@ public class ProductService {
     }
 
     public List<ProductDto> getAllProducts() {
-        return productRepository.findAllByOrderByProductNameAsc().stream()
+        return productRepository.findAllBy().stream()
                 .map(productMapper::mapProductEntityToDto)
                 .toList();
     }
 
     public List<ProductDto> getAllProductsPage(Pageable pageable) {
-        return productRepository.findAllByOrderByProductNameAsc(pageable).stream()
+        return productRepository.findAllBy(pageable).stream()
                 .map(productMapper::mapProductEntityToDto)
                 .toList();
     }

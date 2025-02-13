@@ -1,5 +1,5 @@
 CREATE TABLE users (
-                       user_id SERIAL PRIMARY KEY,
+                       user_id IDENTITY PRIMARY KEY,
                        username VARCHAR(50) NOT NULL UNIQUE,
                        email VARCHAR(100) NOT NULL UNIQUE,
                        password_hash VARCHAR(255) NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE category (
-                          category_id SERIAL PRIMARY KEY,
+                          category_id IDENTITY PRIMARY KEY,
                           category_name VARCHAR(100) NOT NULL UNIQUE
 );
 
@@ -28,14 +28,14 @@ CREATE TABLE product (
 );
 
 CREATE TABLE product_image (
-                                image_id SERIAL PRIMARY KEY,
+                                image_id IDENTITY PRIMARY KEY,
                                 product_id uuid,
                                 image_url VARCHAR(255) NOT NULL,
                                 FOREIGN KEY (product_id) REFERENCES product (product_id)
 );
 
 CREATE TABLE orders (
-                        order_id SERIAL PRIMARY KEY,
+                        order_id IDENTITY PRIMARY KEY,
                         user_id INT,
                         product_id uuid,
                         quantity INT NOT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE orders (
 );
 
 CREATE TABLE shopping_cart (
-                               cart_id SERIAL PRIMARY KEY,
+                               cart_id IDENTITY PRIMARY KEY,
                                user_id INT,
                                product_id uuid,
                                quantity INT NOT NULL,
@@ -61,7 +61,7 @@ CREATE TABLE shopping_cart (
 );
 
 CREATE TABLE review (
-                         review_id  SERIAL PRIMARY KEY,
+                         review_id  IDENTITY PRIMARY KEY,
                          product_id uuid,
                          user_id    INT,
                          rating     INT CHECK (rating >= 1 AND rating <= 5),
@@ -99,7 +99,7 @@ CREATE TABLE user_role (
 );
 
 ALTER TABLE product
-    ALTER COLUMN stock TYPE bigint USING stock::bigint;
+    ALTER COLUMN stock SET DATA TYPE BIGINT;
 
 ALTER TABLE product
-    ADD COLUMN version bigint;
+    ADD COLUMN version BIGINT;

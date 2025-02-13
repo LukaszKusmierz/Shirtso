@@ -54,7 +54,7 @@ class ProductServiceTest {
     @Test
     void shouldGetAllProducts() {
 //        given:
-        when(mockedRepository.findAllByOrderByProductNameAsc()).thenReturn(testProducts);
+        when(mockedRepository.findAllBy()).thenReturn(testProducts);
         when(mockedMapper.mapProductEntityToDto(testProduct1)).thenReturn(testProductDto1);
         when(mockedMapper.mapProductEntityToDto(testProduct2)).thenReturn(testProductDto2);
 
@@ -68,7 +68,7 @@ class ProductServiceTest {
                 .hasSize(testProductDtos.size())
                 .isEqualTo(testProductDtos);
 
-        verify(mockedRepository).findAllByOrderByProductNameAsc();
+        verify(mockedRepository).findAllBy();
         verify(mockedMapper).mapProductEntityToDto(testProduct1);
         verify(mockedMapper).mapProductEntityToDto(testProduct2);
     }
@@ -78,7 +78,7 @@ class ProductServiceTest {
 //        given:
         Pageable pageable = mock(Pageable.class);
 
-        when(mockedRepository.findAllByOrderByProductNameAsc(pageable)).thenReturn(testProducts);
+        when(mockedRepository.findAllBy(pageable)).thenReturn(testProducts);
         when(mockedMapper.mapProductEntityToDto(testProduct1)).thenReturn(testProductDto1);
         when(mockedMapper.mapProductEntityToDto(testProduct2)).thenReturn(testProductDto2);
 
@@ -92,7 +92,7 @@ class ProductServiceTest {
                 .hasSize(testProductDtos.size())
                 .isEqualTo(testProductDtos);
 
-        verify(mockedRepository).findAllByOrderByProductNameAsc(pageable);
+        verify(mockedRepository).findAllBy(pageable);
     }
 
     @Test

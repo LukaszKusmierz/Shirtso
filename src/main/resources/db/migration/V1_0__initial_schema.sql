@@ -1,5 +1,5 @@
 CREATE TABLE users (
-                       user_id SERIAL PRIMARY KEY,
+                       user_id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
                        username VARCHAR(50) NOT NULL UNIQUE,
                        email VARCHAR(100) NOT NULL UNIQUE,
                        password_hash VARCHAR(255) NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE product_image (
 
 CREATE TABLE orders (
                         order_id SERIAL PRIMARY KEY,
-                        user_id INT,
+                        user_id uuid,
                         product_id uuid,
                         quantity INT NOT NULL,
                         price NUMERIC(10, 2) NOT NULL,
@@ -50,7 +50,7 @@ CREATE TABLE orders (
 
 CREATE TABLE shopping_cart (
                                cart_id SERIAL PRIMARY KEY,
-                               user_id INT,
+                               user_id uuid,
                                product_id uuid,
                                quantity INT NOT NULL,
                                total_amount NUMERIC(10, 2) NOT NULL,
@@ -63,7 +63,7 @@ CREATE TABLE shopping_cart (
 CREATE TABLE review (
                          review_id  SERIAL PRIMARY KEY,
                          product_id uuid,
-                         user_id    INT,
+                         user_id    uuid,
                          rating     INT CHECK (rating >= 1 AND rating <= 5),
                          comment    TEXT,
                          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

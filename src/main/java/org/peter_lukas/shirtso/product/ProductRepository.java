@@ -12,9 +12,9 @@ import java.util.UUID;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, UUID> {
 
-    List<Product> findAllByOrderByProductNameAsc();
+    List<Product> findAllBy();
 
-    List<Product> findAllByOrderByProductNameAsc(Pageable pageable);
+    List<Product> findAllBy(Pageable pageable);
 
     List<Product> findAllByCategoryId(int categoryId);
 
