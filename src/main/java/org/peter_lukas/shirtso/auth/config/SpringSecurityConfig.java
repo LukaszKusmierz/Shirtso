@@ -21,6 +21,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -59,20 +60,26 @@ public class SpringSecurityConfig {
         return http.build();
     }
 
+//    @Bean
+//    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
+//        UserDetails user = User.withUsername("user@mail.com")
+//                .password(passwordEncoder.encode("usersecret"))
+//                .roles(DEVELOPER_READ)
+//                .build();
+//
+//        UserDetails admin = User.withUsername("admin@mail.com")
+//                .password(passwordEncoder.encode("adminsecret"))
+//                .roles(
+//                        DEVELOPER_READ, DEVELOPER_WRITE)
+//                .build();
+//
+//        return new InMemoryUserDetailsManager(user, admin);
+//    }
+
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails user = User.withUsername("user@mail.com")
-                .password(passwordEncoder.encode("usersecret"))
-                .roles(DEVELOPER_READ)
-                .build();
 
-        UserDetails admin = User.withUsername("admin@mail.com")
-                .password(passwordEncoder.encode("adminsecret"))
-                .roles(
-                        DEVELOPER_READ, DEVELOPER_WRITE)
-                .build();
-
-        return new InMemoryUserDetailsManager(user, admin);
+        return username -> null;
     }
 
     @Bean
