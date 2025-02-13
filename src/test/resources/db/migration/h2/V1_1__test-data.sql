@@ -19,8 +19,8 @@ INSERT INTO category (category_name) VALUES
       ('Clothing');
 
 INSERT INTO product (product_id, product_name, description, price, currency, image_id, category_id, supplier, stock, size, version) VALUES
-      ('dddddddd-dddd-dddd-dddd-dddddddddddd', 'Laptop',  'High performance laptop', 1200.00, 'USD', 1, 1, 'Dell', 10,    '15-inch', 1),
-      ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', 'Novel',   'Interesting novel',       20.00,  'USD', 2, 2, 'Penguin', 50,    'Paperback', 1),
+      ('dddddddd-dddd-dddd-dddd-dddddddddddd', 'Laptop',  'High performance laptop', 1200.00, 'USD', 1, 1, 'Dell', 10,    'XL', 1),
+      ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', 'Novel',   'Interesting novel',       20.00,  'USD', 2, 2, 'Penguin', 50,    'XS', 1),
       ('ffffffff-ffff-ffff-ffff-ffffffffffff', 'T-Shirt', 'Comfortable t-shirt',     15.00,  'USD', 3, 3, 'H&M',     100,   'M',         1);
 
 INSERT INTO product_image (product_id, image_url) VALUES

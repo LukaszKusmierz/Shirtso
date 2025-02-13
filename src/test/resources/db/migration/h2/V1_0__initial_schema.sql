@@ -1,5 +1,5 @@
 CREATE TABLE users (
-                       user_id IDENTITY PRIMARY KEY,
+                       user_id UUID DEFAULT random_uuid() PRIMARY KEY,
                        username VARCHAR(50) NOT NULL UNIQUE,
                        email VARCHAR(100) NOT NULL UNIQUE,
                        password_hash VARCHAR(255) NOT NULL,
@@ -44,7 +44,6 @@ CREATE TABLE orders (
                         total_amount NUMERIC(10, 2) NOT NULL,
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         FOREIGN KEY (user_id) REFERENCES users(user_id),
-                        FOREIGN KEY (order_id) REFERENCES orders(order_id),
                         FOREIGN KEY (product_id) REFERENCES product (product_id)
 );
 
@@ -56,7 +55,6 @@ CREATE TABLE shopping_cart (
                                total_amount NUMERIC(10, 2) NOT NULL,
                                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                FOREIGN KEY (user_id) REFERENCES users(user_id),
-                               FOREIGN KEY (cart_id) REFERENCES shopping_cart(cart_id),
                                FOREIGN KEY (product_id) REFERENCES product (product_id)
 );
 
