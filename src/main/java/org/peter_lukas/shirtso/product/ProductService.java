@@ -49,13 +49,13 @@ public class ProductService {
         return productMapper.mapProductEntityToDto(addedProduct);
     }
 
-    public List<ProductDto> getProductByCategoryId(int categoryId) {
+    public List<ProductDto> getProductsByCategoryId(int categoryId) {
         return productRepository.findAllByCategoryId(categoryId).stream()
                 .map(productMapper::mapProductEntityToDto)
                 .toList();
     }
 
-    public List<ProductDto> getProductBySize(Sizes size) {
+    public List<ProductDto> getProductsBySize(Sizes size) {
         return productRepository.findAllBySize(size).stream()
                 .map(productMapper::mapProductEntityToDto)
                 .toList();

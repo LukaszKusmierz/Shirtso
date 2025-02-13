@@ -43,13 +43,13 @@ public class ProductController {
     @RolesAllowed(DEVELOPER_READ)
     @GetMapping(params = {"categoryId"})
     public List<ProductDto> getProductsByCategoryId(@RequestParam int categoryId) {
-        return productService.getProductByCategoryId(categoryId);
+        return productService.getProductsByCategoryId(categoryId);
     }
 
     @RolesAllowed(DEVELOPER_READ)
     @GetMapping(params = {"size"})
     public List<ProductDto>getProductsBySize(@RequestParam Sizes size) {
-        return productService.getProductBySize(size);
+        return productService.getProductsBySize(size);
     }
 
     @RolesAllowed(DEVELOPER_READ)
