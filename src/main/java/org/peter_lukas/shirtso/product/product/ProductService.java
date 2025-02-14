@@ -1,7 +1,8 @@
-package org.peter_lukas.shirtso.product;
+package org.peter_lukas.shirtso.product.product;
 
 import org.peter_lukas.shirtso.messages.Alerts;
-import org.peter_lukas.shirtso.product.validation.ProductDuplicationException;
+import org.peter_lukas.shirtso.product.Product;
+import org.peter_lukas.shirtso.product.product.validation.ProductDuplicationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +37,7 @@ public class ProductService {
                 newProduct.price(),
                 newProduct.currency(),
                 newProduct.imageId(),
-                newProduct.categoryId(),
+                newProduct.subcategoryId(),
                 newProduct.supplier(),
                 newProduct.stock(),
                 newProduct.size()
@@ -50,7 +51,7 @@ public class ProductService {
     }
 
     public List<ProductDto> getProductsByCategoryId(int categoryId) {
-        return productRepository.findAllByCategoryId(categoryId).stream()
+        return productRepository.findAllBySubcategoryId(categoryId).stream()
                 .map(productMapper::mapProductEntityToDto)
                 .toList();
     }

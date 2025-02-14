@@ -1,8 +1,7 @@
-package org.peter_lukas.shirtso.product.validation;
+package org.peter_lukas.shirtso.product.product.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import org.peter_lukas.shirtso.messages.Alerts;
 
 import java.lang.annotation.*;
 

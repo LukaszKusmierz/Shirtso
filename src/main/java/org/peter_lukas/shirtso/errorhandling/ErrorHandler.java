@@ -1,6 +1,6 @@
 package org.peter_lukas.shirtso.errorhandling;
 
-import org.peter_lukas.shirtso.product.validation.ProductDuplicationException;
+import org.peter_lukas.shirtso.product.product.validation.ProductDuplicationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;

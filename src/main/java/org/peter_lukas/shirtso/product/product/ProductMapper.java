@@ -1,5 +1,6 @@
-package org.peter_lukas.shirtso.product;
+package org.peter_lukas.shirtso.product.product;
 
+import org.peter_lukas.shirtso.product.Product;
 import org.springframework.stereotype.*;
 
 @Component
@@ -12,7 +13,7 @@ public class ProductMapper {
                 entity.getPrice(),
                 entity.getCurrency(),
                 entity.getImageId(),
-                entity.getCategoryId(),
+                entity.getSubcategoryId(),
                 entity.getSupplier(),
                 entity.getStock(),
                 entity.getSize()
@@ -26,7 +27,7 @@ public class ProductMapper {
                 dto.price(),
                 dto.currency(),
                 dto.imageId(),
-                dto.categoryId(),
+                dto.subcategoryId(),
                 dto.supplier(),
                 dto.stock(),
                 dto.size()

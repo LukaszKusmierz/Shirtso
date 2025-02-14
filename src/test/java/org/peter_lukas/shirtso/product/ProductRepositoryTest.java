@@ -1,14 +1,13 @@
 package org.peter_lukas.shirtso.product;
 
-
-
+import org.peter_lukas.shirtso.product.Product;
 import org.junit.jupiter.api.Test;
+import org.peter_lukas.shirtso.product.product.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -42,12 +41,12 @@ class ProductRepositoryTest {
         assertThat(firstPageProducts)
             .hasSize(2)
             .extracting(Product::getProductName)
-            .containsExactly("Laptop", "Novel");
+            .containsExactly("Bluza Sportowa", "Garnitur Klasyczny");
 
         assertThat(secondPageProducts)
                 .hasSize(1)
                 .extracting(Product::getProductName)
-                .containsExactly("T-Shirt");
+                .containsExactly("Koszula Elegancka");
     }
 }
 //TODO insert all categories and change test data for mens clothes

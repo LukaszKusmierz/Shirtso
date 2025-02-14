@@ -1,4 +1,4 @@
-package org.peter_lukas.shirtso.product;
+package org.peter_lukas.shirtso.product.product;
 
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
@@ -41,9 +41,9 @@ public class ProductController {
     }
 
     @RolesAllowed(DEVELOPER_READ)
-    @GetMapping(params = {"categoryId"})
-    public List<ProductDto> getProductsByCategoryId(@RequestParam int categoryId) {
-        return productService.getProductsByCategoryId(categoryId);
+    @GetMapping(params = {"subcategoryId"})
+    public List<ProductDto> getProductsByCategoryId(@RequestParam int subcategoryId) {
+        return productService.getProductsByCategoryId(subcategoryId);
     }
 
     @RolesAllowed(DEVELOPER_READ)

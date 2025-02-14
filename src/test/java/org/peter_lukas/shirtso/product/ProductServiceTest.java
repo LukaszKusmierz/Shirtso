@@ -8,7 +8,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.peter_lukas.shirtso.messages.Alerts;
-import org.peter_lukas.shirtso.product.validation.ProductDuplicationException;
+import org.peter_lukas.shirtso.product.product.*;
+import org.peter_lukas.shirtso.product.Product;
+import org.peter_lukas.shirtso.product.product.validation.ProductDuplicationException;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Collections;
@@ -106,7 +108,7 @@ class ProductServiceTest {
                 newProductDto.price(),
                 newProductDto.currency(),
                 newProductDto.imageId(),
-                newProductDto.categoryId(),
+                newProductDto.subcategoryId(),
                 newProductDto.supplier(),
                 newProductDto.stock(),
                 newProductDto.size()
@@ -134,7 +136,7 @@ class ProductServiceTest {
                 newProductDto.price(),
                 newProductDto.currency(),
                 newProductDto.imageId(),
-                newProductDto.categoryId(),
+                newProductDto.subcategoryId(),
                 newProductDto.supplier(),
                 newProductDto.stock(),
                 newProductDto.size()
@@ -147,11 +149,11 @@ class ProductServiceTest {
     }
 
     @Test
-    void getProductsByCategoryId_ShouldReturnMappedDtos_WhenProductsFound() {
+    void getProductsBySubcategoryId_ShouldReturnMappedDtos_WhenProductsFound() {
 //        given:
         int categoryId = 1;
 
-        when(mockedRepository.findAllByCategoryId(categoryId)).thenReturn(testProducts);
+        when(mockedRepository.findAllBySubcategoryId(categoryId)).thenReturn(testProducts);
         when(mockedMapper.mapProductEntityToDto(testProduct1)).thenReturn(testProductDto1);
         when(mockedMapper.mapProductEntityToDto(testProduct2)).thenReturn(testProductDto2);
 
@@ -170,7 +172,7 @@ class ProductServiceTest {
 //        given:
         int categoryId = 4;
 
-        when(mockedRepository.findAllByCategoryId(categoryId)).thenReturn(Collections.emptyList());
+        when(mockedRepository.findAllBySubcategoryId(categoryId)).thenReturn(Collections.emptyList());
 
 //        when:
         List<ProductDto> productDtos = testedProductService.getProductsByCategoryId(categoryId);

@@ -3,6 +3,8 @@ package org.peter_lukas.shirtso.product;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.peter_lukas.shirtso.product.product.Currencies;
+import org.peter_lukas.shirtso.product.product.Sizes;
 
 import java.math.BigDecimal;
 import java.util.Currency;
@@ -20,7 +22,7 @@ import java.util.UUID;
                 "price",
                 "currency",
                 "imageId",
-                "categoryId",
+                "subcategoryId",
                 "supplier",
                 "stock",
                 "size"
@@ -50,7 +52,7 @@ public class Product {
     private int imageId;
 
     @NotNull(message = "Category_Id cannot be empty")
-    private int categoryId;
+    private int subcategoryId;
 
     @NotBlank(message = "Supplier field cannot be empty")
     private String supplier;
@@ -72,7 +74,7 @@ public class Product {
         this.price = price;
         this.currency = currency;
         this.imageId = imageId;
-        this.categoryId = categoryId;
+        this.subcategoryId = categoryId;
         this.supplier = supplier;
         this.stock = stock;
         this.size = size;

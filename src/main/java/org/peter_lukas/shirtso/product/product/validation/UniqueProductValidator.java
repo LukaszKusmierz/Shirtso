@@ -1,9 +1,9 @@
-package org.peter_lukas.shirtso.product.validation;
+package org.peter_lukas.shirtso.product.product.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.peter_lukas.shirtso.product.NewProductDto;
-import org.peter_lukas.shirtso.product.ProductRepository;
+import org.peter_lukas.shirtso.product.product.NewProductDto;
+import org.peter_lukas.shirtso.product.product.ProductRepository;
 
 public class UniqueProductValidator implements ConstraintValidator<UniqueProduct, NewProductDto> {
 
@@ -23,7 +23,7 @@ public class UniqueProductValidator implements ConstraintValidator<UniqueProduct
                 newProductDto.price(),
                 newProductDto.currency(),
                 newProductDto.imageId(),
-                newProductDto.categoryId(),
+                newProductDto.subcategoryId(),
                 newProductDto.supplier(),
                 newProductDto.stock(),
                 newProductDto.size()

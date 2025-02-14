@@ -1,5 +1,6 @@
-package org.peter_lukas.shirtso.product;
+package org.peter_lukas.shirtso.product.product;
 
+import org.peter_lukas.shirtso.product.Product;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
@@ -16,7 +17,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     List<Product> findAllBy(Pageable pageable);
 
-    List<Product> findAllByCategoryId(int categoryId);
+    List<Product> findAllBySubcategoryId(int subcategoryId);
 
     List<Product> findAllBySize(Sizes size);
 
@@ -38,7 +39,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             "(:price IS NULL OR p.price = :price) AND " +
             "(:currency IS NULL OR p.currency = :currency) AND " +
             "(:imageId IS NULL OR p.imageId = :imageId) AND " +
-            "(:categoryId IS NULL OR p.categoryId = :categoryId) AND " +
+            "(:categoryId IS NULL OR p.subcategoryId = :categoryId) AND " +
             "(:supplier IS NULL OR p.supplier = :supplier) AND " +
             "(:stock IS NULL OR p.stock = :stock) AND " +
             "(:size IS NULL OR p.size = :size)")
@@ -48,7 +49,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             @Param("price") BigDecimal price,
             @Param("currency") Currencies currency,
             @Param("imageId") Integer imageId,
-            @Param("categoryId") Integer categoryId,
+            @Param("subcategoryId") Integer categoryId,
             @Param("supplier") String supplier,
             @Param("stock") Long stock,
             @Param("size") Sizes size

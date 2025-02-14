@@ -7,7 +7,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.peter_lukas.shirtso.product.*;
+import org.peter_lukas.shirtso.product.product.Currencies;
+import org.peter_lukas.shirtso.product.product.NewProductDto;
+import org.peter_lukas.shirtso.product.product.ProductRepository;
+import org.peter_lukas.shirtso.product.product.Sizes;
+import org.peter_lukas.shirtso.product.product.validation.UniqueProductValidator;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -56,7 +61,7 @@ class UniqueProductValidatorTest {
                 testProductDto.price(),
                 testProductDto.currency(),
                 testProductDto.imageId(),
-                testProductDto.categoryId(),
+                testProductDto.subcategoryId(),
                 testProductDto.supplier(),
                 testProductDto.stock(),
                 testProductDto.size()
@@ -73,7 +78,7 @@ class UniqueProductValidatorTest {
                 testProductDto.price(),
                 testProductDto.currency(),
                 testProductDto.imageId(),
-                testProductDto.categoryId(),
+                testProductDto.subcategoryId(),
                 testProductDto.supplier(),
                 testProductDto.stock(),
                 testProductDto.size()
@@ -89,7 +94,7 @@ class UniqueProductValidatorTest {
                 testProductDto.price(),
                 testProductDto.currency(),
                 testProductDto.imageId(),
-                testProductDto.categoryId(),
+                testProductDto.subcategoryId(),
                 testProductDto.supplier(),
                 testProductDto.stock(),
                 testProductDto.size()
@@ -106,7 +111,7 @@ class UniqueProductValidatorTest {
                 testProductDto.price(),
                 testProductDto.currency(),
                 testProductDto.imageId(),
-                testProductDto.categoryId(),
+                testProductDto.subcategoryId(),
                 testProductDto.supplier(),
                 testProductDto.stock(),
                 testProductDto.size()

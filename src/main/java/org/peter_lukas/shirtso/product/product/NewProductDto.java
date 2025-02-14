@@ -1,9 +1,7 @@
-package org.peter_lukas.shirtso.product;
+package org.peter_lukas.shirtso.product.product;
 
 import jakarta.validation.constraints.*;
-import lombok.Getter;
-import lombok.Setter;
-import org.peter_lukas.shirtso.product.validation.UniqueProduct;
+import org.peter_lukas.shirtso.product.product.validation.UniqueProduct;
 
 import java.math.*;
 
@@ -21,7 +19,7 @@ public record NewProductDto(
         Currencies currency,
         int imageId,
         @NotNull(message = "Category cannot be empty")
-        int categoryId,
+        int subcategoryId,
         @NotBlank(message = "Supplier field cannot be empty")
         String supplier,
         @NotNull(message = "Quantity cannot be empty")

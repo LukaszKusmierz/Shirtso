@@ -1,4 +1,4 @@
-package org.peter_lukas.shirtso.product;
+package org.peter_lukas.shirtso.product.product;
 
 import java.math.*;
 import java.util.*;
@@ -10,7 +10,7 @@ public record ProductDto (
         BigDecimal price,
         Currencies currency,
         int imageId,
-        int categoryId,
+        int subcategoryId,
         String supplier,
         long stock,
         Sizes size

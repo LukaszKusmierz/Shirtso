@@ -1,6 +1,8 @@
 package org.peter_lukas.shirtso.product;
 
 import org.junit.jupiter.api.Test;
+import org.peter_lukas.shirtso.product.product.*;
+import org.peter_lukas.shirtso.product.Product;
 import java.math.BigDecimal;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,7 +28,7 @@ class ProductMapperTest {
         assertThat(actualDto.price()).isEqualTo(entity.getPrice());
         assertThat(actualDto.currency()).isEqualTo(entity.getCurrency());
         assertThat(actualDto.imageId()).isEqualTo(entity.getImageId());
-        assertThat(actualDto.categoryId()).isEqualTo(entity.getCategoryId());
+        assertThat(actualDto.subcategoryId()).isEqualTo(entity.getSubcategoryId());
         assertThat(actualDto.supplier()).isEqualTo(entity.getSupplier());
         assertThat(actualDto.stock()).isEqualTo(entity.getStock());
         assertThat(actualDto.size()).isEqualTo(entity.getSize());
@@ -51,7 +53,7 @@ class ProductMapperTest {
         assertThat(actualEntity.getCurrency()).isEqualTo(dto.currency());
         assertThat(actualEntity.getSize()).isEqualTo(dto.size());
         assertThat(actualEntity.getImageId()).isEqualTo(dto.imageId());
-        assertThat(actualEntity.getCategoryId()).isEqualTo(dto.categoryId());
+        assertThat(actualEntity.getSubcategoryId()).isEqualTo(dto.subcategoryId());
         assertThat(actualEntity.getSupplier()).isEqualTo(dto.supplier());
         assertThat(actualEntity.getStock()).isEqualTo(dto.stock());
         assertThat(actualEntity.getSize()).isEqualTo(dto.size());
