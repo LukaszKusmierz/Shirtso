@@ -1,4 +1,4 @@
-package org.peter_lukas.shirtso.product.product.validation;
+package org.peter_lukas.shirtso.commercial.product.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

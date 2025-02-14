@@ -1,13 +1,9 @@
-package org.peter_lukas.shirtso.product;
+package org.peter_lukas.shirtso.commercial.product;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
-import org.peter_lukas.shirtso.product.product.Currencies;
-import org.peter_lukas.shirtso.product.product.Sizes;
-
 import java.math.BigDecimal;
-import java.util.Currency;
 import java.util.UUID;
 
 @Entity
@@ -68,13 +64,13 @@ public class Product {
     private Integer version;
 
     public Product(String productName, String description, BigDecimal price, Currencies currency, int imageId,
-                   int categoryId, String supplier, long stock, Sizes size) {
+                   int subcategoryId, String supplier, long stock, Sizes size) {
         this.productName = productName;
         this.description = description;
         this.price = price;
         this.currency = currency;
         this.imageId = imageId;
-        this.subcategoryId = categoryId;
+        this.subcategoryId = subcategoryId;
         this.supplier = supplier;
         this.stock = stock;
         this.size = size;

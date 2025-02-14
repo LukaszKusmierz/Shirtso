@@ -1,7 +1,7 @@
-package org.peter_lukas.shirtso.product.product;
+package org.peter_lukas.shirtso.commercial.product;
 
 import jakarta.validation.constraints.*;
-import org.peter_lukas.shirtso.product.product.validation.UniqueProduct;
+import org.peter_lukas.shirtso.commercial.product.validation.UniqueProduct;
 
 import java.math.*;
 

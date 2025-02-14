@@ -1,4 +1,4 @@
-package org.peter_lukas.shirtso.product.product;
+package org.peter_lukas.shirtso.commercial.product;
 
 import java.math.*;
 import java.util.*;

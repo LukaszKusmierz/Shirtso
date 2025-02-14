@@ -1,8 +1,7 @@
-package org.peter_lukas.shirtso.product;
+package org.peter_lukas.shirtso.commercial.product;
 
 import org.junit.jupiter.api.Test;
-import org.peter_lukas.shirtso.product.product.*;
-import org.peter_lukas.shirtso.product.Product;
+
 import java.math.BigDecimal;
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -1,4 +1,4 @@
-package org.peter_lukas.shirtso.product.validation;
+package org.peter_lukas.shirtso.commercial.product.validation;
 
 import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,11 +7,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.peter_lukas.shirtso.product.product.Currencies;
-import org.peter_lukas.shirtso.product.product.NewProductDto;
-import org.peter_lukas.shirtso.product.product.ProductRepository;
-import org.peter_lukas.shirtso.product.product.Sizes;
-import org.peter_lukas.shirtso.product.product.validation.UniqueProductValidator;
+import org.peter_lukas.shirtso.commercial.product.Currencies;
+import org.peter_lukas.shirtso.commercial.product.NewProductDto;
+import org.peter_lukas.shirtso.commercial.product.ProductRepository;
+import org.peter_lukas.shirtso.commercial.product.Sizes;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;

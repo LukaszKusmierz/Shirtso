@@ -1,6 +1,5 @@
-package org.peter_lukas.shirtso.product.product;
+package org.peter_lukas.shirtso.commercial.product;
 
-import org.peter_lukas.shirtso.product.Product;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;

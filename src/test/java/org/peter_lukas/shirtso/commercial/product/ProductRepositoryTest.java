@@ -1,8 +1,6 @@
-package org.peter_lukas.shirtso.product;
+package org.peter_lukas.shirtso.commercial.product;
 
-import org.peter_lukas.shirtso.product.Product;
 import org.junit.jupiter.api.Test;
-import org.peter_lukas.shirtso.product.product.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;

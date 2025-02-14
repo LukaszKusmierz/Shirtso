@@ -1,8 +1,7 @@
-package org.peter_lukas.shirtso.product.product;
+package org.peter_lukas.shirtso.commercial.product;
 
 import org.peter_lukas.shirtso.messages.Alerts;
-import org.peter_lukas.shirtso.product.Product;
-import org.peter_lukas.shirtso.product.product.validation.ProductDuplicationException;
+import org.peter_lukas.shirtso.commercial.product.validation.ProductDuplicationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 

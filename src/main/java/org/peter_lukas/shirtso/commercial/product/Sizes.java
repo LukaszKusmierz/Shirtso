@@ -1,4 +1,4 @@
-package org.peter_lukas.shirtso.product.product;
+package org.peter_lukas.shirtso.commercial.product;
 
 public enum Sizes {
     XS, S, M, L, XL, XXL, XXXL

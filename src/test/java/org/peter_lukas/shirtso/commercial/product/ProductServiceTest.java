@@ -1,4 +1,4 @@
-package org.peter_lukas.shirtso.product;
+package org.peter_lukas.shirtso.commercial.product;
 
 import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,9 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.peter_lukas.shirtso.messages.Alerts;
-import org.peter_lukas.shirtso.product.product.*;
-import org.peter_lukas.shirtso.product.Product;
-import org.peter_lukas.shirtso.product.product.validation.ProductDuplicationException;
+import org.peter_lukas.shirtso.commercial.product.validation.ProductDuplicationException;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Collections;
