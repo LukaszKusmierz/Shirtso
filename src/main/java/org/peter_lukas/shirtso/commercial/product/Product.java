@@ -30,7 +30,7 @@ public class Product {
     @EqualsAndHashCode.Include
     private UUID productId = UUID.randomUUID();
 
-    @NotBlank(message = "This field can't be empty.")
+    @NotBlank(message = "Product name can not be empty.")
     @NotNull
     @Size(min = 3, max = 20, message = "Title must be between 3 and 20 characters")
     private String productName;
@@ -47,10 +47,10 @@ public class Product {
 
     private int imageId;
 
-    @NotNull(message = "Category_Id cannot be empty")
+    @NotNull(message = "Category Id cannot be empty")
     private int subcategoryId;
 
-    @NotBlank(message = "Supplier field cannot be empty")
+    @NotBlank(message = "Supplier cannot be empty")
     private String supplier;
 
     @NotNull(message = "Quantity cannot be empty")

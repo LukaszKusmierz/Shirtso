@@ -7,7 +7,7 @@ import java.math.*;
 
 @UniqueProduct
 public record NewProductDto(
-        @NotBlank(message = "This field can't be empty.")
+        @NotBlank(message = "This field can not be empty")
         @NotNull
         @Size(min = 3, max = 20, message = "Title must be between 3 and 20 characters")
         String productName,
