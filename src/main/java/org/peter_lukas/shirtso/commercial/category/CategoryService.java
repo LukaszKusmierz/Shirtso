@@ -1,5 +1,6 @@
 package org.peter_lukas.shirtso.commercial.category;
 
+import org.peter_lukas.shirtso.commercial.subcategory.SubcategoryService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +16,13 @@ public class CategoryService {
     }
 
     public List<CategoryDto> getAllCategories() {
-        return categoryRepository.findAll().stream()
+        return categoryRepository.findAllBy().stream()
+                .map(categoryMapper::mapCategoryEntityToDto)
+                .toList();
+    }
+
+    public List<CategoryDto> getAllCategoriesAndSubcategories() {
+        return categoryRepository.findAllWithSubcategories().stream()
                 .map(categoryMapper::mapCategoryEntityToDto)
                 .toList();
     }

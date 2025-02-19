@@ -1,9 +1,6 @@
 package org.peter_lukas.shirtso.commercial.subcategory;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,7 +14,9 @@ public class SubcategoryController {
         this.subcategoryService = subcategoryService;
     }
 
-    @GetMapping
-    public List<Subcategory> getSubcategoriesByCategoryId(@RequestParam int categoryId) {
-        return subcategoryService.getAllSubcategoriesByCategoryId();}
+    @GetMapping("/{categoryId}")
+    public List<SubcategoryDto> getSubcategoriesByCategoryId(@PathVariable int categoryId) {
+        return subcategoryService.getAllSubcategoriesByCategoryId(categoryId);
+    }
 }
+//TODO - nie działa autoryzacja

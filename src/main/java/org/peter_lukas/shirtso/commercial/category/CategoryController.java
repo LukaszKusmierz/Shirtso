@@ -16,4 +16,9 @@ public class CategoryController {
 
     @GetMapping
     public List<CategoryDto> getCategories() { return categoryService.getAllCategories();}
+
+    @GetMapping("/subcategories")
+    public List<CategoryDto> getAllCategoriesWithSubcategories() {
+        return categoryService.getAllCategoriesAndSubcategories();
+    }
 }

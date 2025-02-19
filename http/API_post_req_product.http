@@ -477,7 +477,7 @@ content-type: application/json
 ### Authorization
 
 
-### Login as user
+### Login as admin
 
 POST localhost:8080/api/auth/login
 Content-Type: application/json
@@ -487,5 +487,3 @@ Content-Type: application/json
   "password": "adminsecret"
 }
 > {% client.global.set("auth-token", response.body.token); %}
-
-### Login as admin
