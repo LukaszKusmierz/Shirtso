@@ -374,6 +374,7 @@ content-type: application/json
 ###
 
 POST localhost:8080/api/products
+Authorization: Bearer {{auth-token}}
 content-type: application/json
 
 {
@@ -468,7 +469,7 @@ content-type: application/json
   "price": 1119.99,
   "currency": "PLN",
   "imageId": 49,
-  "categoryId": 6,
+  "subcategoryId": 2,
   "supplier": "Bytomianka",
   "stock": 0,
   "size": "XS"

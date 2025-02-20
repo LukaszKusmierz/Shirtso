@@ -38,7 +38,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             "(:price IS NULL OR p.price = :price) AND " +
             "(:currency IS NULL OR p.currency = :currency) AND " +
             "(:imageId IS NULL OR p.imageId = :imageId) AND " +
-            "(:categoryId IS NULL OR p.subcategoryId = :categoryId) AND " +
+            "(:subcategoryId IS NULL OR p.subcategoryId = :subcategoryId) AND " +
             "(:supplier IS NULL OR p.supplier = :supplier) AND " +
             "(:stock IS NULL OR p.stock = :stock) AND " +
             "(:size IS NULL OR p.size = :size)")
