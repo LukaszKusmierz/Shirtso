@@ -16,22 +16,27 @@ Authorization: Bearer {{auth-token}}
 ### wg size
 
 GET localhost:8080/api/products?size=L
+Authorization: Bearer {{auth-token}}
 
 ### wg stock niezerowy
 
 GET localhost:8080/api/products/in-stock
+Authorization: Bearer {{auth-token}}
 
 ### wg stock zerowy
 
 GET localhost:8080/api/products/not-in-stock
+Authorization: Bearer {{auth-token}}
 
 ### wg stock do zamowienia
 
 GET localhost:8080/api/products/top-up-stock
+Authorization: Bearer {{auth-token}}
 
 ### wg nazwy produktu
 
 GET localhost:8080/api/products?productName=Marynarka
+Authorization: Bearer {{auth-token}}
 
 ### Swagger API Docs
 
