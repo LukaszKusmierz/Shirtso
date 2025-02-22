@@ -1,6 +1,6 @@
 package org.peter_lukas.shirtso.auth;
 
-public record JwtTokenResponse(
+public record JwtTokenResponseDto(
         String token
 ) {
 }

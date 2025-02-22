@@ -506,7 +506,7 @@ content-type: application/json
 
 ### Login as admin
 
-#POST localhost:8080/api/auth/login
+#POST localhost:8080/api/auth/username
 #Content-Type: application/json
 #
 #{
@@ -514,3 +514,14 @@ content-type: application/json
 #  "password": "adminsecret"
 #}
 #> {% client.global.set("auth-token", response.body.token); %}
+
+### Register new user
+
+POST localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "Bernard Kaban",
+  "email": "bernard@interia.pl",
+  "password": "qwertyulkjhg"
+}

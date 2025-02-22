@@ -10,7 +10,7 @@ Authorization: Bearer {{auth-token}}
 
 ### wg categoryId
 
-GET localhost:8080/api/products?categoryId=7
+GET localhost:8080/api/products?subcategoryId=18
 Authorization: Bearer {{auth-token}}
 
 ### wg size

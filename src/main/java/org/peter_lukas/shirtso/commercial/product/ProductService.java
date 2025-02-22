@@ -49,8 +49,8 @@ public class ProductService {
         return productMapper.mapProductEntityToDto(addedProduct);
     }
 
-    public List<ProductDto> getProductsByCategoryId(int categoryId) {
-        return productRepository.findAllBySubcategoryId(categoryId).stream()
+    public List<ProductDto> getProductsBySubcategoryId(int subcategoryId) {
+        return productRepository.findAllBySubcategoryId(subcategoryId).stream()
                 .map(productMapper::mapProductEntityToDto)
                 .toList();
     }

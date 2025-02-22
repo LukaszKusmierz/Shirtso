@@ -156,7 +156,7 @@ class ProductServiceTest {
         when(mockedMapper.mapProductEntityToDto(testProduct2)).thenReturn(testProductDto2);
 
 //        when:
-        List<ProductDto> productDtos = testedProductService.getProductsByCategoryId(categoryId);
+        List<ProductDto> productDtos = testedProductService.getProductsBySubcategoryId(categoryId);
 
 //        then:
         assertThat(productDtos)
@@ -173,7 +173,7 @@ class ProductServiceTest {
         when(mockedRepository.findAllBySubcategoryId(categoryId)).thenReturn(Collections.emptyList());
 
 //        when:
-        List<ProductDto> productDtos = testedProductService.getProductsByCategoryId(categoryId);
+        List<ProductDto> productDtos = testedProductService.getProductsBySubcategoryId(categoryId);
 
 //        then:
         assertThat(productDtos).isEmpty();

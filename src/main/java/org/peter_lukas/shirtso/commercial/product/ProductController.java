@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.peter_lukas.shirtso.auth.config.SpringSecurityConfig.DEVELOPER_READ;
-import static org.peter_lukas.shirtso.auth.config.SpringSecurityConfig.DEVELOPER_WRITE;
+import static org.peter_lukas.shirtso.auth.config.SpringSecurityConfig.USER_READ;
+import static org.peter_lukas.shirtso.auth.config.SpringSecurityConfig.USER_WRITE;
 
 @RestController
 @RequestMapping("/api/products")
@@ -21,53 +21,53 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @RolesAllowed(DEVELOPER_READ)
+    @RolesAllowed(USER_READ)
     @LogExecutionTime
     @GetMapping
     public List<ProductDto> getProducts() {
         return productService.getAllProducts();
     }
 
-    @RolesAllowed(DEVELOPER_READ)
+    @RolesAllowed(USER_READ)
     @GetMapping(params = {"page", "size"})
     public List<ProductDto>getProducts(Pageable pageable) {
         return productService.getAllProductsPage(pageable);
     }
 
-    @RolesAllowed(DEVELOPER_WRITE)
+    @RolesAllowed(USER_WRITE)
     @PostMapping
     public ProductDto addNewProduct(@Valid @RequestBody NewProductDto newProduct) {
         return productService.addNewProduct(newProduct);
     }
 
-    @RolesAllowed(DEVELOPER_READ)
+    @RolesAllowed(USER_READ)
     @GetMapping(params = {"subcategoryId"})
-    public List<ProductDto> getProductsByCategoryId(@RequestParam int subcategoryId) {
-        return productService.getProductsByCategoryId(subcategoryId);
+    public List<ProductDto> getProductsBySubcategoryId(@RequestParam int subcategoryId) {
+        return productService.getProductsBySubcategoryId(subcategoryId);
     }
 
-    @RolesAllowed(DEVELOPER_READ)
+    @RolesAllowed(USER_READ)
     @GetMapping(params = {"size"})
     public List<ProductDto>getProductsBySize(@RequestParam Sizes size) {
         return productService.getProductsBySize(size);
     }
 
-    @RolesAllowed(DEVELOPER_READ)
+    @RolesAllowed(USER_READ)
     @GetMapping("/in-stock")
     public List<ProductDto> getProductsInStock() { return productService.getProductsInStock();
     }
 
-    @RolesAllowed(DEVELOPER_READ)
+    @RolesAllowed(USER_READ)
     @GetMapping("/not-in-stock")
     public List<ProductDto> getProductsNotInStock() { return productService.getProductsNotInStock();}
 
-    @RolesAllowed(DEVELOPER_READ)
+    @RolesAllowed(USER_READ)
     @GetMapping("/top-up-stock")
     public List<ProductDto> getProductsTopUpStock() {
         return productService.getProductsTopUpStock();
     }
 
-    @RolesAllowed(DEVELOPER_READ)
+    @RolesAllowed(USER_READ)
     @GetMapping(params = {"productName"})
     public List<ProductDto> getProductsByProductName(@RequestParam String productName) {
         return productService.getProductsByProductName(productName);
