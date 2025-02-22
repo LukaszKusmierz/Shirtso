@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public record RegisterUserDataDto(
 
-        UUID user_id,
-        String login
+        UUID userId,
+        String email
 ) {
 }

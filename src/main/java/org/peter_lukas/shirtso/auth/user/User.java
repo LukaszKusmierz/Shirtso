@@ -1,8 +1,6 @@
 package org.peter_lukas.shirtso.auth.user;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -28,10 +26,10 @@ public class User {
     @EqualsAndHashCode.Include
     private String email;
 
-    public User(String password, String email, String userName) {
-        this.password = password;
-        this.email = email;
+    public User(String userName, String email, String password) {
         this.userName = userName;
+        this.email = email;
+        this.password = password;
     }
 
     @ManyToMany(fetch = FetchType.EAGER)

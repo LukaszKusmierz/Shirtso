@@ -15,6 +15,5 @@ public record NewUserRegistrationDto(
 
         @Size(min = 12, message = "Password should consist of 12 chars at least")
         String password
-
 ) {
 }
