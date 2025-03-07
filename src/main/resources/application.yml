@@ -17,3 +17,9 @@ app:
       token:
         secret: ac6717b2200890a633458a304da98cb8ebf7c7d3baf21e2e585ba087c8af0ba309ac0f454fec2bd67d64029b6fceb3789166466a1571bf49c65cf71d1c23cd2b
         validity: 60m
+  cors:
+    allowed-origins: http://localhost:3000
+    allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+    allowed-headers: Authorization,Content-Type,X-Requested-With
+    allow-credentials: true
+    max-age: 3600
