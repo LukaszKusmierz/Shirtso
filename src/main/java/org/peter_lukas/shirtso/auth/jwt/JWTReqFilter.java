@@ -46,7 +46,7 @@ public class JWTReqFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
     }
-//TODO: autentykacja poprzez parę username-email
+
     private void authenticateUser(HttpServletRequest request, String jwtToken, String userName) {
         if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(userName);

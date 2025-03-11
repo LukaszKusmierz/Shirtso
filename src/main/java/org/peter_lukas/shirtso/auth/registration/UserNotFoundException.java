@@ -1,6 +1,7 @@
 package org.peter_lukas.shirtso.auth.registration;
 
 public class UserNotFoundException extends Throwable {
-    public UserNotFoundException(String userNotFound) {
+    public UserNotFoundException(String massage) {
+        super(massage);
     }
 }
