@@ -1,16 +1,15 @@
 package org.peter_lukas.shirtso.auth;
 
 import jakarta.validation.Valid;
+import org.peter_lukas.shirtso.analytics.LogExecutionTime;
 import org.peter_lukas.shirtso.auth.jwt.JWTTokenService;
 import org.peter_lukas.shirtso.auth.registration.AuthService;
 import org.peter_lukas.shirtso.auth.registration.NewUserRegistrationDto;
 import org.peter_lukas.shirtso.auth.registration.RegisterUserDataDto;
+import org.peter_lukas.shirtso.auth.registration.UserNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -28,6 +27,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @LogExecutionTime
     public JwtTokenResponseDto login(@Valid @RequestBody JwtTokenRequestDto jwtTokenRequest) {
         var authToken = new UsernamePasswordAuthenticationToken(
                 jwtTokenRequest.username(), jwtTokenRequest.password()
@@ -39,9 +39,14 @@ public class AuthController {
     }
 
     @PostMapping("/register")
+    @LogExecutionTime
     public RegisterUserDataDto registerUser(@Valid @RequestBody NewUserRegistrationDto registrationDto) {
         return authService.registerNewUser(registrationDto);
+    }
 
-
+    @GetMapping("/me")
+    @LogExecutionTime
+    public RegisterUserDataDto getCurrentUser() throws UserNotFoundException {
+        return authService.getCurrentUser();
     }
 }

@@ -6,9 +6,14 @@ import org.peter_lukas.shirtso.auth.user.RoleRepository;
 import org.peter_lukas.shirtso.auth.user.User;
 import org.peter_lukas.shirtso.auth.user.UserRepository;
 import org.peter_lukas.shirtso.auth.validation.UserAlreadyExistsException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthService {
@@ -42,12 +47,33 @@ public class AuthService {
         userRole.assignToUser(newUser);
         User saved = userRepository.save(newUser);
 
-        return new RegisterUserDataDto(saved.getUserId(), saved.getEmail());
+        return new RegisterUserDataDto(saved.getUserId(), saved.getUserName(), saved.getEmail());
     }
-//TODO: replace with custom validatior
+
     private void verifyEmail(NewUserRegistrationDto registrationDto) {
         userRepository.findByEmail(registrationDto.email()).ifPresent(
                 user -> {throw new UserAlreadyExistsException(registrationDto.username());}
+        );
+
+        userRepository.findByUserName(registrationDto.username()).ifPresent(
+                user -> {throw new UserAlreadyExistsException("User with username " + registrationDto.username() + " already exists");}
+        );
+    }
+
+    public RegisterUserDataDto getCurrentUser() throws UserNotFoundException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        return new RegisterUserDataDto(
+                user.getUserId(),
+                user.getUserName(),
+                user.getEmail(),
+                user.getRoles().stream()
+                        .map(Role::getName)
+                        .collect(Collectors.toSet())
         );
     }
 }
