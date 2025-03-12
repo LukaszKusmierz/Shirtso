@@ -21,14 +21,12 @@ public class ProductController {
         this.productService = productService;
     }
 
-//    @RolesAllowed(USER_READ)
     @LogExecutionTime
     @GetMapping
     public List<ProductDto> getProducts() {
         return productService.getAllProducts();
     }
 
-    @RolesAllowed(USER_READ)
     @GetMapping(params = {"page", "size"})
     public List<ProductDto>getProducts(Pageable pageable) {
         return productService.getAllProductsPage(pageable);
@@ -40,46 +38,38 @@ public class ProductController {
         return productService.addNewProduct(newProduct);
     }
 
-    @RolesAllowed(USER_READ)
     @GetMapping(params = {"subcategoryId"})
     public List<ProductDto> getProductsBySubcategoryId(@RequestParam int subcategoryId) {
         return productService.getProductsBySubcategoryId(subcategoryId);
     }
 
-    @RolesAllowed(USER_READ)
     @GetMapping(params = {"size"})
     public List<ProductDto>getProductsBySize(@RequestParam Sizes size) {
         return productService.getProductsBySize(size);
     }
 
-//    @RolesAllowed(USER_READ)
     @GetMapping("/in-stock")
     public List<ProductDto> getProductsInStock() { return productService.getProductsInStock();
     }
 
-    @RolesAllowed(USER_READ)
     @GetMapping("/not-in-stock")
     public List<ProductDto> getProductsNotInStock() { return productService.getProductsNotInStock();}
 
-    @RolesAllowed(USER_READ)
     @GetMapping("/top-up-stock")
     public List<ProductDto> getProductsTopUpStock() {
         return productService.getProductsTopUpStock();
     }
 
-    @RolesAllowed(USER_READ)
     @GetMapping(params = {"productName"})
     public List<ProductDto> getProductsByProductName(@RequestParam String productName) {
         return productService.getProductsByProductName(productName);
     }
 
-    @RolesAllowed(USER_READ)
     @GetMapping("/sizes")
     public List<Sizes> getSizes() {
         return List.of(Sizes.values());
     }
 
-    @RolesAllowed(USER_READ)
     @GetMapping(params = {"size", "subcategoryId"})
     public List<ProductDto> getProductsBySizeAndSubcategory(@RequestParam Sizes size, int subcategoryId) {
         return productService.getProductsBySizeAndSubcategoryId(size, subcategoryId);
