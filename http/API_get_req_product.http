@@ -41,7 +41,7 @@ Authorization: Bearer {{auth-token}}
 ### wg rozmiaru i subkategorii
 
 GET localhost:8080/api/products?size=L&subcategoryId=18
-Authorization: Bearer {{auth-token}}
+#Authorization: Bearer {{auth-token}}
 
 ### Swagger API Docs
 
