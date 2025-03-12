@@ -21,7 +21,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @RolesAllowed(USER_READ)
+//    @RolesAllowed(USER_READ)
     @LogExecutionTime
     @GetMapping
     public List<ProductDto> getProducts() {
@@ -52,7 +52,7 @@ public class ProductController {
         return productService.getProductsBySize(size);
     }
 
-    @RolesAllowed(USER_READ)
+//    @RolesAllowed(USER_READ)
     @GetMapping("/in-stock")
     public List<ProductDto> getProductsInStock() { return productService.getProductsInStock();
     }
@@ -71,5 +71,17 @@ public class ProductController {
     @GetMapping(params = {"productName"})
     public List<ProductDto> getProductsByProductName(@RequestParam String productName) {
         return productService.getProductsByProductName(productName);
+    }
+
+    @RolesAllowed(USER_READ)
+    @GetMapping("/sizes")
+    public List<Sizes> getSizes() {
+        return List.of(Sizes.values());
+    }
+
+    @RolesAllowed(USER_READ)
+    @GetMapping(params = {"size", "subcategoryId"})
+    public List<ProductDto> getProductsBySizeAndSubcategory(@RequestParam Sizes size, int subcategoryId) {
+        return productService.getProductsBySizeAndSubcategoryId(size, subcategoryId);
     }
 }

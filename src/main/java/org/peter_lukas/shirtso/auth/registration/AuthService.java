@@ -55,7 +55,7 @@ public class AuthService {
                 user -> {throw new UserAlreadyExistsException(registrationDto.username());}
         );
 
-        userRepository.findByUserName(registrationDto.username()).ifPresent(
+        userRepository.findByEmail(registrationDto.username()).ifPresent(
                 user -> {throw new UserAlreadyExistsException("User with username " + registrationDto.username() + " already exists");}
         );
     }

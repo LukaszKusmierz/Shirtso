@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,6 +19,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     List<Product> findAllBySubcategoryId(int subcategoryId);
 
+    @Query("SELECT p FROM Product p WHERE p.size = :size")
     List<Product> findAllBySize(Sizes size);
 
     @Query("SELECT p FROM Product p WHERE p.stock > 0")
@@ -54,4 +56,6 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             @Param("size") Sizes size
     );
 
+    @Query("SELECT p FROM Product p WHERE p.size = :size AND p.subcategoryId = :subcategoryId")
+    List<Product> findProductsBySizeAndSubcategoryId(Sizes size, int subcategoryId);
 }

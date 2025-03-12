@@ -13,6 +13,7 @@ import org.peter_lukas.shirtso.utils.LocalDateTimeToDateAdapter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
@@ -57,7 +58,9 @@ public class SpringSecurityConfig {
         http
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authz -> authz.requestMatchers(URL_WHITELIST).permitAll()
+                .authorizeHttpRequests(authz -> authz
+                        .requestMatchers(URL_WHITELIST).permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/products/**", "/api/categories/**", "/api/subcategories/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -74,9 +77,9 @@ public class SpringSecurityConfig {
 
             Optional<User> userOpt = userRepository.findByEmail(usernameOrEmail);
 
-            if (userOpt.isEmpty()) {
-                userOpt = userRepository.findByUserName(usernameOrEmail);
-            }
+//            if (userOpt.isEmpty()) {
+//                userOpt = userRepository.findByUserName(usernameOrEmail);
+//            }
 
             return userOpt.map(u -> new UserDetails() {
                 @Override

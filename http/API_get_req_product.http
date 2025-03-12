@@ -1,7 +1,7 @@
 ### wszystkie
 
 GET localhost:8080/api/products
-authorization: Bearer {{auth-token}}
+#authorization: Bearer {{auth-token}}
 
 ### podzielone na strony
 
@@ -36,6 +36,11 @@ Authorization: Bearer {{auth-token}}
 ### wg nazwy produktu
 
 GET localhost:8080/api/products?productName=Marynarka
+Authorization: Bearer {{auth-token}}
+
+### wg rozmiaru i subkategorii
+
+GET localhost:8080/api/products?size=L&subcategoryId=18
 Authorization: Bearer {{auth-token}}
 
 ### Swagger API Docs
