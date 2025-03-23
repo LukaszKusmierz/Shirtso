@@ -43,6 +43,11 @@ Authorization: Bearer {{auth-token}}
 GET localhost:8080/api/products?size=L&subcategoryId=18
 #Authorization: Bearer {{auth-token}}
 
+### wg Id produktu
+
+GET localhost:8080/api/products/a0e25ff8-f3cd-4aef-917a-f2417d172c52
+Authorization: Bearer {{auth-token}}
+
 ### Swagger API Docs
 
 GET localhost:8080/v3/api-docs

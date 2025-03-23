@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.peter_lukas.shirtso.auth.config.SpringSecurityConfig.USER_READ;
 import static org.peter_lukas.shirtso.auth.config.SpringSecurityConfig.USER_WRITE;
@@ -73,5 +74,10 @@ public class ProductController {
     @GetMapping(params = {"size", "subcategoryId"})
     public List<ProductDto> getProductsBySizeAndSubcategory(@RequestParam Sizes size, int subcategoryId) {
         return productService.getProductsBySizeAndSubcategoryId(size, subcategoryId);
+    }
+
+    @GetMapping("/{productId}")
+    public ProductDto getProductById(@PathVariable UUID productId) {
+        return productService.getProductById(productId);
     }
 }

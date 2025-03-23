@@ -19,4 +19,3 @@ public class SubcategoryController {
         return subcategoryService.getAllSubcategoriesByCategoryId(categoryId);
     }
 }
-//TODO - nie działa autoryzacja

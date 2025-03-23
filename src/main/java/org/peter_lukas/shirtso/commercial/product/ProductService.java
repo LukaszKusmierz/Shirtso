@@ -1,11 +1,13 @@
 package org.peter_lukas.shirtso.commercial.product;
 
+import org.peter_lukas.shirtso.commercial.product.validation.ProductNotFoundException;
 import org.peter_lukas.shirtso.messages.Alerts;
 import org.peter_lukas.shirtso.commercial.product.validation.ProductDuplicationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ProductService {
@@ -89,5 +91,11 @@ public class ProductService {
         return productRepository.findProductsBySizeAndSubcategoryId(size, subcategoryId).stream()
                 .map(productMapper::mapProductEntityToDto)
                 .toList();
+    }
+
+    public ProductDto getProductById(UUID productId) {
+        return productRepository.getProductByProductId(productId)
+                .map(productMapper::mapProductEntityToDto)
+                .orElseThrow(() -> new ProductNotFoundException(Alerts.PRODUCT_NOT_FOUND));
     }
 }
