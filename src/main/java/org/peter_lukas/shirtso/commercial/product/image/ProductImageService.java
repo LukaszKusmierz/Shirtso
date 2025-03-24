@@ -66,18 +66,38 @@ public class ProductImageService {
     @Transactional
     public void updatePrimaryImageStatus(UUID productId, long newPrimaryImageId) {
         imageMappingRepository.findByProduct_ProductIdAndIsPrimaryTrue(productId)
-                .ifPresent(imageMappingRepository::save);
+                .ifPresent(mapping -> {
+                    mapping.setPrimary(false);
+                    imageMappingRepository.save(mapping);
+                });
 
         ProductImageMappingId mappingId = new ProductImageMappingId(productId, newPrimaryImageId);
         imageMappingRepository.findById(mappingId)
-                .ifPresent(imageMappingRepository::save);
+                .ifPresent(mapping -> {
+                    mapping.setPrimary(true);
+                    imageMappingRepository.save(mapping);
+                });
     }
 
     @Transactional
     public void removeImageFromProduct(UUID productId, long imageId) {
         ProductImageMappingId mappingId = new ProductImageMappingId(productId, imageId);
         imageMappingRepository.findById(mappingId)
-                .ifPresent(imageMappingRepository::delete);
+                .ifPresent(mapping -> {
+
+                    boolean wasPrimary = mapping.isPrimary();
+                    imageMappingRepository.delete(mapping);
+
+                    if (wasPrimary) {
+                        List<ProductImageMapping> remainingImages =
+                                imageMappingRepository.findByProduct_ProductIdOrderByDisplayOrderAsc(productId);
+                        if (!remainingImages.isEmpty()) {
+                            ProductImageMapping newPrimary = remainingImages.get(0);
+                            newPrimary.setPrimary(true);
+                            imageMappingRepository.save(newPrimary);
+                        }
+                    }
+                });
     }
 
     @Transactional
@@ -86,5 +106,44 @@ public class ProductImageService {
         image.setImageUrl(request.imageUrl());
         image.setAltText(request.altText());
         return imageRepository.save(image);
+    }
+
+    @Transactional
+    public ProductImage updateImage(long imageId, CreateImageRequest request) {
+        ProductImage image = imageRepository.findById(imageId)
+                .orElseThrow(() -> new ImageNotFoundException(Alerts.IMAGE_NOT_FOUND));
+
+        image.setImageUrl(request.imageUrl());
+        image.setAltText(request.altText());
+
+        return imageRepository.save(image);
+    }
+
+    @Transactional
+    public void deleteImage(long imageId) {
+        ProductImage image = imageRepository.findById(imageId)
+                .orElseThrow(() -> new ImageNotFoundException(Alerts.IMAGE_NOT_FOUND));
+
+        if (!image.getProductMappings().isEmpty()) {
+            throw new IllegalStateException("Cannot delete image that is used by products");
+        }
+
+        imageRepository.delete(image);
+    }
+
+    public List<UUID> getProductsUsingImage(long imageId) {
+        return imageRepository.findById(imageId)
+                .map(image -> image.getProductMappings().stream()
+                        .map(mapping -> mapping.getProduct().getProductId())
+                        .toList())
+                .orElse(List.of());
+    }
+
+    public Optional<ProductImage> getImageById(long imageId) {
+        return imageRepository.findById(imageId);
+    }
+
+    public List<ProductImage> getAllImages() {
+        return imageRepository.findAll();
     }
 }
