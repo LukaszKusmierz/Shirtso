@@ -1,6 +1,8 @@
 package org.peter_lukas.shirtso.errorhandling;
 
+import org.peter_lukas.shirtso.commercial.product.validation.ImageNotFoundException;
 import org.peter_lukas.shirtso.commercial.product.validation.ProductDuplicationException;
+import org.peter_lukas.shirtso.commercial.product.validation.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -38,7 +40,17 @@ public class ErrorHandler {
         return new ErrorResponse(errMsg);
     }
 
+    @ExceptionHandler(ImageNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleImageNotFound(ImageNotFoundException e) {
+        return new ErrorResponse(e.getMessage());
+    }
 
+    @ExceptionHandler(ProductNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleProductNotFound(ProductNotFoundException e) {
+        return new ErrorResponse(e.getMessage());
+    }
 
 
     public record ErrorResponse(String info) {

@@ -1,10 +1,30 @@
 package org.peter_lukas.shirtso.commercial.product;
 
+import org.peter_lukas.shirtso.commercial.product.image.ProductImageDto;
+import org.peter_lukas.shirtso.commercial.product.image.ProductImageMapping;
 import org.springframework.stereotype.*;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 @Component
 public class ProductMapper {
     public ProductDto mapProductEntityToDto(Product entity) {
+        List<ProductImageDto> imageDtos = new ArrayList<>();
+
+        if (entity.getImageMappings() != null && !entity.getImageMappings().isEmpty()) {
+            imageDtos = entity.getImageMappings().stream()
+                    .sorted(Comparator.comparing(ProductImageMapping::getDisplayOrder))
+                    .map(mapping -> new ProductImageDto(
+                            mapping.getImage().getImageId(),
+                            mapping.getImage().getImageUrl(),
+                            mapping.getImage().getAltText(),
+                            mapping.isPrimary(),
+                            mapping.getDisplayOrder()
+                    ))
+                    .toList();
+        }
         return new ProductDto(
                 entity.getProductId(),
                 entity.getProductName(),
@@ -15,7 +35,8 @@ public class ProductMapper {
                 entity.getSubcategoryId(),
                 entity.getSupplier(),
                 entity.getStock(),
-                entity.getSize()
+                entity.getSize(),
+                imageDtos
         );
     }
 
