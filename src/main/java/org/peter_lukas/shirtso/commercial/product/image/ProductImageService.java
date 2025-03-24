@@ -109,7 +109,7 @@ public class ProductImageService {
     }
 
     @Transactional
-    public ProductImage updateImage(long imageId, CreateImageRequest request) {
+    public ProductImage updateImage(int imageId, CreateImageRequest request) {
         ProductImage image = imageRepository.findById(imageId)
                 .orElseThrow(() -> new ImageNotFoundException(Alerts.IMAGE_NOT_FOUND));
 
@@ -120,7 +120,7 @@ public class ProductImageService {
     }
 
     @Transactional
-    public void deleteImage(long imageId) {
+    public void deleteImage(int imageId) {
         ProductImage image = imageRepository.findById(imageId)
                 .orElseThrow(() -> new ImageNotFoundException(Alerts.IMAGE_NOT_FOUND));
 
@@ -131,7 +131,7 @@ public class ProductImageService {
         imageRepository.delete(image);
     }
 
-    public List<UUID> getProductsUsingImage(long imageId) {
+    public List<UUID> getProductsUsingImage(int imageId) {
         return imageRepository.findById(imageId)
                 .map(image -> image.getProductMappings().stream()
                         .map(mapping -> mapping.getProduct().getProductId())
@@ -139,7 +139,7 @@ public class ProductImageService {
                 .orElse(List.of());
     }
 
-    public Optional<ProductImage> getImageById(long imageId) {
+    public Optional<ProductImage> getImageById(int imageId) {
         return imageRepository.findById(imageId);
     }
 
