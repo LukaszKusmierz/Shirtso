@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.peter_lukas.shirtso.commercial.product.Product;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "product_image_mapping")
 @Getter
@@ -15,11 +17,17 @@ import org.peter_lukas.shirtso.commercial.product.Product;
 public class ProductImageMapping {
 
     @Id
+    @Column(name = "product_id", insertable = false, updatable = false)
+    private UUID productId;
+
+    @Id
+    @Column(name = "image_id", insertable = false, updatable = false)
+    private int imageId;
+
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "image_id")
     private ProductImage image;
@@ -29,6 +37,8 @@ public class ProductImageMapping {
     private int displayOrder;
 
     public ProductImageMapping(Product product, ProductImage image, boolean isPrimary, int displayOrder) {
+        this.productId = product.getProductId();
+        this.imageId = image.getImageId();
         this.product = product;
         this.image = image;
         this.isPrimary = isPrimary;

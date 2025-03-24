@@ -16,7 +16,7 @@ import java.util.Set;
 public class ProductImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long imageId;
+    private Integer imageId;
 
     @Column(nullable = false)
     private String imageUrl;

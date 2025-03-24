@@ -64,7 +64,7 @@ public class ProductImageService {
     }
 
     @Transactional
-    public void updatePrimaryImageStatus(UUID productId, long newPrimaryImageId) {
+    public void updatePrimaryImageStatus(UUID productId, int newPrimaryImageId) {
         imageMappingRepository.findByProduct_ProductIdAndIsPrimaryTrue(productId)
                 .ifPresent(mapping -> {
                     mapping.setPrimary(false);
@@ -80,7 +80,7 @@ public class ProductImageService {
     }
 
     @Transactional
-    public void removeImageFromProduct(UUID productId, long imageId) {
+    public void removeImageFromProduct(UUID productId, int imageId) {
         ProductImageMappingId mappingId = new ProductImageMappingId(productId, imageId);
         imageMappingRepository.findById(mappingId)
                 .ifPresent(mapping -> {

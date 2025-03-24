@@ -38,7 +38,7 @@ public class ProductImageController {
 
     @GetMapping("/{imageId}")
     @LogExecutionTime
-    public ResponseEntity<ProductImage> getImageById(@PathVariable long imageId) {
+    public ResponseEntity<ProductImage> getImageById(@PathVariable int imageId) {
         return productImageService.getImageById(imageId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -48,7 +48,7 @@ public class ProductImageController {
     @LogExecutionTime
     @RolesAllowed(USER_WRITE)
     public ResponseEntity<ProductImage> updateImage(
-            @PathVariable long imageId,
+            @PathVariable int imageId,
             @Valid @RequestBody CreateImageRequest request) {
         return ResponseEntity.ok(productImageService.updateImage(imageId, request));
     }
@@ -57,13 +57,13 @@ public class ProductImageController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @LogExecutionTime
     @RolesAllowed(USER_WRITE)
-    public void deleteImage(@PathVariable long imageId) {
+    public void deleteImage(@PathVariable int imageId) {
         productImageService.deleteImage(imageId);
     }
 
     @GetMapping("/{imageId}/products")
     @LogExecutionTime
-    public List<UUID> getProductsUsingImage(@PathVariable long imageId) {
+    public List<UUID> getProductsUsingImage(@PathVariable int imageId) {
         return productImageService.getProductsUsingImage(imageId);
     }
 }

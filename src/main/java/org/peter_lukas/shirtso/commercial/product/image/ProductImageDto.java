@@ -1,7 +1,7 @@
 package org.peter_lukas.shirtso.commercial.product.image;
 
 public record ProductImageDto(
-        long imageId,
+        int imageId,
         String imageUrl,
         String altText,
         boolean isPrimary,

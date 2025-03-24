@@ -15,7 +15,7 @@ import java.util.UUID;
 @Setter
 public class ProductImageMappingId implements Serializable {
     private UUID productId;
-    private long imageId;
+    private int imageId;
 
     @Override
     public boolean equals(Object o) {
