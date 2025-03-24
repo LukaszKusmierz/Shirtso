@@ -1,3 +1,6 @@
+-- Set the schema to public explicitly
+SET search_path TO public;
+
 -- Users table
 CREATE TABLE users (
                        user_id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -52,12 +55,22 @@ CREATE TABLE product (
                          FOREIGN KEY (subcategory_id) REFERENCES subcategory(subcategory_id)
 );
 
--- Product Images (One-to-Many)
+-- Images table (independent of products)
 CREATE TABLE product_image (
                                image_id SERIAL PRIMARY KEY,
-                               product_id UUID NOT NULL,
                                image_url VARCHAR(255) NOT NULL,
-                               FOREIGN KEY (product_id) REFERENCES product (product_id) ON DELETE CASCADE
+                               alt_text VARCHAR(255)
+);
+
+-- Many-to-many mapping table with display order
+CREATE TABLE product_image_mapping (
+                                       product_id UUID,
+                                       image_id INT,
+                                       is_primary BOOLEAN DEFAULT FALSE,
+                                       display_order INT DEFAULT 0,
+                                       PRIMARY KEY (product_id, image_id),
+                                       FOREIGN KEY (product_id) REFERENCES product (product_id) ON DELETE CASCADE,
+                                       FOREIGN KEY (image_id) REFERENCES product_image (image_id) ON DELETE CASCADE
 );
 
 -- Orders table

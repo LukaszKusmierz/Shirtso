@@ -1,5 +1,7 @@
 package org.peter_lukas.shirtso.commercial.product;
 
+import org.peter_lukas.shirtso.commercial.product.image.ProductImageDto;
+
 import java.math.*;
 import java.util.*;
 
@@ -13,7 +15,7 @@ public record ProductDto (
         int subcategoryId,
         String supplier,
         long stock,
-        Sizes size
+        Sizes size,
+        List<ProductImageDto> images
 ) {
-
 }

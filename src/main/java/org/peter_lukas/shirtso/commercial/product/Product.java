@@ -3,8 +3,11 @@ package org.peter_lukas.shirtso.commercial.product;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.peter_lukas.shirtso.commercial.product.image.ProductImage;
+import org.peter_lukas.shirtso.commercial.product.image.ProductImageMapping;
+
 import java.math.BigDecimal;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Getter
@@ -60,6 +63,9 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private Sizes size;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ProductImageMapping> imageMappings = new HashSet<>();
+
     @Version
     private Integer version;
 
@@ -74,5 +80,24 @@ public class Product {
         this.supplier = supplier;
         this.stock = stock;
         this.size = size;
+    }
+
+    public void addImage(ProductImage image, boolean isPrimary, int displayOrder) {
+        ProductImageMapping mapping = new ProductImageMapping(this, image, isPrimary, displayOrder);
+        imageMappings.add(mapping);
+    }
+
+    public Optional<ProductImage> getPrimaryImage() {
+        return imageMappings.stream()
+                .filter(ProductImageMapping::isPrimary)
+                .map(ProductImageMapping::getImage)
+                .findFirst();
+    }
+
+    public List<ProductImage> getAllImages() {
+        return imageMappings.stream()
+                .sorted(Comparator.comparing(ProductImageMapping::getDisplayOrder))
+                .map(ProductImageMapping::getImage)
+                .toList();
     }
 }
