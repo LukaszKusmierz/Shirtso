@@ -1,5 +1,6 @@
 package org.peter_lukas.shirtso.commercial.product;
 
+import org.hibernate.Hibernate;
 import org.peter_lukas.shirtso.commercial.product.image.ProductImageDto;
 import org.peter_lukas.shirtso.commercial.product.image.ProductImageMapping;
 import org.springframework.stereotype.*;
@@ -7,13 +8,17 @@ import org.springframework.stereotype.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class ProductMapper {
     public ProductDto mapProductEntityToDto(Product entity) {
-        List<ProductImageDto> imageDtos = new ArrayList<>();
 
-        if (entity.getImageMappings() != null && !entity.getImageMappings().isEmpty()) {
+        List<ProductImageDto> imageDtos = new ArrayList<>();
+        Set<ProductImageMapping> imageMappings = entity.getImageMappings();
+        boolean isInitialized = Hibernate.isInitialized(imageMappings);
+
+        if (isInitialized && entity.getImageMappings() != null && !entity.getImageMappings().isEmpty()) {
             imageDtos = entity.getImageMappings().stream()
                     .sorted(Comparator.comparing(ProductImageMapping::getDisplayOrder))
                     .map(mapping -> new ProductImageDto(

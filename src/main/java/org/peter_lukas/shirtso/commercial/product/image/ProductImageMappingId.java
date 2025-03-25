@@ -1,5 +1,7 @@
 package org.peter_lukas.shirtso.commercial.product.image;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,12 +11,17 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
+@Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 public class ProductImageMappingId implements Serializable {
+
+    @Column(name = "product_id")
     private UUID productId;
+
+    @Column(name = "image_id")
     private int imageId;
 
     @Override

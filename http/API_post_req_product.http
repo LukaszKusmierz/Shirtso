@@ -501,27 +501,138 @@ content-type: application/json
   "size": "XS"
 }
 
+### Images
+
+POST localhost:8080/api/images
+Authorization: Bearer {{auth-token}}
+content-type: application/json
+
+{
+  "imageUrl": "/photos/jeansy-jasne.jpg",
+  "altText": "spodnie-wrangler"
+}
+
+###
+
+POST localhost:8080/api/images
+Authorization: Bearer {{auth-token}}
+content-type: application/json
+
+{
+  "imageUrl": "/photos/jeansy-rurki.jpg",
+  "altText": "spodnie-levis"
+}
+
+###
+
+POST localhost:8080/api/images
+Authorization: Bearer {{auth-token}}
+content-type: application/json
+
+{
+  "imageUrl": "/photos/koszula-casual-krata.jpg",
+  "altText": "koszula-szkocka-krata"
+}
+
+###
+
+POST localhost:8080/api/images
+Authorization: Bearer {{auth-token}}
+content-type: application/json
+
+{
+  "imageUrl": "/photos/koszula-letnia.jpg",
+  "altText": "koszula-jasna-lato"
+}
+
+###
+
+POST localhost:8080/api/images
+Authorization: Bearer {{auth-token}}
+content-type: application/json
+
+{
+  "imageUrl": "/photos/marynarka-ciemna-gladka.jpg",
+  "altText": "marynarka-gladka-czarna"
+}
+
+###
+
+POST localhost:8080/api/images
+Authorization: Bearer {{auth-token}}
+content-type: application/json
+
+{
+  "imageUrl": "/photos/marynarka-flausz.jpg",
+  "altText": "marynarka-casual"
+}
+
+###
+
+POST localhost:8080/api/images
+Authorization: Bearer {{auth-token}}
+content-type: application/json
+
+{
+  "imageUrl": "/photos/plaszcz-meski.jpg",
+  "altText": "plaszcz-do-kolan"
+}
+
+###
+
+POST localhost:8080/api/images
+Authorization: Bearer {{auth-token}}
+content-type: application/json
+
+{
+  "imageUrl": "/photos/plaszcz-meski-2.jpg",
+  "altText": "plaszcz-elegancki"
+}
+
+###
+
+POST localhost:8080/api/images
+Authorization: Bearer {{auth-token}}
+content-type: application/json
+
+{
+  "imageUrl": "/swetr-golf.jpg",
+  "altText": "golf-casualowy"
+}
+
+###
+
+POST localhost:8080/api/products/59b032d5-f7d6-4d5a-8281-c206bcfecd1b/images
+Authorization: Bearer {{auth-token}}
+content-type: application/json
+
+{
+  "imageId": 7,
+  "isPrimary": true,
+  "displayOrder": 1
+}
+
 ### Authorization
 
 
 ### Login as admin
+#
+#POST localhost:8080/api/auth/login
+#Content-Type: application/json
+#
+#{
+#  "username": "bernard@interia.pl",
+#  "password": "qwertyulkjhg"
+#}
+#> {% client.global.set("auth-token", response.body.token); %}
 
-POST localhost:8080/api/auth/login
-Content-Type: application/json
-
-{
-  "username": "bernard@interia.pl",
-  "password": "qwertyulkjhg"
-}
-> {% client.global.set("auth-token", response.body.token); %}
-
-### Register new user
-
-POST localhost:8080/api/auth/register
-Content-Type: application/json
-
-{
-  "username": "Bernard Kaban",
-  "email": "bernard@interia.pl",
-  "password": "qwertyulkjhg"
-}
+#### Register new user
+#
+#POST localhost:8080/api/auth/register
+#Content-Type: application/json
+#
+#{
+#  "username": "Bernard Kaban",
+#  "email": "bernard@interia.pl",
+#  "password": "qwertyulkjhg"
+#}
