@@ -23,7 +23,7 @@ public class ProductMapper {
                     .sorted(Comparator.comparing(ProductImageMapping::getDisplayOrder))
                     .map(mapping -> new ProductImageDto(
                             mapping.getImage().getImageId(),
-                            mapping.getImage().getImageUrl(),
+                            normalizeImagePath(mapping.getImage().getImageUrl()),
                             mapping.getImage().getAltText(),
                             mapping.isPrimary(),
                             mapping.getDisplayOrder()
@@ -43,6 +43,13 @@ public class ProductMapper {
                 entity.getSize(),
                 imageDtos
         );
+    }
+
+    private String normalizeImagePath(String imagePath) {
+        if (imagePath == null || imagePath.isEmpty()) {
+            return "/placeholder-product.png";
+        }
+        return imagePath.startsWith("/") ? imagePath : "/" + imagePath;
     }
 
     public Product mapNewProductDtoToEntity(NewProductDto dto) {
