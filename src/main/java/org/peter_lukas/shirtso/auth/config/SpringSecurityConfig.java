@@ -51,7 +51,8 @@ public class SpringSecurityConfig {
 
     public static final String USER_READ = "USER_READ";
     public static final String USER_WRITE = "USER_WRITE";
-    private static final String[] URL_WHITELIST = {"/api/auth/register", "/api/auth/login", "/swagger-ui/**", "/v3/api-docs/**", "/error"};
+    private static final String[] URL_WHITELIST = {"/api/auth/register", "/api/auth/login", "/swagger-ui/**",
+            "/v3/api-docs/**", "/error", "/static/**", "/static/photos/** ", "/*.png", "/.jpg"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationEntryPoint authenticationEntryPoint, JWTReqFilter jwtFilter) throws Exception {
@@ -60,7 +61,8 @@ public class SpringSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers(URL_WHITELIST).permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/products/**", "/api/categories/**", "/api/subcategories/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/products/**", "/api/categories/**",
+                                "/api/subcategories/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
