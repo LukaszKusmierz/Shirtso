@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.peter_lukas.shirtso.messages.Alerts.USER_NOT_FOUND;
+
 @Service
 public class AuthService {
 
@@ -65,7 +67,7 @@ public class AuthService {
         String email = authentication.getName();
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
 
         return new RegisterUserDataDto(
                 user.getUserId(),
