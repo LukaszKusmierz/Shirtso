@@ -83,7 +83,7 @@ CREATE TABLE orders (
                         FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
--- Order Items (Many-to-Many)
+-- OrderDto Items (Many-to-Many)
 CREATE TABLE order_item (
                             order_item_id SERIAL PRIMARY KEY,
                             order_id INT NOT NULL,

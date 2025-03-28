@@ -18,4 +18,10 @@ public final class Alerts {
     public static final String CART_NOT_FOUND = "Shopping cart not found";
 
     public static final String CART_ITEM_NOT_FOUND = "Cart item not found";
+
+    public static final String ORDER_NOT_FOUND = "Order not found";
+
+    public static final String ORDER_STATUS_EXCEPTION = "Cannot cancel order with status: ";
+
+    public static final String EMPTY_CART_ORDER = "Cannot create order from empty cart";
 }

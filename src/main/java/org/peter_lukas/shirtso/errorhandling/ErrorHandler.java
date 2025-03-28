@@ -68,6 +68,25 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage());
     }
 
-    public record ErrorResponse(String info) {}
+    @ExceptionHandler(OrderNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleOrderNotFound(OrderNotFoundException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler(EmptyCartException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleEmptyCart(EmptyCartException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler(OrderStatusException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse handleOrderStatusException(OrderStatusException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    public record ErrorResponse(String info) {
+    }
 
 }
