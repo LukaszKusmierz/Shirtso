@@ -1,8 +1,6 @@
 package org.peter_lukas.shirtso.errorhandling;
 
-import org.peter_lukas.shirtso.commercial.product.validation.ImageNotFoundException;
-import org.peter_lukas.shirtso.commercial.product.validation.ProductDuplicationException;
-import org.peter_lukas.shirtso.commercial.product.validation.ProductNotFoundException;
+import org.peter_lukas.shirtso.commercial.product.validation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -52,9 +50,24 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage());
     }
 
-
-    public record ErrorResponse(String info) {
-
+    @ExceptionHandler(CartNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleCartNotFound(CartNotFoundException e) {
+        return new ErrorResponse(e.getMessage());
     }
+
+    @ExceptionHandler(CartItemNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleCartItemNotFound(CartItemNotFoundException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler(InsufficientStockException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse handleInsufficientStock(InsufficientStockException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    public record ErrorResponse(String info) {}
 
 }
