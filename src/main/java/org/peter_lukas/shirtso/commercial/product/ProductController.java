@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-import static org.peter_lukas.shirtso.auth.config.SpringSecurityConfig.USER_READ;
 import static org.peter_lukas.shirtso.auth.config.SpringSecurityConfig.USER_WRITE;
 
 @RestController
@@ -79,5 +78,10 @@ public class ProductController {
     @GetMapping("/{productId}")
     public ProductDto getProductById(@PathVariable UUID productId) {
         return productService.getProductById(productId);
+    }
+
+    @GetMapping(params = {"categoryId"})
+    public List<ProductDto> getProductsByCategoryId(@RequestParam int categoryId) {
+        return productService.getProductsByCategoryId(categoryId);
     }
 }

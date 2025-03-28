@@ -109,4 +109,11 @@ public class ProductService {
                 .map(productMapper::mapProductEntityToDto)
                 .orElseThrow(() -> new ProductNotFoundException(Alerts.PRODUCT_NOT_FOUND));
     }
+
+    @Transactional
+    public List<ProductDto> getProductsByCategoryId(int categoryId) {
+        return productRepository.getProductsByCategoryId(categoryId).stream()
+                .map(productMapper::mapProductEntityToDto)
+                .toList();
+    }
 }

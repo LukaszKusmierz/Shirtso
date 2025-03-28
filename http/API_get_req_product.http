@@ -10,6 +10,11 @@ Authorization: Bearer {{auth-token}}
 
 ### wg categoryId
 
+GET localhost:8080/api/products?categoryId=1
+Authorization: Bearer {{auth-token}}
+
+### wg subcategoryId
+
 GET localhost:8080/api/products?subcategoryId=18
 Authorization: Bearer {{auth-token}}
 
