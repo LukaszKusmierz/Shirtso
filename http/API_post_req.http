@@ -619,8 +619,8 @@ Content-Type: application/json
 Authorization: Bearer {{auth-token}}
 
 {
-  "productId": "b96b49c5-810d-453e-bbe1-d776e584685d",
-  "quantity": 2
+  "productId": "9e9d223f-a963-4b01-bf9b-5710c3bdb729",
+  "quantity": 20
 }
 
 ### stwórz zamówienie z wózka
@@ -630,12 +630,12 @@ Content-Type: application/json
 Authorization: Bearer {{auth-token}}
 
 {
-  "cartId": 2
+  "cartId": 4
 }
 
 ### skasuj zamówienia użytkownika
 
-POST localhost:8080/api/orders/1/cancel
+POST localhost:8080/api/orders/6/cancel
 Authorization: Bearer {{auth-token}}
 
 ### płatność-powodzenie
@@ -645,7 +645,7 @@ Content-Type: application/json
 Authorization: Bearer {{auth-token}}
 
 {
-  "orderId": 2,
+  "orderId": 6,
   "paymentMethod": "CREDIT_CARD",
   "cardNumber": "4111111111111111",
   "cardHolderName": "John Doe",
@@ -660,7 +660,7 @@ Content-Type: application/json
 Authorization: Bearer {{auth-token}}
 
 {
-  "orderId": 2,
+  "orderId": 6,
   "paymentMethod": "CREDIT_CARD",
   "cardNumber": "4242424242424242",
   "cardHolderName": "John Doe",
@@ -690,7 +690,7 @@ Content-Type: application/json
 Authorization: Bearer {{auth-token}}
 
 {
-  "orderId": 2,
+  "orderId": 6,
   "paymentMethod": "CREDIT_CARD",
   "cardNumber": "4111111111111111",
   "cardHolderName": "John Doe",

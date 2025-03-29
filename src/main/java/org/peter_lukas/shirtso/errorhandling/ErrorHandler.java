@@ -86,6 +86,12 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage());
     }
 
+    @ExceptionHandler(PaymentException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse handlePaymentException(PaymentException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
     public record ErrorResponse(String info) {
     }
 
