@@ -1,0 +1,20 @@
+### update wózka użytkownika
+
+PUT localhost:8080/api/cart
+Content-Type: application/json
+Authorization: Bearer {{auth-token}}
+
+{
+  "cartItemId": 1,
+  "quantity": 3
+}
+
+### update status zamówienia
+
+PUT localhost:8080/api/orders/1/status
+Content-Type: application/json
+Authorization: Bearer {{auth-token}}
+
+{
+  "orderStatus": "PROCESSING"
+}

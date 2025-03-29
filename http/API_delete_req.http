@@ -1,0 +1,9 @@
+### usuń produkt z wózka
+
+DELETE localhost:8080/api/cart/1
+Authorization: Bearer {{auth-token}}
+
+### usuń wózek użytkownika
+
+DELETE localhost:8080/api/cart
+Authorization: Bearer {{auth-token}}

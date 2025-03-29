@@ -612,27 +612,50 @@ content-type: application/json
   "displayOrder": 1
 }
 
-### Authorization
+### dodaj do wózka
 
+POST localhost:8080/api/cart
+Content-Type: application/json
+Authorization: Bearer {{auth-token}}
 
-### Login as admin
-#
-#POST localhost:8080/api/auth/login
-#Content-Type: application/json
-#
-#{
-#  "username": "bernard@interia.pl",
-#  "password": "qwertyulkjhg"
-#}
-#> {% client.global.set("auth-token", response.body.token); %}
+{
+  "productId": "b96b49c5-810d-453e-bbe1-d776e584685d",
+  "quantity": 2
+}
 
-#### Register new user
-#
-#POST localhost:8080/api/auth/register
-#Content-Type: application/json
-#
-#{
-#  "username": "Bernard Kaban",
-#  "email": "bernard@interia.pl",
-#  "password": "qwertyulkjhg"
-#}
+### stwórz zamówienie z wózka
+
+POST localhost:8080/api/orders
+Content-Type: application/json
+Authorization: Bearer {{auth-token}}
+
+{
+  "cartId": 1
+}
+
+### skasuj zamówienia użytkownika
+
+POST localhost:8080/api/orders/1/cancel
+Authorization: Bearer {{auth-token}}
+
+### zaloguj admina
+
+POST localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "bernard@interia.pl",
+  "password": "qwertyulkjhg"
+}
+> {% client.global.set("auth-token", response.body.token); %}
+
+### zarejestruj nowego użytkownika
+
+POST localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "Bernard Kaban",
+  "email": "bernard@interia.pl",
+  "password": "qwertyulkjhg"
+}

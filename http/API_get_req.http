@@ -1,7 +1,7 @@
 ### wszystkie
 
 GET localhost:8080/api/products
-#authorization: Bearer {{auth-token}}
+authorization: Bearer {{auth-token}}
 
 ### podzielone na strony
 
@@ -46,11 +46,26 @@ Authorization: Bearer {{auth-token}}
 ### wg rozmiaru i subkategorii
 
 GET localhost:8080/api/products?size=L&subcategoryId=18
-#Authorization: Bearer {{auth-token}}
+Authorization: Bearer {{auth-token}}
 
 ### wg Id produktu
 
 GET localhost:8080/api/products/a0e25ff8-f3cd-4aef-917a-f2417d172c52
+Authorization: Bearer {{auth-token}}
+
+### wózek użytkownika
+
+GET localhost:8080/api/cart
+Authorization: Bearer {{auth-token}}
+
+### zamówienia użytkownika
+
+GET localhost:8080/api/orders
+Authorization: Bearer {{auth-token}}
+
+### dane zamówienie użytkownika
+
+GET localhost:8080/api/orders/1
 Authorization: Bearer {{auth-token}}
 
 ### Swagger API Docs
