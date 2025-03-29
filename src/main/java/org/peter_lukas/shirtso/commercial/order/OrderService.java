@@ -12,6 +12,7 @@ import org.peter_lukas.shirtso.commercial.order.dto.UpdateOrderStatusRequestDto;
 import org.peter_lukas.shirtso.commercial.product.Product;
 import org.peter_lukas.shirtso.commercial.product.ProductRepository;
 import org.peter_lukas.shirtso.commercial.product.validation.*;
+import org.peter_lukas.shirtso.notification.NotificationService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -30,19 +31,22 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final OrderMapper orderMapper;
+    private final NotificationService notificationService;
 
     public OrderService(OrderRepository orderRepository,
                         OrderItemRepository orderItemRepository,
                         ShoppingCartRepository cartRepository,
                         ProductRepository productRepository,
                         UserRepository userRepository,
-                        OrderMapper orderMapper) {
+                        OrderMapper orderMapper,
+                        NotificationService notificationService) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.cartRepository = cartRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
         this.orderMapper = orderMapper;
+        this.notificationService = notificationService;
     }
 
     @Transactional
@@ -79,9 +83,9 @@ public class OrderService {
         }
 
         Order savedOrder = orderRepository.save(order);
-
         cart.getItems().clear();
         cartRepository.save(cart);
+        notificationService.sendOrderConfirmationNotification(savedOrder);
 
         return orderMapper.mapToOrderDto(savedOrder);
     }
@@ -110,8 +114,10 @@ public class OrderService {
         Order order = orderRepository.findByOrderIdWithItems(orderId)
                 .orElseThrow(() -> new OrderNotFoundException(ORDER_NOT_FOUND));
 
+        OrderStatus previousStatus = order.getOrderStatus();
         order.setOrderStatus(request.orderStatus());
         Order savedOrder = orderRepository.save(order);
+        notificationService.sendOrderStatusChangeNotification(savedOrder, previousStatus.toString());
 
         return orderMapper.mapToOrderDto(savedOrder);
     }
@@ -127,6 +133,7 @@ public class OrderService {
             throw new OrderStatusException(ORDER_STATUS_EXCEPTION + order.getOrderStatus());
         }
 
+        OrderStatus previousStatus = order.getOrderStatus();
         order.setOrderStatus(OrderStatus.CANCELLED);
 
         for (OrderItem item : order.getItems()) {
@@ -135,6 +142,7 @@ public class OrderService {
             productRepository.save(product);
         }
 
+        notificationService.sendOrderStatusChangeNotification(order, previousStatus.toString());
         orderRepository.save(order);
     }
 

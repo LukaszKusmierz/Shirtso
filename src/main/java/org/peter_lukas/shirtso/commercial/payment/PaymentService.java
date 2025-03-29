@@ -8,6 +8,7 @@ import org.peter_lukas.shirtso.commercial.payment.dto.ProcessPaymentRequestDto;
 import org.peter_lukas.shirtso.commercial.product.validation.OrderNotFoundException;
 import org.peter_lukas.shirtso.commercial.product.validation.PaymentException;
 import org.peter_lukas.shirtso.messages.Alerts;
+import org.peter_lukas.shirtso.notification.NotificationService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

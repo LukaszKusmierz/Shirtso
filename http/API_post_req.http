@@ -630,13 +630,74 @@ Content-Type: application/json
 Authorization: Bearer {{auth-token}}
 
 {
-  "cartId": 1
+  "cartId": 2
 }
 
 ### skasuj zamówienia użytkownika
 
 POST localhost:8080/api/orders/1/cancel
 Authorization: Bearer {{auth-token}}
+
+### płatność-powodzenie
+
+POST http://localhost:8080/api/payments/process
+Content-Type: application/json
+Authorization: Bearer {{auth-token}}
+
+{
+  "orderId": 2,
+  "paymentMethod": "CREDIT_CARD",
+  "cardNumber": "4111111111111111",
+  "cardHolderName": "John Doe",
+  "expiryDate": "12/25",
+  "cvv": "123"
+}
+
+### płatność-niepowodzenie(błędna karta)
+
+POST http://localhost:8080/api/payments/process
+Content-Type: application/json
+Authorization: Bearer {{auth-token}}
+
+{
+  "orderId": 2,
+  "paymentMethod": "CREDIT_CARD",
+  "cardNumber": "4242424242424242",
+  "cardHolderName": "John Doe",
+  "expiryDate": "12/25",
+  "cvv": "123"
+}
+
+### płatność-niepowodzenie(nieistniejące zamówienie)
+
+POST http://localhost:8080/api/payments/process
+Content-Type: application/json
+Authorization: Bearer {{auth-token}}
+
+{
+  "orderId": 99,
+  "paymentMethod": "CREDIT_CARD",
+  "cardNumber": "4111111111111111",
+  "cardHolderName": "John Doe",
+  "expiryDate": "12/25",
+  "cvv": "123"
+}
+
+### płatność-niepowodzenie(już zapłacone zamówienie)
+
+POST http://localhost:8080/api/payments/process
+Content-Type: application/json
+Authorization: Bearer {{auth-token}}
+
+{
+  "orderId": 2,
+  "paymentMethod": "CREDIT_CARD",
+  "cardNumber": "4111111111111111",
+  "cardHolderName": "John Doe",
+  "expiryDate": "12/25",
+  "cvv": "123"
+}
+
 
 ### zaloguj admina
 

@@ -5,11 +5,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.peter_lukas.shirtso.auth.user.User;
+import org.peter_lukas.shirtso.commercial.payment.Payment;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+
+import static org.peter_lukas.shirtso.commercial.payment.PaymentStatus.COMPLETED;
 
 @Entity
 @Table(name = "orders")
@@ -40,6 +43,9 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderItem> items = new HashSet<>();
 
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Payment payment;
+
     public Order(User user) {
         this.user = user;
     }
@@ -60,6 +66,10 @@ public class Order {
         this.totalAmount = items.stream()
                 .map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public boolean isPaid() {
+        return payment != null && payment.getStatus() == COMPLETED;
     }
 }
 
