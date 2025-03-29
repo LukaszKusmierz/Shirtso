@@ -1,4 +1,4 @@
-package org.peter_lukas.shirtso.commercial.subcategory;
+package org.peter_lukas.shirtso.commercial.subcategory.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

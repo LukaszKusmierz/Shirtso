@@ -1,4 +1,4 @@
-package org.peter_lukas.shirtso.commercial.product.image;
+package org.peter_lukas.shirtso.commercial.product.image.dto;
 
 public record ProductImageDto(
         int imageId,

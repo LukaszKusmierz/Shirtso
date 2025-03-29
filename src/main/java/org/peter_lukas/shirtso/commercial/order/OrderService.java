@@ -5,10 +5,10 @@ import org.peter_lukas.shirtso.auth.user.User;
 import org.peter_lukas.shirtso.auth.user.UserRepository;
 import org.peter_lukas.shirtso.commercial.cart.ShoppingCart;
 import org.peter_lukas.shirtso.commercial.cart.ShoppingCartRepository;
-import org.peter_lukas.shirtso.commercial.order.dto.CreateOrderRequest;
+import org.peter_lukas.shirtso.commercial.order.dto.CreateOrderRequestDto;
 import org.peter_lukas.shirtso.commercial.order.dto.OrderDto;
 import org.peter_lukas.shirtso.commercial.order.dto.OrderSummaryDto;
-import org.peter_lukas.shirtso.commercial.order.dto.UpdateOrderStatusRequest;
+import org.peter_lukas.shirtso.commercial.order.dto.UpdateOrderStatusRequestDto;
 import org.peter_lukas.shirtso.commercial.product.Product;
 import org.peter_lukas.shirtso.commercial.product.ProductRepository;
 import org.peter_lukas.shirtso.commercial.product.validation.*;
@@ -46,7 +46,7 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderDto createOrderFromCart(CreateOrderRequest request) throws UserNotFoundException {
+    public OrderDto createOrderFromCart(CreateOrderRequestDto request) throws UserNotFoundException {
         User currentUser = getCurrentUser();
         ShoppingCart cart = cartRepository.findById(request.cartId())
                 .orElseThrow(() -> new CartNotFoundException(CART_NOT_FOUND));
@@ -106,7 +106,7 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderDto updateOrderStatus(Integer orderId, UpdateOrderStatusRequest request) {
+    public OrderDto updateOrderStatus(Integer orderId, UpdateOrderStatusRequestDto request) {
         Order order = orderRepository.findByOrderIdWithItems(orderId)
                 .orElseThrow(() -> new OrderNotFoundException(ORDER_NOT_FOUND));
 

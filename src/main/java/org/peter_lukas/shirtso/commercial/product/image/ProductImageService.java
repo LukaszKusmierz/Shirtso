@@ -2,6 +2,9 @@ package org.peter_lukas.shirtso.commercial.product.image;
 
 import org.peter_lukas.shirtso.commercial.product.Product;
 import org.peter_lukas.shirtso.commercial.product.ProductRepository;
+import org.peter_lukas.shirtso.commercial.product.image.dto.AssociateImageRequestDto;
+import org.peter_lukas.shirtso.commercial.product.image.dto.CreateImageRequestDto;
+import org.peter_lukas.shirtso.commercial.product.image.dto.ProductImageDto;
 import org.peter_lukas.shirtso.commercial.product.validation.ImageNotFoundException;
 import org.peter_lukas.shirtso.commercial.product.validation.ProductNotFoundException;
 import org.peter_lukas.shirtso.messages.Alerts;
@@ -41,7 +44,7 @@ public class ProductImageService {
     }
 
     @Transactional
-    public ProductImageDto associateImageWithProduct(UUID productId, AssociateImageRequest request) {
+    public ProductImageDto associateImageWithProduct(UUID productId, AssociateImageRequestDto request) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(Alerts.PRODUCT_NOT_FOUND));
 
@@ -101,7 +104,7 @@ public class ProductImageService {
     }
 
     @Transactional
-    public ProductImage createImage(CreateImageRequest request) {
+    public ProductImage createImage(CreateImageRequestDto request) {
         ProductImage image = new ProductImage();
         image.setImageUrl(request.imageUrl());
         image.setAltText(request.altText());
@@ -109,7 +112,7 @@ public class ProductImageService {
     }
 
     @Transactional
-    public ProductImage updateImage(int imageId, CreateImageRequest request) {
+    public ProductImage updateImage(int imageId, CreateImageRequestDto request) {
         ProductImage image = imageRepository.findById(imageId)
                 .orElseThrow(() -> new ImageNotFoundException(Alerts.IMAGE_NOT_FOUND));
 

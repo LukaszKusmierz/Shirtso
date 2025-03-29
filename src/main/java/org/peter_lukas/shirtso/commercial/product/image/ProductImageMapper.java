@@ -1,5 +1,6 @@
 package org.peter_lukas.shirtso.commercial.product.image;
 
+import org.peter_lukas.shirtso.commercial.product.image.dto.ProductImageDto;
 import org.springframework.stereotype.Component;
 
 @Component

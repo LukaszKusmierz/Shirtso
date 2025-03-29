@@ -4,10 +4,10 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import org.peter_lukas.shirtso.analytics.LogExecutionTime;
 import org.peter_lukas.shirtso.auth.registration.UserNotFoundException;
-import org.peter_lukas.shirtso.commercial.order.dto.CreateOrderRequest;
+import org.peter_lukas.shirtso.commercial.order.dto.CreateOrderRequestDto;
 import org.peter_lukas.shirtso.commercial.order.dto.OrderDto;
 import org.peter_lukas.shirtso.commercial.order.dto.OrderSummaryDto;
-import org.peter_lukas.shirtso.commercial.order.dto.UpdateOrderStatusRequest;
+import org.peter_lukas.shirtso.commercial.order.dto.UpdateOrderStatusRequestDto;
 import org.peter_lukas.shirtso.commercial.product.validation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +29,7 @@ public class OrderController {
 
     @PostMapping
     @LogExecutionTime
-    public ResponseEntity<OrderDto> createOrder(@Valid @RequestBody CreateOrderRequest request) {
+    public ResponseEntity<OrderDto> createOrder(@Valid @RequestBody CreateOrderRequestDto request) {
         try {
             OrderDto order = orderService.createOrderFromCart(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(order);
@@ -71,7 +71,7 @@ public class OrderController {
     @RolesAllowed(USER_WRITE)
     public ResponseEntity<OrderDto> updateOrderStatus(
             @PathVariable Integer orderId,
-            @Valid @RequestBody UpdateOrderStatusRequest request) {
+            @Valid @RequestBody UpdateOrderStatusRequestDto request) {
         try {
             OrderDto order = orderService.updateOrderStatus(orderId, request);
             return ResponseEntity.ok(order);

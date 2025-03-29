@@ -1,7 +1,9 @@
 package org.peter_lukas.shirtso.commercial.product;
 
 import org.hibernate.Hibernate;
-import org.peter_lukas.shirtso.commercial.product.image.ProductImageDto;
+import org.peter_lukas.shirtso.commercial.product.dto.NewProductDto;
+import org.peter_lukas.shirtso.commercial.product.dto.ProductDto;
+import org.peter_lukas.shirtso.commercial.product.image.dto.ProductImageDto;
 import org.peter_lukas.shirtso.commercial.product.image.ProductImageMapping;
 import org.springframework.stereotype.*;
 

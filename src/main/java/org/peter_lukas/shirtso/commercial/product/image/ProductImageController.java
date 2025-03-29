@@ -3,6 +3,7 @@ package org.peter_lukas.shirtso.commercial.product.image;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import org.peter_lukas.shirtso.analytics.LogExecutionTime;
+import org.peter_lukas.shirtso.commercial.product.image.dto.CreateImageRequestDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class ProductImageController {
     @ResponseStatus(HttpStatus.CREATED)
     @LogExecutionTime
     @RolesAllowed(USER_WRITE)
-    public ProductImage createImage(@Valid @RequestBody CreateImageRequest request) {
+    public ProductImage createImage(@Valid @RequestBody CreateImageRequestDto request) {
         return productImageService.createImage(request);
     }
 
@@ -49,7 +50,7 @@ public class ProductImageController {
     @RolesAllowed(USER_WRITE)
     public ResponseEntity<ProductImage> updateImage(
             @PathVariable int imageId,
-            @Valid @RequestBody CreateImageRequest request) {
+            @Valid @RequestBody CreateImageRequestDto request) {
         return ResponseEntity.ok(productImageService.updateImage(imageId, request));
     }
 

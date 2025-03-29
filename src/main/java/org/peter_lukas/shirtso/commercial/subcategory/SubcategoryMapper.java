@@ -2,6 +2,8 @@ package org.peter_lukas.shirtso.commercial.subcategory;
 
 import org.peter_lukas.shirtso.commercial.category.Category;
 import org.peter_lukas.shirtso.commercial.category.CategoryRepository;
+import org.peter_lukas.shirtso.commercial.subcategory.dto.NewSubcategoryDto;
+import org.peter_lukas.shirtso.commercial.subcategory.dto.SubcategoryDto;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -8,7 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.peter_lukas.shirtso.commercial.product.Currencies;
-import org.peter_lukas.shirtso.commercial.product.NewProductDto;
+import org.peter_lukas.shirtso.commercial.product.dto.NewProductDto;
 import org.peter_lukas.shirtso.commercial.product.ProductRepository;
 import org.peter_lukas.shirtso.commercial.product.Sizes;
 

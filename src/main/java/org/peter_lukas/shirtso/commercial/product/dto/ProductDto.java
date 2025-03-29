@@ -1,6 +1,8 @@
-package org.peter_lukas.shirtso.commercial.product;
+package org.peter_lukas.shirtso.commercial.product.dto;
 
-import org.peter_lukas.shirtso.commercial.product.image.ProductImageDto;
+import org.peter_lukas.shirtso.commercial.product.Currencies;
+import org.peter_lukas.shirtso.commercial.product.Sizes;
+import org.peter_lukas.shirtso.commercial.product.image.dto.ProductImageDto;
 
 import java.math.*;
 import java.util.*;

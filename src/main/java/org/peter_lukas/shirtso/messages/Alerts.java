@@ -24,4 +24,10 @@ public final class Alerts {
     public static final String ORDER_STATUS_EXCEPTION = "Cannot cancel order with status: ";
 
     public static final String EMPTY_CART_ORDER = "Cannot create order from empty cart";
+
+    public static final String PAYMENT_FAILED = "Payment processing failed: ";
+
+    public static final String PAYMENT_FAILED_ORDER_STATUS = "Payment can only be processed for orders in NEW status";
+
+    public static final String PAYMENT_ALREADY_EXISTS = "Payment already exists for this order";
 }

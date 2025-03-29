@@ -1,5 +1,7 @@
 package org.peter_lukas.shirtso.commercial.category;
 
+import org.peter_lukas.shirtso.commercial.category.dto.CategoryDto;
+import org.peter_lukas.shirtso.commercial.category.dto.NewCategoryDto;
 import org.springframework.stereotype.Component;
 
 @Component

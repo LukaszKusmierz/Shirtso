@@ -2,7 +2,7 @@ package org.peter_lukas.shirtso.commercial.order.dto;
 
 import jakarta.validation.constraints.NotNull;
 
-public record CreateOrderRequest(
+public record CreateOrderRequestDto(
         @NotNull(message = "Cart ID cannot be null")
         Integer cartId
 ) {

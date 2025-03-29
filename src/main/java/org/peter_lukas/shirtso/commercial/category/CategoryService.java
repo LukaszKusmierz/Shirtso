@@ -1,6 +1,6 @@
 package org.peter_lukas.shirtso.commercial.category;
 
-import org.peter_lukas.shirtso.commercial.subcategory.SubcategoryService;
+import org.peter_lukas.shirtso.commercial.category.dto.CategoryDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,5 +1,7 @@
 package org.peter_lukas.shirtso.commercial.product;
 
+import org.peter_lukas.shirtso.commercial.product.dto.NewProductDto;
+import org.peter_lukas.shirtso.commercial.product.dto.ProductDto;
 import org.peter_lukas.shirtso.commercial.product.validation.ProductNotFoundException;
 import org.peter_lukas.shirtso.messages.Alerts;
 import org.peter_lukas.shirtso.commercial.product.validation.ProductDuplicationException;

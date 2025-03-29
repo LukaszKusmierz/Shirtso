@@ -3,6 +3,8 @@ package org.peter_lukas.shirtso.commercial.product.image;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import org.peter_lukas.shirtso.analytics.LogExecutionTime;
+import org.peter_lukas.shirtso.commercial.product.image.dto.AssociateImageRequestDto;
+import org.peter_lukas.shirtso.commercial.product.image.dto.ProductImageDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +44,7 @@ public class ProductToImageController {
     @RolesAllowed(USER_WRITE)
     public ProductImageDto associateImageWithProduct(
             @PathVariable UUID productId,
-            @Valid @RequestBody AssociateImageRequest request) {
+            @Valid @RequestBody AssociateImageRequestDto request) {
         return productImageService.associateImageWithProduct(productId, request);
     }
 

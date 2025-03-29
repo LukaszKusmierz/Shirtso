@@ -2,7 +2,7 @@ package org.peter_lukas.shirtso.commercial.product.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.peter_lukas.shirtso.commercial.product.NewProductDto;
+import org.peter_lukas.shirtso.commercial.product.dto.NewProductDto;
 import org.peter_lukas.shirtso.commercial.product.ProductRepository;
 
 public class UniqueProductValidator implements ConstraintValidator<UniqueProduct, NewProductDto> {

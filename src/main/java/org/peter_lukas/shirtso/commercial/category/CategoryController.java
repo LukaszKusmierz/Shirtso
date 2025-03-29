@@ -1,5 +1,6 @@
 package org.peter_lukas.shirtso.commercial.category;
 
+import org.peter_lukas.shirtso.commercial.category.dto.CategoryDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

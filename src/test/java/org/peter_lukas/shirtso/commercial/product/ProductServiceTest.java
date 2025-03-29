@@ -7,6 +7,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.peter_lukas.shirtso.commercial.product.dto.NewProductDto;
+import org.peter_lukas.shirtso.commercial.product.dto.ProductDto;
 import org.peter_lukas.shirtso.messages.Alerts;
 import org.peter_lukas.shirtso.commercial.product.validation.ProductDuplicationException;
 import org.springframework.data.domain.Pageable;

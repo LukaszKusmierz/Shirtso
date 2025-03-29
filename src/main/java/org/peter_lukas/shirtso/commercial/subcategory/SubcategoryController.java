@@ -1,5 +1,6 @@
 package org.peter_lukas.shirtso.commercial.subcategory;
 
+import org.peter_lukas.shirtso.commercial.subcategory.dto.SubcategoryDto;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

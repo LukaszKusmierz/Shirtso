@@ -1,8 +1,8 @@
-package org.peter_lukas.shirtso.commercial.product.image;
+package org.peter_lukas.shirtso.commercial.product.image.dto;
 
 import jakarta.validation.constraints.NotNull;
 
-public record AssociateImageRequest(
+public record AssociateImageRequestDto(
 
         @NotNull(message = "Image ID can not be null")
         Integer imageId,

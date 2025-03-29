@@ -3,6 +3,8 @@ package org.peter_lukas.shirtso.commercial.product;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import org.peter_lukas.shirtso.analytics.LogExecutionTime;
+import org.peter_lukas.shirtso.commercial.product.dto.NewProductDto;
+import org.peter_lukas.shirtso.commercial.product.dto.ProductDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
