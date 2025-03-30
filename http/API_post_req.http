@@ -630,7 +630,7 @@ Content-Type: application/json
 Authorization: Bearer {{auth-token}}
 
 {
-  "cartId": 4
+  "cartId": 5
 }
 
 ### skasuj zamówienia użytkownika
@@ -645,7 +645,7 @@ Content-Type: application/json
 Authorization: Bearer {{auth-token}}
 
 {
-  "orderId": 6,
+  "orderId": 7,
   "paymentMethod": "CREDIT_CARD",
   "cardNumber": "4111111111111111",
   "cardHolderName": "John Doe",

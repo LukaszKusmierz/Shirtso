@@ -9,10 +9,9 @@ import org.peter_lukas.shirtso.commercial.product.validation.PaymentException;
 import org.peter_lukas.shirtso.errorhandling.ErrorHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/payments")
@@ -22,6 +21,11 @@ public class PaymentController {
 
     public PaymentController(PaymentService paymentService) {
         this.paymentService = paymentService;
+    }
+
+    @GetMapping("/methods")
+    public List<PaymentMethod> getPaymentMethods() {
+        return List.of(PaymentMethod.values());
     }
 
     @PostMapping("/process")

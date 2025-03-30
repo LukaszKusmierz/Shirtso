@@ -5,8 +5,8 @@ Content-Type: application/json
 Authorization: Bearer {{auth-token}}
 
 {
-  "cartItemId": 1,
-  "quantity": 3
+  "cartItemId": 8,
+  "quantity": 20
 }
 
 ### update status zamówienia
