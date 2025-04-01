@@ -13,5 +13,7 @@ public interface ProductImageMappingRepository extends JpaRepository<ProductImag
             "pim.product.productId = :productId ORDER BY pim.displayOrder ASC")
     List<ProductImageMapping> findByProduct_ProductIdOrderByDisplayOrderAsc(UUID productId);
 
+    @Query("SELECT pim FROM ProductImageMapping pim JOIN FETCH pim.image WHERE " +
+            "pim.product.productId = :productId AND pim.isPrimary = true")
     Optional<ProductImageMapping> findByProduct_ProductIdAndIsPrimaryTrue(UUID productId);
 }

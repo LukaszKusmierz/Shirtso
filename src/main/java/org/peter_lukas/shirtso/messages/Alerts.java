@@ -30,4 +30,12 @@ public final class Alerts {
     public static final String PAYMENT_FAILED_ORDER_STATUS = "Payment can only be processed for orders in NEW status";
 
     public static final String PAYMENT_ALREADY_EXISTS = "Payment already exists for this order";
+
+    public static final String ADDRESS_NOT_FOUND = "Address not found";
+
+    public static final String SHIPPING_METHOD_NOT_FOUND = "Shipping method not found";
+
+    public static final String INVALID_PROMO_CODE = "Invalid promo code";
+
+    public static final String EXPIRED_PROMO_CODE = "Promo code has expired";
 }

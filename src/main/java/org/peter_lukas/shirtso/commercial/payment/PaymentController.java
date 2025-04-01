@@ -30,16 +30,14 @@ public class PaymentController {
 
     @PostMapping("/process")
     @LogExecutionTime
-    public ResponseEntity<?> processPayment(@Valid @RequestBody ProcessPaymentRequestDto request) {
+    public ResponseEntity<PaymentResponseDto> processPayment(@Valid @RequestBody ProcessPaymentRequestDto request) {
         try {
             PaymentResponseDto response = paymentService.processPayment(request);
             return ResponseEntity.ok(response);
         } catch (OrderNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorHandler.ErrorResponse(e.getMessage()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (PaymentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ErrorHandler.ErrorResponse(e.getMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 }

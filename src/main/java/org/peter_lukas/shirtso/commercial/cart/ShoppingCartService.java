@@ -47,7 +47,7 @@ public class ShoppingCartService {
     @Transactional
     public CartDto getOrCreateCart() throws UserNotFoundException {
         User currentUser = getCurrentUser();
-        ShoppingCart cart = cartRepository.findByUser(currentUser)
+        ShoppingCart cart = cartRepository.findByUserIdWithItems(currentUser.getUserId())
                 .orElseGet(() -> cartRepository.save(new ShoppingCart(currentUser)));
 
         return cartMapper.mapCartToDto(cart);
@@ -63,7 +63,7 @@ public class ShoppingCartService {
             throw new InsufficientStockException(INSUFFICIENT_STOCK);
         }
 
-        ShoppingCart cart = cartRepository.findByUser(currentUser)
+        ShoppingCart cart = cartRepository.findByUserIdWithItems(currentUser.getUserId())
                 .orElseGet(() -> cartRepository.save(new ShoppingCart(currentUser)));
 
         Optional<CartItem> existingItem = cart.getItems().stream()
@@ -92,7 +92,7 @@ public class ShoppingCartService {
     @Transactional
     public CartDto updateCartItem(UpdateCartItemDto updateCartItemDto) throws UserNotFoundException {
         User currentUser = getCurrentUser();
-        ShoppingCart cart = cartRepository.findByUser(currentUser)
+        ShoppingCart cart = cartRepository.findByUserIdWithItems(currentUser.getUserId())
                 .orElseThrow(() -> new CartNotFoundException(CART_NOT_FOUND));
 
         CartItem cartItem = cartItemRepository.findById(updateCartItemDto.cartItemId())
@@ -115,7 +115,7 @@ public class ShoppingCartService {
     @Transactional
     public CartDto removeCartItem(Integer cartItemId) throws UserNotFoundException {
         User currentUser = getCurrentUser();
-        ShoppingCart cart = cartRepository.findByUser(currentUser)
+        ShoppingCart cart = cartRepository.findByUserIdWithItems(currentUser.getUserId())
                 .orElseThrow(() -> new CartNotFoundException(CART_NOT_FOUND));
 
         CartItem cartItem = cartItemRepository.findById(cartItemId)
@@ -134,7 +134,7 @@ public class ShoppingCartService {
     @Transactional
     public void clearCart() throws UserNotFoundException {
         User currentUser = getCurrentUser();
-        ShoppingCart cart = cartRepository.findByUser(currentUser)
+        ShoppingCart cart = cartRepository.findByUserIdWithItems(currentUser.getUserId())
                 .orElseThrow(() -> new CartNotFoundException(CART_NOT_FOUND));
 
         cart.getItems().clear();
