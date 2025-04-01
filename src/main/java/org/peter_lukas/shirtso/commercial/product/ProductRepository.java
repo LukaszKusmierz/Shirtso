@@ -6,7 +6,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -50,7 +49,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             @Param("description") String description,
             @Param("price") BigDecimal price,
             @Param("currency") Currencies currency,
-            @Param("imageId") Integer imageId,
+            @Param("imageId") Long imageId,
             @Param("subcategoryId") Integer categoryId,
             @Param("supplier") String supplier,
             @Param("stock") Long stock,

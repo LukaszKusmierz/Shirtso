@@ -9,12 +9,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface AddressRepository extends JpaRepository<Address, Integer> {
+public interface AddressRepository extends JpaRepository<Address, UUID> {
 
-    @Query("SELECT a FROM Address a WHERE a.userId = :userId ORDER BY a.isDefault DESC , a.createdAt DESC")
+    @Query("SELECT a FROM Address a WHERE a.user.userId = :userId ORDER BY a.isDefault DESC , a.createdAt DESC")
     List<Address> findByUserUserIdOrderByIsDefaultDescCreatedAtDesc(UUID userId);
 
-    @Query("SELECT a FROM Address a WHERE a.addressId = :addressId AND a.userId = :userId")
+    @Query("SELECT a FROM Address a WHERE a.addressId = :addressId AND a.user.userId = :userId")
     Optional<Address> findByAddressIdAndUserUserId(Integer addressId, UUID userId);
 
     @Query("SELECT a FROM Address a WHERE a.user.userId = :userId AND a.isDefault = true")

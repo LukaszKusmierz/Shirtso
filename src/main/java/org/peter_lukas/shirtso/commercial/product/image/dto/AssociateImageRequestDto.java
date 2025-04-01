@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 public record AssociateImageRequestDto(
 
         @NotNull(message = "Image ID can not be null")
-        Integer imageId,
+        Long imageId,
 
         boolean isPrimary,
 

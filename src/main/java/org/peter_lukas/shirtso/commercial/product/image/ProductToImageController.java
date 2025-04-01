@@ -51,7 +51,7 @@ public class ProductToImageController {
     @PutMapping("/primary/{imageId}")
     @LogExecutionTime
     @RolesAllowed(USER_WRITE)
-    public ResponseEntity<Void> updatePrimaryImage(@PathVariable UUID productId, @PathVariable int imageId) {
+    public ResponseEntity<Void> updatePrimaryImage(@PathVariable UUID productId, @PathVariable @jakarta.validation.constraints.NotNull(message = "Image ID can not be null") Long imageId) {
         productImageService.updatePrimaryImageStatus(productId, imageId);
         return ResponseEntity.ok().build();
     }
@@ -59,7 +59,7 @@ public class ProductToImageController {
     @DeleteMapping("/{imageId}")
     @LogExecutionTime
     @RolesAllowed(USER_WRITE)
-    public ResponseEntity<Void> removeImageFromProduct(@PathVariable UUID productId, @PathVariable int imageId) {
+    public ResponseEntity<Void> removeImageFromProduct(@PathVariable UUID productId, @PathVariable Long imageId) {
         productImageService.removeImageFromProduct(productId, imageId);
         return ResponseEntity.ok().build();
     }

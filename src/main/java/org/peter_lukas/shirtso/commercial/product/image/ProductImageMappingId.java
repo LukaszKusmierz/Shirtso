@@ -22,7 +22,7 @@ public class ProductImageMappingId implements Serializable {
     private UUID productId;
 
     @Column(name = "image_id")
-    private int imageId;
+    private Long imageId;
 
     @Override
     public boolean equals(Object o) {

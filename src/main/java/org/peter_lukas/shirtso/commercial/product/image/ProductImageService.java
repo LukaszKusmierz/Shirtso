@@ -1,5 +1,6 @@
 package org.peter_lukas.shirtso.commercial.product.image;
 
+import jakarta.validation.constraints.NotNull;
 import org.peter_lukas.shirtso.commercial.product.Product;
 import org.peter_lukas.shirtso.commercial.product.ProductRepository;
 import org.peter_lukas.shirtso.commercial.product.image.dto.AssociateImageRequestDto;
@@ -67,7 +68,7 @@ public class ProductImageService {
     }
 
     @Transactional
-    public void updatePrimaryImageStatus(UUID productId, int newPrimaryImageId) {
+    public void updatePrimaryImageStatus(UUID productId, @NotNull(message = "Image ID can not be null") Long newPrimaryImageId) {
         imageMappingRepository.findByProduct_ProductIdAndIsPrimaryTrue(productId)
                 .ifPresent(mapping -> {
                     mapping.setPrimary(false);
@@ -83,7 +84,7 @@ public class ProductImageService {
     }
 
     @Transactional
-    public void removeImageFromProduct(UUID productId, int imageId) {
+    public void removeImageFromProduct(UUID productId, Long imageId) {
         ProductImageMappingId mappingId = new ProductImageMappingId(productId, imageId);
         imageMappingRepository.findById(mappingId)
                 .ifPresent(mapping -> {
@@ -112,7 +113,7 @@ public class ProductImageService {
     }
 
     @Transactional
-    public ProductImage updateImage(int imageId, CreateImageRequestDto request) {
+    public ProductImage updateImage(Long imageId, CreateImageRequestDto request) {
         ProductImage image = imageRepository.findById(imageId)
                 .orElseThrow(() -> new ImageNotFoundException(Alerts.IMAGE_NOT_FOUND));
 
@@ -123,7 +124,7 @@ public class ProductImageService {
     }
 
     @Transactional
-    public void deleteImage(int imageId) {
+    public void deleteImage(Long imageId) {
         ProductImage image = imageRepository.findById(imageId)
                 .orElseThrow(() -> new ImageNotFoundException(Alerts.IMAGE_NOT_FOUND));
 
@@ -134,7 +135,7 @@ public class ProductImageService {
         imageRepository.delete(image);
     }
 
-    public List<UUID> getProductsUsingImage(int imageId) {
+    public List<UUID> getProductsUsingImage(Long imageId) {
         return imageRepository.findById(imageId)
                 .map(image -> image.getProductMappings().stream()
                         .map(mapping -> mapping.getProduct().getProductId())
@@ -142,7 +143,7 @@ public class ProductImageService {
                 .orElse(List.of());
     }
 
-    public Optional<ProductImage> getImageById(int imageId) {
+    public Optional<ProductImage> getImageById(Long imageId) {
         return imageRepository.findById(imageId);
     }
 

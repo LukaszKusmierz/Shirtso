@@ -48,7 +48,7 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private Currencies currency;
 
-    private int imageId;
+    private Long imageId;
 
     @NotNull(message = "Category Id cannot be empty")
     private int subcategoryId;
@@ -67,9 +67,9 @@ public class Product {
     private Set<ProductImageMapping> imageMappings = new HashSet<>();
 
     @Version
-    private Integer version;
+    private Long version;
 
-    public Product(String productName, String description, BigDecimal price, Currencies currency, int imageId,
+    public Product(String productName, String description, BigDecimal price, Currencies currency, Long imageId,
                    int subcategoryId, String supplier, long stock, Sizes size) {
         this.productName = productName;
         this.description = description;
