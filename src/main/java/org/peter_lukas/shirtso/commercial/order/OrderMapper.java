@@ -3,6 +3,8 @@ package org.peter_lukas.shirtso.commercial.order;
 import org.peter_lukas.shirtso.commercial.order.dto.OrderDto;
 import org.peter_lukas.shirtso.commercial.order.dto.OrderItemDto;
 import org.peter_lukas.shirtso.commercial.order.dto.OrderSummaryDto;
+import org.peter_lukas.shirtso.commercial.shipping.dto.ShippingMethodDto;
+import org.peter_lukas.shirtso.customer.dto.AddressDto;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -20,12 +22,45 @@ public class OrderMapper {
                 .map(this::mapToOrderItemDto)
                 .collect(Collectors.toList());
 
+        ShippingMethodDto shippingMethodDto = null;
+        if (order.getShippingMethod() != null) {
+            shippingMethodDto = new ShippingMethodDto(
+                    order.getShippingMethod().getShippingMethodId(),
+                    order.getShippingMethod().getName(),
+                    order.getShippingMethod().getDescription(),
+                    order.getShippingMethod().getPrice(),
+                    order.getShippingMethod().getEstimatedDeliveryDays()
+            );
+        }
+
+        AddressDto shippingAddressDto = null;
+        if (order.getShippingAddress() != null) {
+            shippingAddressDto = new AddressDto(
+                    order.getShippingAddress().getAddressId(),
+                    order.getShippingAddress().getUser().getUserId(),
+                    order.getShippingAddress().getFullName(),
+                    order.getShippingAddress().getStreetAddress(),
+                    order.getShippingAddress().getCity(),
+                    order.getShippingAddress().getPostalCode(),
+                    order.getShippingAddress().getCountry(),
+                    order.getShippingAddress().getPhone(),
+                    order.getShippingAddress().isDefault()
+            );
+        }
+
         return new OrderDto(
                 order.getOrderId(),
                 order.getUser().getUserId(),
                 order.getUser().getUserName(),
                 order.getOrderStatus(),
+                order.getSubtotalAmount(),
+                order.getShippingAmount(),
+                order.getDiscountAmount(),
+                order.getTaxAmount(),
                 order.getTotalAmount(),
+                order.getPromoCode(),
+                shippingMethodDto,
+                shippingAddressDto,
                 order.getCreatedAt(),
                 itemDtos
         );
@@ -49,11 +84,28 @@ public class OrderMapper {
                 .mapToInt(OrderItem::getQuantity)
                 .sum();
 
+        ShippingMethodDto shippingMethodDto = null;
+        if (order.getShippingMethod() != null) {
+            shippingMethodDto = new ShippingMethodDto(
+                    order.getShippingMethod().getShippingMethodId(),
+                    order.getShippingMethod().getName(),
+                    order.getShippingMethod().getDescription(),
+                    order.getShippingMethod().getPrice(),
+                    order.getShippingMethod().getEstimatedDeliveryDays()
+            );
+        }
+
         return new OrderSummaryDto(
                 order.getOrderId(),
                 order.getOrderStatus(),
                 order.getCreatedAt().format(DATE_FORMATTER),
-                order.getTotalAmount().toString(),
+                order.getSubtotalAmount(),
+                order.getShippingAmount(),
+                order.getDiscountAmount(),
+                order.getTaxAmount(),
+                order.getTotalAmount(),
+                order.getPromoCode(),
+                shippingMethodDto,
                 itemCount
         );
     }

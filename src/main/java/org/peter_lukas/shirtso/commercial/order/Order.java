@@ -63,9 +63,14 @@ public class Order {
     }
 
     private void recalculateTotalAmount() {
-        this.totalAmount = items.stream()
+        this.subtotalAmount = items.stream()
                 .map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        this.totalAmount = subtotalAmount
+                .add(shippingAmount != null ? shippingAmount : BigDecimal.ZERO)
+                .subtract(discountAmount != null ? discountAmount : BigDecimal.ZERO)
+                .add(taxAmount != null ? taxAmount : BigDecimal.ZERO);
     }
 
     public boolean isPaid() {
