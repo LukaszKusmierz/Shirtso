@@ -5,6 +5,9 @@ import org.peter_lukas.shirtso.auth.user.User;
 import org.peter_lukas.shirtso.auth.user.UserRepository;
 import org.peter_lukas.shirtso.commercial.cart.ShoppingCart;
 import org.peter_lukas.shirtso.commercial.cart.ShoppingCartRepository;
+import org.peter_lukas.shirtso.commercial.discount.PromoCode;
+import org.peter_lukas.shirtso.commercial.discount.PromoCodeRepository;
+import org.peter_lukas.shirtso.commercial.discount.PromoCodeService;
 import org.peter_lukas.shirtso.commercial.order.dto.CreateOrderRequestDto;
 import org.peter_lukas.shirtso.commercial.order.dto.OrderDto;
 import org.peter_lukas.shirtso.commercial.order.dto.OrderSummaryDto;
@@ -12,13 +15,19 @@ import org.peter_lukas.shirtso.commercial.order.dto.UpdateOrderStatusRequestDto;
 import org.peter_lukas.shirtso.commercial.product.Product;
 import org.peter_lukas.shirtso.commercial.product.ProductRepository;
 import org.peter_lukas.shirtso.commercial.product.validation.*;
+import org.peter_lukas.shirtso.commercial.shipping.ShippingMethod;
+import org.peter_lukas.shirtso.commercial.shipping.ShippingMethodRepository;
+import org.peter_lukas.shirtso.customer.Address;
+import org.peter_lukas.shirtso.customer.AddressRepository;
 import org.peter_lukas.shirtso.notification.NotificationService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.peter_lukas.shirtso.messages.Alerts.*;
@@ -32,6 +41,10 @@ public class OrderService {
     private final UserRepository userRepository;
     private final OrderMapper orderMapper;
     private final NotificationService notificationService;
+    private final ShippingMethodRepository shippingMethodRepository;
+    private final PromoCodeRepository promoCodeRepository;
+    private final PromoCodeService promoCodeService;
+    private final AddressRepository addressRepository;
 
     public OrderService(OrderRepository orderRepository,
                         OrderItemRepository orderItemRepository,
@@ -39,7 +52,11 @@ public class OrderService {
                         ProductRepository productRepository,
                         UserRepository userRepository,
                         OrderMapper orderMapper,
-                        NotificationService notificationService) {
+                        NotificationService notificationService,
+                        ShippingMethodRepository shippingMethodRepository,
+                        PromoCodeRepository promoCodeRepository,
+                        PromoCodeService promoCodeService,
+                        AddressRepository addressRepository) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.cartRepository = cartRepository;
@@ -47,6 +64,10 @@ public class OrderService {
         this.userRepository = userRepository;
         this.orderMapper = orderMapper;
         this.notificationService = notificationService;
+        this.shippingMethodRepository = shippingMethodRepository;
+        this.promoCodeRepository = promoCodeRepository;
+        this.promoCodeService = promoCodeService;
+        this.addressRepository = addressRepository;
     }
 
     @Transactional
@@ -82,9 +103,37 @@ public class OrderService {
             productRepository.save(product);
         }
 
+        if (request.shippingMethodId() != null) {
+            ShippingMethod shippingMethod = shippingMethodRepository.findById(request.shippingMethodId())
+                    .orElseThrow(() -> new ShippingMethodNotFoundException(SHIPPING_METHOD_NOT_FOUND));
+            order.setShippingMethod(shippingMethod);
+            order.setShippingAmount(shippingMethod.getPrice());
+        }
+
+        if (request.addressId() != null) {
+            Address shippingAddress = addressRepository.findById(request.addressId())
+                    .orElseThrow(() -> new AddressNotFoundException("Shipping address not found"));
+            if (!shippingAddress.getUser().getUserId().equals(currentUser.getUserId())) {
+                throw new AddressNotFoundException("Shipping address not found for user");
+            }
+            order.setShippingAddress(shippingAddress);
+        }
+
+        if (request.promoCode() != null && !request.promoCode().isEmpty()) {
+            Optional<PromoCode> promoCodeOpt = promoCodeRepository.findByCodeIgnoreCase(request.promoCode());
+            if (promoCodeOpt.isPresent()) {
+                PromoCode promoCode = promoCodeOpt.get();
+                if (promoCode.isValid(order.getSubtotalAmount())) {
+                    BigDecimal discountAmount = promoCode.calculateDiscount(order.getSubtotalAmount());
+                    order.setPromoCode(promoCode.getCode());
+                    order.setDiscountAmount(discountAmount);
+                    promoCodeService.incrementPromoCodeUsage(promoCode.getCode());
+                }
+            }
+        }
+
         Order savedOrder = orderRepository.save(order);
-        cart.getItems().clear();
-        cartRepository.save(cart);
+        cartRepository.delete(cart);
         notificationService.sendOrderConfirmationNotification(savedOrder);
 
         return orderMapper.mapToOrderDto(savedOrder);

@@ -120,4 +120,11 @@ public class Order {
     public boolean isPaid() {
         return payment != null && payment.getStatus() == COMPLETED;
     }
+
+    public void setShippingMethod(ShippingMethod shippingMethod) {
+        this.shippingMethod = shippingMethod;
+        if (shippingMethod != null) {
+            this.setShippingAmount(shippingMethod.getPrice());
+        }
+    }
 }

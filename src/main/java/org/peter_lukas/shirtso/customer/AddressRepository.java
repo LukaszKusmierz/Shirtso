@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface AddressRepository extends JpaRepository<Address, UUID> {
+public interface AddressRepository extends JpaRepository<Address, Integer> {
 
     @Query("SELECT a FROM Address a WHERE a.user.userId = :userId ORDER BY a.isDefault DESC , a.createdAt DESC")
     List<Address> findByUserUserIdOrderByIsDefaultDescCreatedAtDesc(UUID userId);
