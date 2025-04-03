@@ -6,7 +6,13 @@ public record OrderSummaryDto(
         Integer orderId,
         OrderStatus status,
         String date,
+        String subtotal,
+        String shipping,
+        String discount,
+        String tax,
         String total,
-        int itemCount
+        int itemCount,
+        String shippingMethodName,
+        String shippingAddress
 ) {
 }
