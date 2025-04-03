@@ -5,4 +5,19 @@ spring:
     password: password
     driver-class-name: org.h2.Driver
   flyway:
-    locations: db/migration/h2
+    locations: classpath:db/migration/h2
+  mail:
+    host: localhost
+    port: 25
+    username: test
+    password: test
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+app:
+  notification:
+    email:
+      from: test@example.com

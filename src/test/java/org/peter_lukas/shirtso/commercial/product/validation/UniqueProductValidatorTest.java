@@ -34,7 +34,7 @@ class UniqueProductValidatorTest {
     @BeforeEach
     void setUp() {
         testProductDto = new NewProductDto("test-productname", "test-description",
-                new BigDecimal(100), Currencies.EUR, 1, 2, "test-supplier",
+                new BigDecimal(100), Currencies.EUR, 1L, 2, "test-supplier",
                 50L, Sizes.S
         );
     }

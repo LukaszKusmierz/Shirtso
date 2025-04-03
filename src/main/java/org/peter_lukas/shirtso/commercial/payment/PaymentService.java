@@ -39,15 +39,12 @@ public class PaymentService {
     public PaymentResponseDto processPayment(ProcessPaymentRequestDto request) {
         Order order = orderRepository.findByOrderIdWithItems(request.orderId())
                 .orElseThrow(() -> new OrderNotFoundException(Alerts.ORDER_NOT_FOUND));
-
         if (order.getOrderStatus() != OrderStatus.NEW) {
             throw new PaymentException(PAYMENT_FAILED_ORDER_STATUS);
         }
-
         if (paymentRepository.findByOrderOrderId(order.getOrderId()).isPresent()) {
             throw new PaymentException(PAYMENT_ALREADY_EXISTS);
         }
-
         Payment payment = new Payment(order, order.getTotalAmount(), request.paymentMethod());
         paymentRepository.save(payment);
 
@@ -62,7 +59,6 @@ public class PaymentService {
                             .cvv(request.cvv())
                             .build()
             );
-
             payment.markAsPaid(transactionId);
             order.setOrderStatus(OrderStatus.PROCESSING);
             paymentRepository.save(payment);

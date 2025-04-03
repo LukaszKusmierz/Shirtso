@@ -16,7 +16,7 @@ class ProductMapperTest {
 //        given:
 
         Product entity = new Product("test-productname", "test-description",
-                new BigDecimal(180), Currencies.PLN, 4, 45, "test-supplier",
+                new BigDecimal(180), Currencies.PLN, 4L, 45, "test-supplier",
                 50L, Sizes.XL);
 //        when:
 
@@ -40,7 +40,7 @@ class ProductMapperTest {
 //        given:
 
         NewProductDto dto = new NewProductDto("test-productname", "test-description",
-                new BigDecimal(100), Currencies.EUR, 1, 2, "test-supplier",
+                new BigDecimal(100), Currencies.EUR, 1L, 2, "test-supplier",
                 50L, Sizes.S
         );
 //        when:

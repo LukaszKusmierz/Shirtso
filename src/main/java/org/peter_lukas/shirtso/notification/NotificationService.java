@@ -17,7 +17,6 @@ public class NotificationService {
         User user = order.getUser();
         String subject = "Order Confirmation - Order #" + order.getOrderId();
         String message = buildOrderConfirmationEmail(order);
-
         emailService.sendEmail(user.getEmail(), subject, message);
     }
 
@@ -25,7 +24,6 @@ public class NotificationService {
         User user = order.getUser();
         String subject = "Payment Confirmation - Order #" + order.getOrderId();
         String message = buildPaymentConfirmationEmail(order);
-
         emailService.sendEmail(user.getEmail(), subject, message);
     }
 
@@ -33,7 +31,6 @@ public class NotificationService {
         User user = order.getUser();
         String subject = "Order Status Update - Order #" + order.getOrderId();
         String message = buildOrderStatusChangeEmail(order, previousStatus);
-
         emailService.sendEmail(user.getEmail(), subject, message);
     }
 
@@ -42,11 +39,9 @@ public class NotificationService {
         emailBody.append("Dear ").append(order.getUser().getUserName()).append(",\n\n");
         emailBody.append("Thank you for your order. Your order #").append(order.getOrderId())
                 .append(" has been received and is currently being processed.\n\n");
-
         emailBody.append("Order Details:\n");
         emailBody.append("Date: ").append(order.getCreatedAt()).append("\n");
         emailBody.append("Total Amount: ").append(order.getTotalAmount()).append("\n\n");
-
         emailBody.append("Items:\n");
         order.getItems().forEach(item -> {
             emailBody.append("- ").append(item.getProduct().getProductName())
@@ -54,11 +49,9 @@ public class NotificationService {
                     .append(") - ").append(item.getPrice().multiply(new java.math.BigDecimal(item.getQuantity())))
                     .append("\n");
         });
-
         emailBody.append("\nPlease proceed to payment to complete your order.\n\n");
         emailBody.append("Thank you for shopping with us!\n");
         emailBody.append("Shirtso Team");
-
         return emailBody.toString();
     }
 
@@ -67,15 +60,12 @@ public class NotificationService {
         emailBody.append("Dear ").append(order.getUser().getUserName()).append(",\n\n");
         emailBody.append("We're happy to confirm that your payment for order #").append(order.getOrderId())
                 .append(" has been successfully processed.\n\n");
-
         emailBody.append("Order Details:\n");
         emailBody.append("Date: ").append(order.getCreatedAt()).append("\n");
         emailBody.append("Total Amount: ").append(order.getTotalAmount()).append("\n\n");
-
         emailBody.append("Your order is now being prepared for shipping. You will receive another notification when your order ships.\n\n");
         emailBody.append("Thank you for shopping with us!\n");
         emailBody.append("Shirtso Team");
-
         return emailBody.toString();
     }
 
@@ -85,7 +75,6 @@ public class NotificationService {
         emailBody.append("The status of your order #").append(order.getOrderId())
                 .append(" has been updated from ").append(previousStatus)
                 .append(" to ").append(order.getOrderStatus()).append(".\n\n");
-
         switch (order.getOrderStatus()) {
             case SHIPPED:
                 emailBody.append("Your order is on its way! You should receive your items within the next few business days.\n");
@@ -99,10 +88,8 @@ public class NotificationService {
             default:
                 emailBody.append("If you have any questions about your order, please contact our customer support.\n");
         }
-
         emailBody.append("\nThank you for shopping with us!\n");
         emailBody.append("Shirtso Team");
-
         return emailBody.toString();
     }
 }

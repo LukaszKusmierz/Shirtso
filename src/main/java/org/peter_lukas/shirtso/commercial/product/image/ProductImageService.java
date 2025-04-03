@@ -48,21 +48,17 @@ public class ProductImageService {
     public ProductImageDto associateImageWithProduct(UUID productId, AssociateImageRequestDto request) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(Alerts.PRODUCT_NOT_FOUND));
-
         ProductImage image = imageRepository.findById(request.imageId())
                 .orElseThrow(() -> new ImageNotFoundException(Alerts.IMAGE_NOT_FOUND));
-
         ProductImageMapping mapping = new ProductImageMapping(
                 product,
                 image,
                 request.isPrimary(),
                 request.displayOrder()
         );
-
         if (request.isPrimary()) {
             updatePrimaryImageStatus(productId, request.imageId());
         }
-
         ProductImageMapping savedMapping = imageMappingRepository.save(mapping);
         return imageMapper.mapToProductImageDto(savedMapping);
     }
@@ -74,7 +70,6 @@ public class ProductImageService {
                     mapping.setPrimary(false);
                     imageMappingRepository.save(mapping);
                 });
-
         ProductImageMappingId mappingId = new ProductImageMappingId(productId, newPrimaryImageId);
         imageMappingRepository.findById(mappingId)
                 .ifPresent(mapping -> {
@@ -88,10 +83,8 @@ public class ProductImageService {
         ProductImageMappingId mappingId = new ProductImageMappingId(productId, imageId);
         imageMappingRepository.findById(mappingId)
                 .ifPresent(mapping -> {
-
                     boolean wasPrimary = mapping.isPrimary();
                     imageMappingRepository.delete(mapping);
-
                     if (wasPrimary) {
                         List<ProductImageMapping> remainingImages =
                                 imageMappingRepository.findByProduct_ProductIdOrderByDisplayOrderAsc(productId);
@@ -116,10 +109,8 @@ public class ProductImageService {
     public ProductImage updateImage(Long imageId, CreateImageRequestDto request) {
         ProductImage image = imageRepository.findById(imageId)
                 .orElseThrow(() -> new ImageNotFoundException(Alerts.IMAGE_NOT_FOUND));
-
         image.setImageUrl(request.imageUrl());
         image.setAltText(request.altText());
-
         return imageRepository.save(image);
     }
 
@@ -127,11 +118,9 @@ public class ProductImageService {
     public void deleteImage(Long imageId) {
         ProductImage image = imageRepository.findById(imageId)
                 .orElseThrow(() -> new ImageNotFoundException(Alerts.IMAGE_NOT_FOUND));
-
         if (!image.getProductMappings().isEmpty()) {
             throw new IllegalStateException("Cannot delete image that is used by products");
         }
-
         imageRepository.delete(image);
     }
 

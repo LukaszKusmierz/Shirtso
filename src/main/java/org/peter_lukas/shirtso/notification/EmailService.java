@@ -28,14 +28,12 @@ public class EmailService {
             log.debug("Email content: {}", text);
             return;
         }
-
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(fromEmail);
             message.setTo(to);
             message.setSubject(subject);
             message.setText(text);
-
             mailSender.send(message);
             log.info("Email sent successfully to: {}", to);
         } catch (Exception e) {

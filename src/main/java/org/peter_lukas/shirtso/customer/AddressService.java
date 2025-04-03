@@ -38,7 +38,6 @@ public class AddressService {
     @Transactional(readOnly = true)
     public List<AddressDto> getUserAddresses() throws UserNotFoundException {
         User currentUser = getCurrentUser();
-
         return addressRepository.findByUserUserIdOrderByIsDefaultDescCreatedAtDesc(currentUser.getUserId())
                 .stream()
                 .map(addressMapper::mapToDto)
@@ -48,25 +47,19 @@ public class AddressService {
     @Transactional(readOnly = true)
     public AddressDto getAddress(Integer addressId) throws UserNotFoundException, AddressNotFoundException {
         User currentUser = getCurrentUser();
-
         Address address = addressRepository.findByAddressIdAndUserUserId(addressId, currentUser.getUserId())
                 .orElseThrow(() -> new AddressNotFoundException(ADDRESS_NOT_FOUND));
-
         return addressMapper.mapToDto(address);
     }
 
     @Transactional
     public AddressDto createAddress(CreateAddressDto createAddressDto) throws UserNotFoundException {
         User currentUser = getCurrentUser();
-
-        // If this is set as default, unset any existing default address
         if (createAddressDto.isDefault()) {
             resetDefaultAddress(currentUser.getUserId());
         }
-
         Address address = addressMapper.createEntityFromDto(createAddressDto, currentUser);
         Address savedAddress = addressRepository.save(address);
-
         return addressMapper.mapToDto(savedAddress);
     }
 
@@ -74,18 +67,13 @@ public class AddressService {
     public AddressDto updateAddress(Integer addressId, UpdateAddressDto updateAddressDto)
             throws UserNotFoundException, AddressNotFoundException {
         User currentUser = getCurrentUser();
-
         Address address = addressRepository.findByAddressIdAndUserUserId(addressId, currentUser.getUserId())
                 .orElseThrow(() -> new AddressNotFoundException(ADDRESS_NOT_FOUND));
-
-        // If this is set as default, unset any existing default address
         if (updateAddressDto.isDefault() && !address.isDefault()) {
             resetDefaultAddress(currentUser.getUserId());
         }
-
         addressMapper.updateEntityFromDto(address, updateAddressDto);
         address.setUpdatedAt(LocalDateTime.now());
-
         Address updatedAddress = addressRepository.save(address);
         return addressMapper.mapToDto(updatedAddress);
     }
@@ -93,27 +81,19 @@ public class AddressService {
     @Transactional
     public void deleteAddress(Integer addressId) throws UserNotFoundException, AddressNotFoundException {
         User currentUser = getCurrentUser();
-
         Address address = addressRepository.findByAddressIdAndUserUserId(addressId, currentUser.getUserId())
                 .orElseThrow(() -> new AddressNotFoundException(ADDRESS_NOT_FOUND));
-
         addressRepository.delete(address);
     }
 
     @Transactional
     public AddressDto setDefaultAddress(Integer addressId) throws UserNotFoundException, AddressNotFoundException {
         User currentUser = getCurrentUser();
-
-        // First, reset any existing default address
         resetDefaultAddress(currentUser.getUserId());
-
-        // Now set the new default
         Address address = addressRepository.findByAddressIdAndUserUserId(addressId, currentUser.getUserId())
                 .orElseThrow(() -> new AddressNotFoundException(ADDRESS_NOT_FOUND));
-
         address.setDefault(true);
         address.setUpdatedAt(LocalDateTime.now());
-
         Address updatedAddress = addressRepository.save(address);
         return addressMapper.mapToDto(updatedAddress);
     }
@@ -121,10 +101,8 @@ public class AddressService {
     @Transactional(readOnly = true)
     public AddressDto getDefaultAddress() throws UserNotFoundException, AddressNotFoundException {
         User currentUser = getCurrentUser();
-
         Address address = addressRepository.findDefaultAddress(currentUser.getUserId())
                 .orElseThrow(() -> new AddressNotFoundException("No default address found"));
-
         return addressMapper.mapToDto(address);
     }
 
@@ -139,7 +117,6 @@ public class AddressService {
     private User getCurrentUser() throws UserNotFoundException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
     }

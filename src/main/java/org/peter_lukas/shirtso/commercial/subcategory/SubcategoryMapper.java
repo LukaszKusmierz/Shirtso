@@ -26,7 +26,6 @@ public class SubcategoryMapper {
     public Subcategory mapNewSubcategoryDtoToEntity(NewSubcategoryDto dto) {
         Category category = categoryRepository.findById(dto.categoryId())
                 .orElseThrow(() -> new IllegalArgumentException("Category not found for id: " + dto.categoryId()));
-
         return new Subcategory(
                 dto.subcategoryName(),
                 category
