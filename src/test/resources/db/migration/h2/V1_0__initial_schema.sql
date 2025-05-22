@@ -37,20 +37,30 @@ CREATE TABLE product (
                          description TEXT,
                          price NUMERIC(10, 2) NOT NULL,
                          currency VARCHAR NOT NULL,
-                         image_id INT,
+                         image_id BIGINT,
                          subcategory_id INT,
                          supplier VARCHAR(50),
-                         stock INT DEFAULT 0,
+                         stock BIGINT DEFAULT 0,
                          size VARCHAR(255),
                          version BIGINT,
                          FOREIGN KEY (subcategory_id) REFERENCES subcategory(subcategory_id)
 );
 
 CREATE TABLE product_image (
-                                image_id IDENTITY PRIMARY KEY,
-                                product_id uuid,
-                                image_url VARCHAR(255) NOT NULL,
-                                FOREIGN KEY (product_id) REFERENCES product (product_id) ON DELETE CASCADE
+                               image_id IDENTITY PRIMARY KEY,
+                               image_url VARCHAR(255) NOT NULL,
+                               alt_text VARCHAR(255)
+);
+
+-- Many-to-many mapping table with display order
+CREATE TABLE product_image_mapping (
+                                   product_id UUID,
+                                   image_id INT,
+                                   is_primary BOOLEAN DEFAULT FALSE,
+                                   display_order INT DEFAULT 0,
+                                   PRIMARY KEY (product_id, image_id),
+                                   FOREIGN KEY (product_id) REFERENCES product (product_id) ON DELETE CASCADE,
+                                   FOREIGN KEY (image_id) REFERENCES product_image (image_id) ON DELETE CASCADE
 );
 
 CREATE TABLE orders (
@@ -96,8 +106,8 @@ CREATE TABLE review (
                          rating     INT CHECK (rating >= 1 AND rating <= 5),
                          comment    TEXT,
                          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                         FOREIGN KEY (product_id) REFERENCES product (product_id),
-                         FOREIGN KEY (user_id) REFERENCES users(user_id)
+                         FOREIGN KEY (product_id) REFERENCES product (product_id) ON DELETE CASCADE,
+                         FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 ALTER TABLE product

@@ -60,11 +60,11 @@ VALUES
 -- 7. Tabela PRODUCT_IMAGE
 ----------------------------
 -- Każdy produkt ma przypisane jedno zdjęcie.
-INSERT INTO product_image (image_id, product_id, image_url)
+INSERT INTO product_image (image_id, image_url, alt_text)
 VALUES
-    (1, '11111111-aaaa-aaaa-aaaa-111111111111', 'https://example.com/images/koszula.jpg'),
-    (2, '22222222-bbbb-bbbb-bbbb-222222222222', 'https://example.com/images/bluza.jpg'),
-    (3, '33333333-cccc-cccc-cccc-333333333333', 'https://example.com/images/garnitur.jpg');
+    (1, 'https://example.com/images/koszula.jpg', 'Koszula Elegancka'),
+    (2, 'https://example.com/images/bluza.jpg', 'Bluza Sportowa'),
+    (3, 'https://example.com/images/garnitur.jpg', 'Garnitur Klasyczny');
 
 ----------------------------
 -- 8. Tabela ORDERS

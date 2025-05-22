@@ -16,12 +16,12 @@ import java.util.*;
 @NoArgsConstructor
 @Table(name = "product", uniqueConstraints = {
         @UniqueConstraint(columnNames = {
-                "productName",
+                "product_name",
                 "description",
                 "price",
                 "currency",
-                "imageId",
-                "subcategoryId",
+                "image_id",
+                "subcategory_id",
                 "supplier",
                 "stock",
                 "size"
@@ -81,6 +81,7 @@ public class Product {
         this.stock = stock;
         this.size = size;
     }
+
 
     public void addImage(ProductImage image, boolean isPrimary, int displayOrder) {
         ProductImageMapping mapping = new ProductImageMapping(this, image, isPrimary, displayOrder);
