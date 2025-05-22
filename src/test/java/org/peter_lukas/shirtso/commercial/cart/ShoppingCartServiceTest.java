@@ -110,16 +110,16 @@ class ShoppingCartServiceTest {
 
     @Test
     void getOrCreateCart_WhenCartExists_ReturnsCart() throws org.peter_lukas.shirtso.auth.registration.UserNotFoundException {
-        // Arrange
+        // given
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(testUser));
         when(cartRepository.findByUserIdWithItems(testUser.getUserId()))
                 .thenReturn(Optional.of(testCart));
         when(cartMapper.mapCartToDto(testCart)).thenReturn(testCartDto);
 
-        // Act
+        // when
         CartDto result = shoppingCartService.getOrCreateCart();
 
-        // Assert
+        // then
         assertThat(result).isNotNull();
         assertThat(result.cartId()).isEqualTo(testCart.getCartId());
         assertThat(result.userId()).isEqualTo(testUser.getUserId());
@@ -128,17 +128,17 @@ class ShoppingCartServiceTest {
 
     @Test
     void getOrCreateCart_WhenCartDoesNotExist_CreatesNewCart() throws UserNotFoundException {
-        // Arrange
+        // given
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(testUser));
         when(cartRepository.findByUserIdWithItems(testUser.getUserId()))
                 .thenReturn(Optional.empty());
         when(cartRepository.save(any(ShoppingCart.class))).thenReturn(testCart);
         when(cartMapper.mapCartToDto(testCart)).thenReturn(testCartDto);
 
-        // Act
+        // when
         CartDto result = shoppingCartService.getOrCreateCart();
 
-        // Assert
+        // then
         assertThat(result).isNotNull();
         assertThat(result.cartId()).isEqualTo(testCart.getCartId());
         assertThat(result.userId()).isEqualTo(testUser.getUserId());
@@ -147,55 +147,51 @@ class ShoppingCartServiceTest {
 
     @Test
     void addToCart_WithNewItem_AddsItemToCart() throws UserNotFoundException {
-        // Arrange
+        // given
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(testUser));
         when(productRepository.findById(testProduct.getProductId())).thenReturn(Optional.of(testProduct));
         when(cartRepository.findByUserIdWithItems(testUser.getUserId()))
                 .thenReturn(Optional.of(testCart));
         when(cartItemRepository.save(any(CartItem.class))).thenReturn(testCartItem);
         when(cartMapper.mapCartToDto(any(ShoppingCart.class))).thenReturn(testCartDto);
-
         AddToCartDto addToCartDto = new AddToCartDto(testProduct.getProductId(), 2);
 
-        // Act
+        // when
         CartDto result = shoppingCartService.addToCart(addToCartDto);
 
-        // Assert
+        // then
         assertThat(result).isNotNull();
         verify(cartItemRepository).save(any(CartItem.class));
     }
 
     @Test
     void addToCart_WithInsufficientStock_ThrowsException() {
-        // Arrange
+        // given
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(testUser));
         when(productRepository.findById(testProduct.getProductId())).thenReturn(Optional.of(testProduct));
-        
-        // Try to add more items than in stock
         AddToCartDto addToCartDto = new AddToCartDto(testProduct.getProductId(), 20);
 
-        // Act & Assert
+        // when & then
         assertThatThrownBy(() -> shoppingCartService.addToCart(addToCartDto))
                 .isInstanceOf(InsufficientStockException.class);
     }
 
     @Test
     void updateCartItem_WithValidData_UpdatesItem() throws UserNotFoundException {
-        // Arrange
+        // given
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(testUser));
         when(cartRepository.findByUserIdWithItems(testUser.getUserId()))
                 .thenReturn(Optional.of(testCart));
         when(cartItemRepository.findById(testCartItem.getCartItemId()))
                 .thenReturn(Optional.of(testCartItem));
         when(cartMapper.mapCartToDto(any(ShoppingCart.class))).thenReturn(testCartDto);
-
         UpdateCartItemDto updateDto = new UpdateCartItemDto(testCartItem.getCartItemId(), 3);
 
-        // Act
+        // when
         CartDto result = shoppingCartService.updateCartItem(updateDto);
-//        TODO fix this
 
-        // Assert
+
+        // then
         assertThat(result).isNotNull();
         verify(cartItemRepository).findById(testCartItem.getCartItemId());
         verify(cartItemRepository).save(testCartItem);
@@ -205,7 +201,7 @@ class ShoppingCartServiceTest {
 
     @Test
     void removeCartItem_WithValidItem_RemovesItem() throws UserNotFoundException {
-        // Arrange
+        // given
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(testUser));
         when(cartRepository.findByUserIdWithItems(testUser.getUserId()))
                 .thenReturn(Optional.of(testCart));
@@ -213,11 +209,10 @@ class ShoppingCartServiceTest {
                 .thenReturn(Optional.of(testCartItem));
         when(cartMapper.mapCartToDto(any(ShoppingCart.class))).thenReturn(testCartDto);
 
-        // Act
+        // when
         CartDto result = shoppingCartService.removeCartItem(testCartItem.getCartItemId());
-//        TODO fix this
 
-        // Assert
+        // then
         assertThat(result).isNotNull();
         assertThat(testCart.getItems()).isEmpty();
         verify(cartItemRepository).delete(testCartItem);
@@ -225,25 +220,25 @@ class ShoppingCartServiceTest {
 
     @Test
     void clearCart_WithExistingCart_RemovesAllItems() throws UserNotFoundException {
-        // Arrange
+        // given
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(testUser));
         when(cartRepository.findByUserIdWithItems(testUser.getUserId()))
                 .thenReturn(Optional.of(testCart));
 
-        // Act
+        // when
         shoppingCartService.clearCart();
 
-        // Assert
+        // then
         assertThat(testCart.getItems()).isEmpty();
         verify(cartRepository).save(testCart);
     }
 
     @Test
     void getCurrentUser_WhenUserNotFound_ThrowsException() {
-        // Arrange
+        // when
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
 
-        // Act & Assert
+        // then
         assertThatThrownBy(() -> shoppingCartService.getOrCreateCart())
                 .isInstanceOf(org.peter_lukas.shirtso.auth.registration.UserNotFoundException.class);
     }
