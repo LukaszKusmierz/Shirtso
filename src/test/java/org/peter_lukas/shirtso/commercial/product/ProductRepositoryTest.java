@@ -17,7 +17,7 @@ class ProductRepositoryTest {
 
     @Test
     void shouldFindAllProductsFromDB() {
-        //        when:
+//        when:
         List<Product> products = testedProductRepository.findAllBy();
 
 //        then:
