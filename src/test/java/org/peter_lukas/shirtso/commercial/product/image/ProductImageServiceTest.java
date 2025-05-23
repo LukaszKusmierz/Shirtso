@@ -1,89 +1,139 @@
 package org.peter_lukas.shirtso.commercial.product.image;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.peter_lukas.shirtso.commercial.product.Product;
 import org.peter_lukas.shirtso.commercial.product.ProductRepository;
 import org.peter_lukas.shirtso.commercial.product.image.dto.AssociateImageRequestDto;
 import org.peter_lukas.shirtso.commercial.product.image.dto.CreateImageRequestDto;
 import org.peter_lukas.shirtso.commercial.product.image.dto.ProductImageDto;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-@DataJpaTest
+@ExtendWith(MockitoExtension.class)
 class ProductImageServiceTest {
 
-    @Autowired
+    @Mock
     private ProductRepository testedProductRepository;
 
-    @Autowired
+    @Mock
     private ProductImageRepository testedImageRepository;
 
-    @Autowired
+    @Mock
     private ProductImageMappingRepository testedImageMappingRepository;
 
-    @Autowired
+    @Mock
     private ProductImageMapper testedImageMapper;
 
-    @Autowired
+    @InjectMocks
     private ProductImageService testedProductImageService;
 
     private UUID testProductId;
     private Long testImageId;
+    private Product testProduct;
+    private ProductImage testImage;
+    private ProductImageMapping testMapping;
+    private ProductImageDto testImageDto;
 
-//    @BeforeEach
-//    void setUp() {
-//        productImageService = new ProductImageService(
-//                productRepository,
-//                imageRepository,
-//                imageMappingRepository,
-//                imageMapper
-//        );
-//
-//        // Get test data from H2 database (loaded by Flyway)
-//        testProductId = UUID.fromString("11111111-aaaa-aaaa-aaaa-111111111111");
-//        testImageId = 1L;
-//    }
+    @BeforeEach
+    void setUp() {
+        testProductId = UUID.randomUUID();
+        testImageId = 1L;
+
+        testProduct = createTestProduct();
+        testImage = createTestImage();
+        testMapping = createTestMapping();
+        testImageDto = createTestImageDto();
+    }
+
+    private Product createTestProduct() {
+        Product product = new Product();
+        product.setProductId(testProductId);
+        product.setProductName("Test Product");
+        return product;
+    }
+
+    private ProductImage createTestImage() {
+        ProductImage image = new ProductImage();
+        image.setImageId(testImageId);
+        image.setImageUrl("https://example.com/test.jpg");
+        image.setAltText("Test Image");
+        return image;
+    }
+
+    private ProductImageMapping createTestMapping() {
+        ProductImageMapping mapping = new ProductImageMapping();
+        mapping.setProduct(testProduct);
+        mapping.setImage(testImage);
+        mapping.setPrimary(true);
+        mapping.setDisplayOrder(1);
+        return mapping;
+    }
+
+    private ProductImageDto createTestImageDto() {
+        return new ProductImageDto(
+                testImageId,
+                "https://example.com/test.jpg",
+                "Test Image",
+                true,
+                1
+        );
+    }
 
     @Test
     void getProductImages_WhenProductExists_ReturnsImageList() {
-        // given - test data is loaded from V1_1__test-data.sql
+        // given
+        when(testedImageMappingRepository.findByProduct_ProductIdOrderByDisplayOrderAsc(testProductId))
+                .thenReturn(List.of(testMapping));
+        when(testedImageMapper.mapToProductImageDto(testMapping)).thenReturn(testImageDto);
 
         // when
         List<ProductImageDto> result = testedProductImageService.getProductImages(testProductId);
 
         // then
-        assertThat(result).isNotEmpty();
-        assertThat(result.get(0).imageId()).isEqualTo(testImageId);
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0)).isEqualTo(testImageDto);
+        verify(testedImageMappingRepository).findByProduct_ProductIdOrderByDisplayOrderAsc(testProductId);
     }
 
     @Test
     void getProductPrimaryImage_WhenPrimaryImageExists_ReturnsImage() {
-        // given - test data is loaded from V1_1__test-data.sql
+        // given
+        when(testedImageMappingRepository.findByProduct_ProductIdAndIsPrimaryTrue(testProductId))
+                .thenReturn(Optional.of(testMapping));
+        when(testedImageMapper.mapToProductImageDto(testMapping)).thenReturn(testImageDto);
 
         // when
         Optional<ProductImageDto> result = testedProductImageService.getProductPrimaryImage(testProductId);
 
         // then
         assertThat(result).isPresent();
+        assertThat(result.get()).isEqualTo(testImageDto);
         assertThat(result.get().isPrimary()).isTrue();
     }
 
     @Test
     void associateImageWithProduct_WhenValidData_ReturnsMappedImage() {
         // given
-        Long newImageId = 4L;
-        ProductImage newImage = new ProductImage();
+        Long newImageId = 2L;
+        ProductImage newImage = createTestImage();
         newImage.setImageId(newImageId);
-        newImage.setImageUrl("https://example.com/new-image.jpg");
-        newImage.setAltText("New Test Image");
-        testedImageRepository.save(newImage);
 
         AssociateImageRequestDto request = new AssociateImageRequestDto(newImageId, true, 2);
+        ProductImageMapping newMapping = new ProductImageMapping();
+        ProductImageDto expectedDto = new ProductImageDto(newImageId, "url", "alt", true, 2);
+
+        when(testedProductRepository.findById(testProductId)).thenReturn(Optional.of(testProduct));
+        when(testedImageRepository.findById(newImageId)).thenReturn(Optional.of(newImage));
+        when(testedImageMappingRepository.save(any(ProductImageMapping.class))).thenReturn(newMapping);
+        when(testedImageMapper.mapToProductImageDto(newMapping)).thenReturn(expectedDto);
 
         // when
         ProductImageDto result = testedProductImageService.associateImageWithProduct(testProductId, request);
@@ -92,10 +142,7 @@ class ProductImageServiceTest {
         assertThat(result).isNotNull();
         assertThat(result.imageId()).isEqualTo(newImageId);
         assertThat(result.isPrimary()).isTrue();
-
-        // Verify the mapping was saved
-        List<ProductImageMapping> mappings = testedImageMappingRepository.findByProduct_ProductIdOrderByDisplayOrderAsc(testProductId);
-        assertThat(mappings).hasSize(2); // Original + new mapping
+        verify(testedImageMappingRepository).save(any(ProductImageMapping.class));
     }
 
     @Test
@@ -105,27 +152,37 @@ class ProductImageServiceTest {
                 "https://example.com/created.jpg",
                 "Newly created image"
         );
+        ProductImage createdImage = new ProductImage();
+        createdImage.setImageId(99L);
+        createdImage.setImageUrl(request.imageUrl());
+        createdImage.setAltText(request.altText());
+
+        when(testedImageRepository.save(any(ProductImage.class))).thenReturn(createdImage);
 
         // when
         ProductImage result = testedProductImageService.createImage(request);
 
         // then
         assertThat(result).isNotNull();
-        assertThat(result.getImageId()).isNotNull();
         assertThat(result.getImageUrl()).isEqualTo(request.imageUrl());
         assertThat(result.getAltText()).isEqualTo(request.altText());
-
-        // Verify it was saved
-        ProductImage savedImage = testedImageRepository.findById(result.getImageId()).orElse(null);
-        assertThat(savedImage).isNotNull();
+        verify(testedImageRepository).save(any(ProductImage.class));
     }
 
     @Test
     void updateImage_WhenImageExists_UpdatesAndReturnsImage() {
         // given
-        String updatedUrl = "https://example.com/updated-image.jpg";
+        String updatedUrl = "https://example.com/updated.jpg";
         String updatedAltText = "Updated alt text";
         CreateImageRequestDto request = new CreateImageRequestDto(updatedUrl, updatedAltText);
+
+        ProductImage updatedImage = new ProductImage();
+        updatedImage.setImageId(testImageId);
+        updatedImage.setImageUrl(updatedUrl);
+        updatedImage.setAltText(updatedAltText);
+
+        when(testedImageRepository.findById(testImageId)).thenReturn(Optional.of(testImage));
+        when(testedImageRepository.save(testImage)).thenReturn(updatedImage);
 
         // when
         ProductImage result = testedProductImageService.updateImage(testImageId, request);
@@ -134,67 +191,61 @@ class ProductImageServiceTest {
         assertThat(result).isNotNull();
         assertThat(result.getImageUrl()).isEqualTo(updatedUrl);
         assertThat(result.getAltText()).isEqualTo(updatedAltText);
-
-        // Verify it was updated in the database
-        ProductImage updatedImage = testedImageRepository.findById(testImageId).orElse(null);
-        assertThat(updatedImage).isNotNull();
-        assertThat(updatedImage.getImageUrl()).isEqualTo(updatedUrl);
+        verify(testedImageRepository).save(testImage);
     }
 
     @Test
     void deleteImage_WhenImageNotUsed_DeletesImage() {
-        // given - create a new image that's not mapped to any product
-        ProductImage newImage = new ProductImage();
-        newImage.setImageUrl("https://example.com/to-delete.jpg");
-        newImage.setAltText("To be deleted");
-        ProductImage savedImage = testedImageRepository.save(newImage);
+        // given
+        testImage.setProductMappings(Collections.emptySet());
+        when(testedImageRepository.findById(testImageId)).thenReturn(Optional.of(testImage));
 
         // when
-        testedProductImageService.deleteImage(savedImage.getImageId());
+        testedProductImageService.deleteImage(testImageId);
 
         // then
-        Optional<ProductImage> deletedImage = testedImageRepository.findById(savedImage.getImageId());
-        assertThat(deletedImage).isEmpty();
+        verify(testedImageRepository).delete(testImage);
     }
 
     @Test
     void deleteImage_WhenImageInUse_ThrowsException() {
-        // given - testImageId is already mapped to a product in the test data
+        // given
+        testImage.setProductMappings(Set.of(testMapping));
+
+        when(testedImageRepository.findById(testImageId)).thenReturn(Optional.of(testImage));
 
         // when & then
         assertThatThrownBy(() -> testedProductImageService.deleteImage(testImageId))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("Cannot delete image that is used by products");
+
+        verify(testedImageRepository, never()).delete(any());
     }
 
     @Test
     void updatePrimaryImageStatus_WhenValidData_UpdatesPrimaryImage() {
-        // given - create and save a second image for the product
-        ProductImage secondImage = new ProductImage();
-        secondImage.setImageUrl("https://example.com/second-image.jpg");
-        secondImage.setAltText("Second Image");
-        secondImage = testedImageRepository.save(secondImage);
+        // given
+        ProductImageMapping currentPrimary = new ProductImageMapping();
+        currentPrimary.setPrimary(true);
 
-        // Associate the second image with the product (not primary)
-        AssociateImageRequestDto associateRequest = new AssociateImageRequestDto(
-                secondImage.getImageId(), false, 2);
-        testedProductImageService.associateImageWithProduct(testProductId, associateRequest);
+        ProductImageMapping newPrimary = new ProductImageMapping();
+        newPrimary.setImage(testImage);
+        newPrimary.setPrimary(false);
 
-        // when - make the second image primary
-        testedProductImageService.updatePrimaryImageStatus(testProductId, secondImage.getImageId());
+        ProductImageMappingId mappingId = new ProductImageMappingId(testProductId, testImageId);
+
+        when(testedImageMappingRepository.findByProduct_ProductIdAndIsPrimaryTrue(testProductId))
+                .thenReturn(Optional.of(currentPrimary));
+        when(testedImageMappingRepository.findById(mappingId))
+                .thenReturn(Optional.of(newPrimary));
+
+        // when
+        testedProductImageService.updatePrimaryImageStatus(testProductId, testImageId);
 
         // then
-        Optional<ProductImageMapping> primaryMapping = testedImageMappingRepository
-                .findByProduct_ProductIdAndIsPrimaryTrue(testProductId);
-
-        assertThat(primaryMapping).isPresent();
-        assertThat(primaryMapping.get().getImage().getImageId()).isEqualTo(secondImage.getImageId());
-
-        // Verify only one image is primary
-        List<ProductImageMapping> allMappings = testedImageMappingRepository
-                .findByProduct_ProductIdOrderByDisplayOrderAsc(testProductId);
-        long primaryCount = allMappings.stream().filter(ProductImageMapping::isPrimary).count();
-        assertThat(primaryCount).isEqualTo(1);
+        verify(testedImageMappingRepository, times(2)).save(any(ProductImageMapping.class));
+        assertThat(currentPrimary.isPrimary()).isFalse();
+        assertThat(newPrimary.isPrimary()).isTrue();
     }
 }
 

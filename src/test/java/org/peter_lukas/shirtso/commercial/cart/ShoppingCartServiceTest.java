@@ -35,14 +35,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-@ExtendWith({MockitoExtension.class, InstancioExtension.class})
+@ExtendWith({MockitoExtension.class})
 class ShoppingCartServiceTest {
-
-    @WithSettings
-    private static final Settings settings = Settings.create()
-            .set(Keys.BEAN_VALIDATION_ENABLED, true)
-            .set(Keys.COLLECTION_MIN_SIZE, 1)
-            .set(Keys.COLLECTION_MAX_SIZE, 3);
 
     @Mock
     private ShoppingCartRepository cartRepository;
@@ -70,39 +64,58 @@ class ShoppingCartServiceTest {
 
     @BeforeEach
     void setUp() {
-        // Generate test data using Instancio
-        testUser = Instancio.of(User.class)
-                .set(field(User::getEmail), "test@example.com")
-                .create();
+        testUser = createTestUser();
+        testProduct = createTestProduct();
+        testCart = createTestCart();
+        testCartItem = createTestCartItem();
+        testCartDto = createTestCartDto();
 
-        testProduct = Instancio.of(Product.class)
-                .set(field(Product::getStock), 10)
-                .set(field(Product::getPrice), new BigDecimal("19.99"))
-                .create();
+        setupSecurityContext();
+    }
 
-        testCartItem = Instancio.of(CartItem.class)
-                .set(field(CartItem::getProduct), testProduct)
-                .set(field(CartItem::getQuantity), 1)
-                .create();
+    private User createTestUser() {
+        User user = new User();
+        user.setUserId(UUID.randomUUID());
+        user.setEmail("test@example.com");
+        user.setUserName("testuser");
+        return user;
+    }
 
-        testCart = Instancio.of(ShoppingCart.class)
-                .set(field(ShoppingCart::getUser), testUser)
-                .set(field(ShoppingCart::getItems), new HashSet<>(Set.of(testCartItem)))
-                .create();
+    private Product createTestProduct() {
+        Product product = new Product();
+        product.setProductId(UUID.randomUUID());
+        product.setProductName("Test Product");
+        product.setDescription("Test Description");
+        product.setPrice(new BigDecimal("19.99"));
+        product.setStock(10);
+        return product;
+    }
 
-        testCartItem.setCart(testCart);
+    private ShoppingCart createTestCart() {
+        ShoppingCart cart = new ShoppingCart(testUser);
+        cart.setCartId(1);
+        return cart;
+    }
 
-        testCartDto = Instancio.of(CartDto.class)
-                .set(field(CartDto::cartId), testCart.getCartId())
-                .set(field(CartDto::userId), testUser.getUserId())
-                .set(field(CartDto::items), List.of())
-                .set(field(CartDto::totalAmount), BigDecimal.ZERO)
-                .set(field(CartDto::totalItems), 0)
-                .create();
+    private CartItem createTestCartItem() {
+        CartItem item = new CartItem(testCart, testProduct, 1);
+        item.setCartItemId(1);
+        return item;
+    }
 
-        // Setup security context
+    private CartDto createTestCartDto() {
+        return new CartDto(
+                testCart.getCartId(),
+                testUser.getUserId(),
+                List.of(),
+                BigDecimal.ZERO,
+                0
+        );
+    }
+
+    private void setupSecurityContext() {
         Authentication authentication = new UsernamePasswordAuthenticationToken(
-            testUser.getEmail(), "password");
+                testUser.getEmail(), "password");
         SecurityContext securityContext = mock(SecurityContext.class);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);

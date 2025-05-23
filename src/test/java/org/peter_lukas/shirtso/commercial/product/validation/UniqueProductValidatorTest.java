@@ -40,7 +40,7 @@ class UniqueProductValidatorTest {
     }
 
     @Test
-    void shouldReturnTrueWhenNewProductDtoIsNull() {
+    void shouldReturnFalseWhenNewProductDtoIsNull() {
 //        given:
 
 //        when:

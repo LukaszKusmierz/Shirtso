@@ -49,4 +49,14 @@ class CartItemTest {
         assertEquals(3, cartItem.getQuantity());
         assertEquals(new BigDecimal("59.97"), cartItem.getTotalAmount());
     }
+
+    @Test
+    void updateQuantity_WithZero_SetsQuantityToZero() {
+        // when:
+        cartItem.updateQuantity(0);
+
+        // then:
+        assertEquals(0, cartItem.getQuantity());
+        assertEquals(new BigDecimal("0.00"), cartItem.getTotalAmount());
+    }
 }

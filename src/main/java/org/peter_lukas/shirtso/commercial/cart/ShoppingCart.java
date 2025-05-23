@@ -37,12 +37,16 @@ public class ShoppingCart {
     }
 
     public void addItem(CartItem item) {
-        items.add(item);
-        item.setCart(this);
+        if (item != null) {
+            items.add(item);
+            item.setCart(this);
+        }
     }
 
     public void removeItem(CartItem item) {
-        items.remove(item);
-        item.setCart(null);
+        if (item != null) {
+            items.remove(item);
+            item.setCart(null);
+        }
     }
 }
