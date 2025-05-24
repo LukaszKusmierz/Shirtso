@@ -73,38 +73,38 @@ public class SpringSecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-
-        return usernameOrEmail -> {
-
-            Optional<User> userOpt = userRepository.findByEmail(usernameOrEmail);
-
-//            if (userOpt.isEmpty()) {
-//                userOpt = userRepository.findByUserName(usernameOrEmail);
-//            }
-
-            return userOpt.map(u -> new UserDetails() {
-                @Override
-                public Collection<? extends GrantedAuthority> getAuthorities() {
-                    return u.getRoles().stream()
-                            .map(r -> new SimpleGrantedAuthority("ROLE_" + r.getName()))
-                            .toList();
-                }
-
-                @Override
-                public String getPassword() {
-                    return u.getPassword();
-                }
-
-                @Override
-                public String getUsername() {
-                            return u.getUserName();
-                        }
-            })
-            .orElseThrow(() -> new UsernameNotFoundException("User with " + usernameOrEmail + " not found"));
-        };
-    }
+//    @Bean
+//    public UserDetailsService userDetailsService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+//
+//        return usernameOrEmail -> {
+//
+//            Optional<User> userOpt = userRepository.findByEmail(usernameOrEmail);
+//
+////            if (userOpt.isEmpty()) {
+////                userOpt = userRepository.findByUserName(usernameOrEmail);
+////            }
+//
+//            return userOpt.map(u -> new UserDetails() {
+//                @Override
+//                public Collection<? extends GrantedAuthority> getAuthorities() {
+//                    return u.getRoles().stream()
+//                            .map(r -> new SimpleGrantedAuthority("ROLE_" + r.getName()))
+//                            .toList();
+//                }
+//
+//                @Override
+//                public String getPassword() {
+//                    return u.getPassword();
+//                }
+//
+//                @Override
+//                public String getUsername() {
+//                            return u.getUserName();
+//                        }
+//            })
+//            .orElseThrow(() -> new UsernameNotFoundException("User with " + usernameOrEmail + " not found"));
+//        };
+//    }
 
     @Bean
     WebSecurityCustomizer configureWebSecurity() {
