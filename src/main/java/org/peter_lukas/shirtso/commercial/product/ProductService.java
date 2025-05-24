@@ -22,20 +22,21 @@ public class ProductService {
         this.productMapper = productMapper;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ProductDto> getAllProducts() {
-        return productRepository.findAllBy().stream()
+        return productRepository.findAllWithImages().stream()
+                .map(productMapper::mapProductEntityToDto)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProductDto> getAllProductsPage(Pageable pageable) {
+        return productRepository.findAllWithImages(pageable).stream()
                 .map(productMapper::mapProductEntityToDto)
                 .toList();
     }
 
     @Transactional
-    public List<ProductDto> getAllProductsPage(Pageable pageable) {
-        return productRepository.findAllBy(pageable).stream()
-                .map(productMapper::mapProductEntityToDto)
-                .toList();
-    }
-
     public ProductDto addNewProduct(NewProductDto newProduct) {
         boolean exists = productRepository.existsByAttributes(
                 newProduct.productName(),
@@ -56,65 +57,65 @@ public class ProductService {
         return productMapper.mapProductEntityToDto(addedProduct);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ProductDto> getProductsBySubcategoryId(int subcategoryId) {
-        return productRepository.findAllBySubcategoryId(subcategoryId).stream()
+        return productRepository.findAllBySubcategoryIdWithImages(subcategoryId).stream()
                 .map(productMapper::mapProductEntityToDto)
                 .toList();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ProductDto> getProductsBySize(Sizes size) {
-        return productRepository.findAllBySize(size).stream()
+        return productRepository.findAllBySizeWithImages(size).stream()
                 .map(productMapper::mapProductEntityToDto)
                 .toList();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ProductDto> getProductsInStock() {
-        return productRepository.findAllInStock().stream()
+        return productRepository.findAllInStockWithImages().stream()
                 .map(productMapper::mapProductEntityToDto)
                 .toList();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ProductDto> getProductsNotInStock() {
-        return productRepository.findAllZeroStock().stream()
+        return productRepository.findAllZeroStockWithImages().stream()
                 .map(productMapper::mapProductEntityToDto)
                 .toList();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ProductDto> getProductsTopUpStock() {
-        return productRepository.findAllLessThan3Stock().stream()
+        return productRepository.findAllLessThan3StockWithImages().stream()
                 .map(productMapper::mapProductEntityToDto)
                 .toList();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ProductDto> getProductsByProductName(String productName) {
-        return productRepository.findAllByProductName(productName).stream()
+        return productRepository.findAllByProductNameWithImages(productName).stream()
                 .map(productMapper::mapProductEntityToDto)
                 .toList();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ProductDto> getProductsBySizeAndSubcategoryId(Sizes size, int subcategoryId) {
-        return productRepository.findProductsBySizeAndSubcategoryId(size, subcategoryId).stream()
+        return productRepository.findProductsBySizeAndSubcategoryIdWithImages(size, subcategoryId).stream()
                 .map(productMapper::mapProductEntityToDto)
                 .toList();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public ProductDto getProductById(UUID productId) {
-        return productRepository.getProductByProductId(productId)
+        return productRepository.getProductByProductIdWithImages(productId)
                 .map(productMapper::mapProductEntityToDto)
                 .orElseThrow(() -> new ProductNotFoundException(Alerts.PRODUCT_NOT_FOUND));
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ProductDto> getProductsByCategoryId(int categoryId) {
-        return productRepository.getProductsByCategoryId(categoryId).stream()
+        return productRepository.getProductsByCategoryIdWithImages(categoryId).stream()
                 .map(productMapper::mapProductEntityToDto)
                 .toList();
     }

@@ -13,6 +13,39 @@ import java.util.UUID;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, UUID> {
 
+    @Query("SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.imageMappings im LEFT JOIN FETCH im.image")
+    List<Product> findAllWithImages();
+
+    @Query("SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.imageMappings im LEFT JOIN FETCH im.image")
+    List<Product> findAllWithImages(Pageable pageable);
+
+    @Query("SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.imageMappings im LEFT JOIN FETCH im.image WHERE p.subcategoryId = :subcategoryId")
+    List<Product> findAllBySubcategoryIdWithImages(@Param("subcategoryId") int subcategoryId);
+
+    @Query("SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.imageMappings im LEFT JOIN FETCH im.image WHERE p.size = :size")
+    List<Product> findAllBySizeWithImages(@Param("size") Sizes size);
+
+    @Query("SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.imageMappings im LEFT JOIN FETCH im.image WHERE p.stock > 0")
+    List<Product> findAllInStockWithImages();
+
+    @Query("SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.imageMappings im LEFT JOIN FETCH im.image WHERE p.stock = 0")
+    List<Product> findAllZeroStockWithImages();
+
+    @Query("SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.imageMappings im LEFT JOIN FETCH im.image WHERE p.stock > 0 AND p.stock < 3")
+    List<Product> findAllLessThan3StockWithImages();
+
+    @Query("SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.imageMappings im LEFT JOIN FETCH im.image WHERE p.productName = :productName")
+    List<Product> findAllByProductNameWithImages(@Param("productName") String productName);
+
+    @Query("SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.imageMappings im LEFT JOIN FETCH im.image WHERE p.size = :size AND p.subcategoryId = :subcategoryId")
+    List<Product> findProductsBySizeAndSubcategoryIdWithImages(@Param("size") Sizes size, @Param("subcategoryId") int subcategoryId);
+
+    @Query("SELECT p FROM Product p LEFT JOIN FETCH p.imageMappings im LEFT JOIN FETCH im.image WHERE p.productId = :productId")
+    Optional<Product> getProductByProductIdWithImages(@Param("productId") UUID productId);
+
+    @Query("SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.imageMappings im LEFT JOIN FETCH im.image WHERE p.subcategoryId IN (SELECT s.subcategoryId FROM Subcategory s WHERE s.category.categoryId = :categoryId)")
+    List<Product> getProductsByCategoryIdWithImages(@Param("categoryId") int categoryId);
+
     List<Product> findAllBy();
 
     List<Product> findAllBy(Pageable pageable);
