@@ -68,5 +68,5 @@ public class CachedUserDetailsService implements UserDetailsService {
             public boolean isEnabled() {
                 return true;
             }
-        }
+    }
 }
