@@ -24,53 +24,49 @@ public class CachedUserDetailsService implements UserDetailsService {
     @Override
     @Cacheable(value = "usersByEmail", key = "#usernameOrEmail")
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
-        User user = userRepository.findByUserName(usernameOrEmail)
+        User user = userRepository.findByEmail(usernameOrEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("User with " + usernameOrEmail + " not found"));
+
         return new CustomUserDetails(user);
     }
 
-    private static class CustomUserDetails implements UserDetails {
-        private final User user;
-
-        public CustomUserDetails(User user) {
-            this.user = user;
-        }
+    private record CustomUserDetails(User user) implements UserDetails {
 
         @Override
-        public Collection<? extends GrantedAuthority> getAuthorities() {
-            return user.getRoles().stream()
-                    .map(r -> new SimpleGrantedAuthority("ROLE_" + r.getName()))
-                    .toList();
-        }
+            public Collection<? extends GrantedAuthority> getAuthorities() {
+                return user.getRoles().stream()
+                        .map(r -> new SimpleGrantedAuthority("ROLE_" + r.getName()))
+                        .toList();
+            }
 
-        @Override
-        public String getPassword() {
-            return user.getPassword();
-        }
+            @Override
+            public String getPassword() {
+                return user.getPassword();
+            }
 
-        @Override
-        public String getUsername() {
-            return user.getUserName();
-        }
+            @Override
+            public String getUsername() {
+                return user.getUserName();
+            }
 
-        @Override
-        public boolean isAccountNonExpired() {
-            return true;
-        }
+            @Override
+            public boolean isAccountNonExpired() {
+                return true;
+            }
 
-        @Override
-        public boolean isAccountNonLocked() {
-            return true;
-        }
+            @Override
+            public boolean isAccountNonLocked() {
+                return true;
+            }
 
-        @Override
-        public boolean isCredentialsNonExpired() {
-            return true;
-        }
+            @Override
+            public boolean isCredentialsNonExpired() {
+                return true;
+            }
 
-        @Override
-        public boolean isEnabled() {
-            return true;
+            @Override
+            public boolean isEnabled() {
+                return true;
+            }
         }
-    }
 }
