@@ -43,8 +43,12 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     @Query("SELECT p FROM Product p LEFT JOIN FETCH p.imageMappings im LEFT JOIN FETCH im.image WHERE p.productId = :productId")
     Optional<Product> getProductByProductIdWithImages(UUID productId);
 
-    @Query("SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.imageMappings im LEFT JOIN FETCH im.image WHERE p.subcategoryId IN (SELECT s.subcategoryId FROM Subcategory s WHERE s.category.categoryId = :categoryId)")
-    List<Product> getProductsByCategoryIdWithImages(int categoryId);
+    @Query("SELECT DISTINCT p FROM Product p " +
+            "LEFT JOIN FETCH p.imageMappings im " +
+            "LEFT JOIN FETCH im.image " +
+            "WHERE p.subcategoryId IN " +
+            "(SELECT s.subcategoryId FROM Subcategory s WHERE s.category.categoryId = :categoryId)")
+    List<Product> getProductsByCategoryIdWithImages(@Param("categoryId") int categoryId);
 
     List<Product> findAllBy();
 
