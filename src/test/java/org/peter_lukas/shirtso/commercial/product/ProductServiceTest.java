@@ -168,7 +168,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void getProductsByCategoryId_ShouldReturnEmptyList_WhenProductsNotFound() {
+    void getProductsBySubcategoryId_ShouldReturnEmptyList_WhenProductsNotFound() {
 //        given:
         int categoryId = 4;
 
@@ -211,6 +211,109 @@ class ProductServiceTest {
         List<ProductDto> productDtos = testedProductService.getProductsBySize(size);
 
 //        then:
+        assertThat(productDtos).isEmpty();
+    }
+
+    @Test
+    void getProductsByCategoryId_ShouldReturnMappedDtos_WhenProductsFound() {
+        // given:
+        int categoryId = 1;
+
+        when(mockedRepository.getProductsByCategoryIdWithImages(categoryId)).thenReturn(testProducts);
+        when(mockedMapper.mapProductEntityToDto(testProduct1)).thenReturn(testProductDto1);
+        when(mockedMapper.mapProductEntityToDto(testProduct2)).thenReturn(testProductDto2);
+
+        // when:
+        List<ProductDto> productDtos = testedProductService.getProductsByCategoryId(categoryId);
+
+        // then:
+        assertThat(productDtos)
+                .isNotNull()
+                .hasSize(testProductDtos.size())
+                .containsExactly(testProductDto1, testProductDto2);
+    }
+
+    @Test
+    void getProductsByCategoryId_ShouldReturnEmptyList_WhenProductsNotFound() {
+        // given:
+        int categoryId = 4;
+
+        when(mockedRepository.getProductsByCategoryIdWithImages(categoryId)).thenReturn(Collections.emptyList());
+
+        // when:
+        List<ProductDto> productDtos = testedProductService.getProductsByCategoryId(categoryId);
+
+        // then:
+        assertThat(productDtos).isEmpty();
+    }
+
+    @Test
+    void getProductsBySizeAndCategoryId_ShouldReturnMappedDtos_WhenProductsFound() {
+        // given:
+        Sizes size = Sizes.L;
+        int categoryId = 1;
+
+        when(mockedRepository.findProductsBySizeAndCategoryIdWithImages(size, categoryId)).thenReturn(testProducts);
+        when(mockedMapper.mapProductEntityToDto(testProduct1)).thenReturn(testProductDto1);
+        when(mockedMapper.mapProductEntityToDto(testProduct2)).thenReturn(testProductDto2);
+
+        // when:
+        List<ProductDto> productDtos = testedProductService.getProductsBySizeAndCategoryId(size, categoryId);
+
+        // then:
+        assertThat(productDtos)
+                .isNotNull()
+                .hasSize(testProductDtos.size())
+                .containsExactly(testProductDto1, testProductDto2);
+    }
+
+    @Test
+    void getProductsBySizeAndCategoryId_ShouldReturnEmptyList_WhenProductsNotFound() {
+        // given:
+        Sizes size = Sizes.M;
+        int categoryId = 4;
+
+        when(mockedRepository.findProductsBySizeAndCategoryIdWithImages(size, categoryId)).thenReturn(Collections.emptyList());
+
+        // when:
+        List<ProductDto> productDtos = testedProductService.getProductsBySizeAndCategoryId(size, categoryId);
+
+        // then:
+        assertThat(productDtos).isEmpty();
+    }
+
+    @Test
+    void getProductsBySizeAndSubcategoryId_ShouldReturnMappedDtos_WhenProductsFound() {
+        // given:
+        Sizes size = Sizes.L;
+        int subcategoryId = 1;
+
+        when(mockedRepository.findProductsBySizeAndSubcategoryIdWithImages(size, subcategoryId)).thenReturn(testProducts);
+        when(mockedMapper.mapProductEntityToDto(testProduct1)).thenReturn(testProductDto1);
+        when(mockedMapper.mapProductEntityToDto(testProduct2)).thenReturn(testProductDto2);
+
+        // when:
+        List<ProductDto> productDtos = testedProductService.getProductsBySizeAndSubcategoryId(size, subcategoryId);
+
+        // then:
+        assertThat(productDtos)
+                .isNotNull()
+                .hasSize(testProductDtos.size())
+                .containsExactly(testProductDto1, testProductDto2);
+    }
+
+    @Test
+    void getProductsBySizeAndSubcategoryId_ShouldReturnEmptyList_WhenProductsNotFound() {
+        // given:
+        Sizes size = Sizes.M;
+        int subcategoryId = 4;
+
+        when(mockedRepository.findProductsBySizeAndSubcategoryIdWithImages(size, subcategoryId)).thenReturn(Collections.emptyList());
+
+        // when:
+        List<ProductDto> productDtos = testedProductService.getProductsBySizeAndSubcategoryId(size, subcategoryId);
+
+        // then:
         assertThat(productDtos).isEmpty();
     }
 
