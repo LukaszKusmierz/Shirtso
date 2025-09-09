@@ -1,6 +1,5 @@
 package org.peter_lukas.shirtso.commercial.product.validation;
 
-import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,9 +22,6 @@ class UniqueProductValidatorTest {
     @Mock
     private ProductRepository mockedProductRepository;
 
-    @Mock
-    private ConstraintValidatorContext mockedContext;
-
     @InjectMocks
     private UniqueProductValidator testedValidator;
 
@@ -44,7 +40,7 @@ class UniqueProductValidatorTest {
 //        given:
 
 //        when:
-        boolean result = testedValidator.isValid(null, mockedContext);
+        boolean result = testedValidator.isValid(null, null);
 
 //        then:
         assertThat(result).isFalse();
@@ -67,7 +63,7 @@ class UniqueProductValidatorTest {
         )).thenReturn(Boolean.FALSE);
 
 //        when:
-        boolean result = testedValidator.isValid(testProductDto, mockedContext);
+        boolean result = testedValidator.isValid(testProductDto, null);
 
 //        then
         assertThat(result).isTrue();
@@ -100,7 +96,7 @@ class UniqueProductValidatorTest {
         )).thenReturn(Boolean.TRUE);
 
 //        when:
-        boolean result = testedValidator.isValid(testProductDto, mockedContext);
+        boolean result = testedValidator.isValid(testProductDto, null);
 
 //        then:
         assertThat(result).isFalse();
