@@ -56,7 +56,7 @@ class ProductServiceTest {
     @Test
     void shouldGetAllProducts() {
 //        given:
-        when(mockedRepository.findAllBy()).thenReturn(testProducts);
+        when(mockedRepository.findAllWithImages()).thenReturn(testProducts);
         when(mockedMapper.mapProductEntityToDto(testProduct1)).thenReturn(testProductDto1);
         when(mockedMapper.mapProductEntityToDto(testProduct2)).thenReturn(testProductDto2);
 
@@ -70,7 +70,7 @@ class ProductServiceTest {
                 .hasSize(testProductDtos.size())
                 .isEqualTo(testProductDtos);
 
-        verify(mockedRepository).findAllBy();
+        verify(mockedRepository).findAllWithImages();
         verify(mockedMapper).mapProductEntityToDto(testProduct1);
         verify(mockedMapper).mapProductEntityToDto(testProduct2);
     }
@@ -80,7 +80,7 @@ class ProductServiceTest {
 //        given:
         Pageable pageable = mock(Pageable.class);
 
-        when(mockedRepository.findAllBy(pageable)).thenReturn(testProducts);
+        when(mockedRepository.findAllWithImages(pageable)).thenReturn(testProducts);
         when(mockedMapper.mapProductEntityToDto(testProduct1)).thenReturn(testProductDto1);
         when(mockedMapper.mapProductEntityToDto(testProduct2)).thenReturn(testProductDto2);
 
@@ -94,7 +94,7 @@ class ProductServiceTest {
                 .hasSize(testProductDtos.size())
                 .isEqualTo(testProductDtos);
 
-        verify(mockedRepository).findAllBy(pageable);
+        verify(mockedRepository).findAllWithImages(pageable);
     }
 
     @Test
@@ -153,7 +153,7 @@ class ProductServiceTest {
 //        given:
         int categoryId = 1;
 
-        when(mockedRepository.findAllBySubcategoryId(categoryId)).thenReturn(testProducts);
+        when(mockedRepository.findAllBySubcategoryIdWithImages(categoryId)).thenReturn(testProducts);
         when(mockedMapper.mapProductEntityToDto(testProduct1)).thenReturn(testProductDto1);
         when(mockedMapper.mapProductEntityToDto(testProduct2)).thenReturn(testProductDto2);
 
@@ -172,7 +172,7 @@ class ProductServiceTest {
 //        given:
         int categoryId = 4;
 
-        when(mockedRepository.findAllBySubcategoryId(categoryId)).thenReturn(Collections.emptyList());
+        when(mockedRepository.findAllBySubcategoryIdWithImages(categoryId)).thenReturn(Collections.emptyList());
 
 //        when:
         List<ProductDto> productDtos = testedProductService.getProductsBySubcategoryId(categoryId);
@@ -186,7 +186,7 @@ class ProductServiceTest {
 //        given:
         Sizes size = Sizes.L;
 
-        when(mockedRepository.findAllBySize(size)).thenReturn(testProducts);
+        when(mockedRepository.findAllBySizeWithImages(size)).thenReturn(testProducts);
         when(mockedMapper.mapProductEntityToDto(testProduct1)).thenReturn(testProductDto1);
         when(mockedMapper.mapProductEntityToDto(testProduct2)).thenReturn(testProductDto2);
 
@@ -205,7 +205,7 @@ class ProductServiceTest {
 //        given:
         Sizes size = Sizes.M;
 
-        when(mockedRepository.findAllBySize(size)).thenReturn(Collections.emptyList());
+        when(mockedRepository.findAllBySizeWithImages(size)).thenReturn(Collections.emptyList());
 
 //        when:
         List<ProductDto> productDtos = testedProductService.getProductsBySize(size);
@@ -217,7 +217,7 @@ class ProductServiceTest {
     @Test
     void getProductsInStock_ShouldReturnMappedDtos_WhenProductsFound() {
 //        given:
-        when(mockedRepository.findAllInStock()).thenReturn(testProducts);
+        when(mockedRepository.findAllInStockWithImages()).thenReturn(testProducts);
         when(mockedMapper.mapProductEntityToDto(testProduct1)).thenReturn(testProductDto1);
         when(mockedMapper.mapProductEntityToDto(testProduct2)).thenReturn(testProductDto2);
 
@@ -234,7 +234,7 @@ class ProductServiceTest {
     @Test
     void getProductsInStock_ShouldReturnEmptyList_WhenProductsNotFound() {
 //        given:
-        when(mockedRepository.findAllInStock()).thenReturn(Collections.emptyList());
+        when(mockedRepository.findAllInStockWithImages()).thenReturn(Collections.emptyList());
 
 //        when:
         List<ProductDto> productDtos = testedProductService.getProductsInStock();
@@ -246,7 +246,7 @@ class ProductServiceTest {
     @Test
     void getProductsNotInStock_ShouldReturnMappedDtos_WhenProductsFound() {
 //        given:
-        when(mockedRepository.findAllZeroStock()).thenReturn(testProducts);
+        when(mockedRepository.findAllZeroStockWithImages()).thenReturn(testProducts);
         when(mockedMapper.mapProductEntityToDto(testProduct1)).thenReturn(testProductDto1);
         when(mockedMapper.mapProductEntityToDto(testProduct2)).thenReturn(testProductDto2);
 
@@ -263,7 +263,7 @@ class ProductServiceTest {
     @Test
     void getProductsNotInStock_ShouldReturnEmptyList_WhenProductsNotFound() {
 //        given:
-        when(mockedRepository.findAllZeroStock()).thenReturn(Collections.emptyList());
+        when(mockedRepository.findAllZeroStockWithImages()).thenReturn(Collections.emptyList());
 
 //        when:
         List<ProductDto> productDtos = testedProductService.getProductsNotInStock();
@@ -275,7 +275,7 @@ class ProductServiceTest {
     @Test
     void getProductsTopUpStock_ShouldReturnMappedDtos_WhenProductsFound() {
 //        given:
-        when(mockedRepository.findAllLessThan3Stock()).thenReturn(testProducts);
+        when(mockedRepository.findAllLessThan3StockWithImages()).thenReturn(testProducts);
         when(mockedMapper.mapProductEntityToDto(testProduct1)).thenReturn(testProductDto1);
         when(mockedMapper.mapProductEntityToDto(testProduct2)).thenReturn(testProductDto2);
 
@@ -292,7 +292,7 @@ class ProductServiceTest {
     @Test
     void getProductsTopUpStock_ShouldReturnEmptyList_WhenProductsNotFound() {
 //        given:
-        when(mockedRepository.findAllLessThan3Stock()).thenReturn(Collections.emptyList());
+        when(mockedRepository.findAllLessThan3StockWithImages()).thenReturn(Collections.emptyList());
 
 //        when:
         List<ProductDto> productDtos = testedProductService.getProductsTopUpStock();
@@ -306,7 +306,7 @@ class ProductServiceTest {
 //        given:
         String productName = "testProduct";
 
-        when(mockedRepository.findAllByProductName(productName)).thenReturn(testProducts);
+        when(mockedRepository.findAllByProductNameWithImages(productName)).thenReturn(testProducts);
         when(mockedMapper.mapProductEntityToDto(testProduct1)).thenReturn(testProductDto1);
         when(mockedMapper.mapProductEntityToDto(testProduct2)).thenReturn(testProductDto2);
 
@@ -325,7 +325,7 @@ class ProductServiceTest {
 //        given:
         String productName = "testProduct";
 
-        when(mockedRepository.findAllByProductName(productName)).thenReturn(Collections.emptyList());
+        when(mockedRepository.findAllByProductNameWithImages(productName)).thenReturn(Collections.emptyList());
 
 //        when:
         List<ProductDto> productDtos = testedProductService.getProductsByProductName(productName);

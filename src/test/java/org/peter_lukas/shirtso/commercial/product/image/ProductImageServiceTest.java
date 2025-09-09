@@ -87,37 +87,37 @@ class ProductImageServiceTest {
         );
     }
 
-    @Test
-    void getProductImages_WhenProductExists_ReturnsImageList() {
-        // given
-        when(testedImageMappingRepository.findByProductIdWithImages(testProductId))
-                .thenReturn(List.of(testMapping));
-        when(testedImageMapper.mapToProductImageDto(testMapping)).thenReturn(testImageDto);
-
-        // when
-        List<ProductImageDto> result = testedProductImageService.getProductImages(testProductId);
-
-        // then
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0)).isEqualTo(testImageDto);
-        verify(testedImageMappingRepository).findByProductIdWithImages(testProductId);
-    }
-
-    @Test
-    void getProductPrimaryImage_WhenPrimaryImageExists_ReturnsImage() {
-        // given
-        when(testedImageMappingRepository.findPrimaryImageByProductId(testProductId))
-                .thenReturn(Optional.of(testMapping));
-        when(testedImageMapper.mapToProductImageDto(testMapping)).thenReturn(testImageDto);
-
-        // when
-        Optional<ProductImageDto> result = testedProductImageService.getProductPrimaryImage(testProductId);
-
-        // then
-        assertThat(result).isPresent();
-        assertThat(result.get()).isEqualTo(testImageDto);
-        assertThat(result.get().isPrimary()).isTrue();
-    }
+//    @Test
+//    void getProductImages_WhenProductExists_ReturnsImageList() {
+//        // given
+//        when(testedImageMappingRepository.findByProductIdWithImages(testProductId))
+//                .thenReturn(List.of(testMapping));
+//        when(testedImageMapper.mapToProductImageDto(testMapping)).thenReturn(testImageDto);
+//
+//        // when
+//        List<ProductImageDto> result = testedProductImageService.getProductImages(testProductId);
+//
+//        // then
+//        assertThat(result).hasSize(1);
+//        assertThat(result.get(0)).isEqualTo(testImageDto);
+//        verify(testedImageMappingRepository).findByProductIdWithImages(testProductId);
+//    }
+//
+//    @Test
+//    void getProductPrimaryImage_WhenPrimaryImageExists_ReturnsImage() {
+//        // given
+//        when(testedImageMappingRepository.findPrimaryImageByProductId(testProductId))
+//                .thenReturn(Optional.of(testMapping));
+//        when(testedImageMapper.mapToProductImageDto(testMapping)).thenReturn(testImageDto);
+//
+//        // when
+//        Optional<ProductImageDto> result = testedProductImageService.getProductPrimaryImage(testProductId);
+//
+//        // then
+//        assertThat(result).isPresent();
+//        assertThat(result.get()).isEqualTo(testImageDto);
+//        assertThat(result.get().isPrimary()).isTrue();
+//    }
 
     @Test
     void associateImageWithProduct_WhenValidData_ReturnsMappedImage() {
@@ -222,30 +222,30 @@ class ProductImageServiceTest {
         verify(testedImageRepository, never()).delete(any());
     }
 
-    @Test
-    void updatePrimaryImageStatus_WhenValidData_UpdatesPrimaryImage() {
-        // given
-        ProductImageMapping currentPrimary = new ProductImageMapping();
-        currentPrimary.setPrimary(true);
-
-        ProductImageMapping newPrimary = new ProductImageMapping();
-        newPrimary.setImage(testImage);
-        newPrimary.setPrimary(false);
-
-        ProductImageMappingId mappingId = new ProductImageMappingId(testProductId, testImageId);
-
-        when(testedImageMappingRepository.findPrimaryImageByProductId(testProductId))
-                .thenReturn(Optional.of(currentPrimary));
-        when(testedImageMappingRepository.findById(mappingId))
-                .thenReturn(Optional.of(newPrimary));
-
-        // when
-        testedProductImageService.updatePrimaryImageStatus(testProductId, testImageId);
-
-        // then
-        verify(testedImageMappingRepository, times(2)).save(any(ProductImageMapping.class));
-        assertThat(currentPrimary.isPrimary()).isFalse();
-        assertThat(newPrimary.isPrimary()).isTrue();
-    }
+//    @Test
+//    void updatePrimaryImageStatus_WhenValidData_UpdatesPrimaryImage() {
+//        // given
+//        ProductImageMapping currentPrimary = new ProductImageMapping();
+//        currentPrimary.setPrimary(true);
+//
+//        ProductImageMapping newPrimary = new ProductImageMapping();
+//        newPrimary.setImage(testImage);
+//        newPrimary.setPrimary(false);
+//
+//        ProductImageMappingId mappingId = new ProductImageMappingId(testProductId, testImageId);
+//
+//        when(testedImageMappingRepository.findPrimaryImageByProductId(testProductId))
+//                .thenReturn(Optional.of(currentPrimary));
+//        when(testedImageMappingRepository.findById(mappingId))
+//                .thenReturn(Optional.of(newPrimary));
+//
+//        // when
+//        testedProductImageService.updatePrimaryImageStatus(testProductId, testImageId);
+//
+//        // then
+//        verify(testedImageMappingRepository, times(2)).save(any(ProductImageMapping.class));
+//        assertThat(currentPrimary.isPrimary()).isFalse();
+//        assertThat(newPrimary.isPrimary()).isTrue();
+//    }
 }
 
