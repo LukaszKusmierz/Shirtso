@@ -100,6 +100,13 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
+    public List<ProductDto> getProductsBySizeAndCategoryId(Sizes size, int categoryId) {
+        return productRepository.findProductsBySizeAndCategoryIdWithImages(size, categoryId).stream()
+                .map(productMapper::mapProductEntityToDto)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
     public List<ProductDto> getProductsBySizeAndSubcategoryId(Sizes size, int subcategoryId) {
         return productRepository.findProductsBySizeAndSubcategoryIdWithImages(size, subcategoryId).stream()
                 .map(productMapper::mapProductEntityToDto)

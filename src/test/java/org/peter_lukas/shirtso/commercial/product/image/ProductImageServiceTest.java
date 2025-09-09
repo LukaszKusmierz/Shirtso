@@ -90,7 +90,7 @@ class ProductImageServiceTest {
     @Test
     void getProductImages_WhenProductExists_ReturnsImageList() {
         // given
-        when(testedImageMappingRepository.findByProduct_ProductIdOrderByDisplayOrderAsc(testProductId))
+        when(testedImageMappingRepository.findByProductIdWithImages(testProductId))
                 .thenReturn(List.of(testMapping));
         when(testedImageMapper.mapToProductImageDto(testMapping)).thenReturn(testImageDto);
 
@@ -100,13 +100,13 @@ class ProductImageServiceTest {
         // then
         assertThat(result).hasSize(1);
         assertThat(result.get(0)).isEqualTo(testImageDto);
-        verify(testedImageMappingRepository).findByProduct_ProductIdOrderByDisplayOrderAsc(testProductId);
+        verify(testedImageMappingRepository).findByProductIdWithImages(testProductId);
     }
 
     @Test
     void getProductPrimaryImage_WhenPrimaryImageExists_ReturnsImage() {
         // given
-        when(testedImageMappingRepository.findByProduct_ProductIdAndIsPrimaryTrue(testProductId))
+        when(testedImageMappingRepository.findPrimaryImageByProductId(testProductId))
                 .thenReturn(Optional.of(testMapping));
         when(testedImageMapper.mapToProductImageDto(testMapping)).thenReturn(testImageDto);
 
@@ -234,7 +234,7 @@ class ProductImageServiceTest {
 
         ProductImageMappingId mappingId = new ProductImageMappingId(testProductId, testImageId);
 
-        when(testedImageMappingRepository.findByProduct_ProductIdAndIsPrimaryTrue(testProductId))
+        when(testedImageMappingRepository.findPrimaryImageByProductId(testProductId))
                 .thenReturn(Optional.of(currentPrimary));
         when(testedImageMappingRepository.findById(mappingId))
                 .thenReturn(Optional.of(newPrimary));

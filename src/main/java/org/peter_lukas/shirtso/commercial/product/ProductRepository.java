@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -102,4 +103,8 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     @Query("SELECT p FROM Product p WHERE p.subcategoryId IN " +
             "(SELECT s.subcategoryId FROM Subcategory s WHERE s.category.categoryId = :categoryId)")
     List<Product> getProductsByCategoryId(int categoryId);
+
+    @Query("SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.imageMappings im LEFT JOIN FETCH im.image WHERE p.size = :size AND p.subcategoryId IN " +
+            "(SELECT s.subcategoryId FROM Subcategory s WHERE s.category.categoryId = :categoryId)")
+    List<Product> findProductsBySizeAndCategoryIdWithImages(Sizes size, int categoryId);
 }

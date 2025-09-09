@@ -72,6 +72,11 @@ public class ProductController {
         return List.of(Sizes.values());
     }
 
+    @GetMapping(params = {"size", "categoryId"})
+    public List<ProductDto> getProductsBySizeAndCategoryId(@RequestParam Sizes size, int categoryId) {
+        return productService.getProductsBySizeAndCategoryId(size, categoryId);
+    }
+
     @GetMapping(params = {"size", "subcategoryId"})
     public List<ProductDto> getProductsBySizeAndSubcategory(@RequestParam Sizes size, int subcategoryId) {
         return productService.getProductsBySizeAndSubcategoryId(size, subcategoryId);
