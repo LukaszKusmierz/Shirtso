@@ -1,10 +1,13 @@
 package org.peter_lukas.shirtso.commercial.product.image;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.peter_lukas.shirtso.commercial.product.Product;
+
+import java.util.UUID;
 
 @Entity
 @Table(name = "product_image_mapping")
@@ -34,5 +37,9 @@ public class ProductImageMapping {
         this.image = image;
         this.isPrimary = isPrimary;
         this.displayOrder = displayOrder;
+    }
+
+    public static ProductImageMappingId createId(UUID productId, Long imageId) {
+        return new ProductImageMappingId(productId, imageId);
     }
 }

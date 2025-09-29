@@ -29,7 +29,7 @@ public class ProductImageMappingId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductImageMappingId that = (ProductImageMappingId) o;
-        return imageId == that.imageId &&
+        return Objects.equals(imageId, that.imageId) &&
                 Objects.equals(productId, that.productId);
     }
 
