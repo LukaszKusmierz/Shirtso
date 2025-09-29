@@ -51,7 +51,8 @@ public class ProductToImageController {
     @PutMapping("/primary/{imageId}")
     @LogExecutionTime
     @RolesAllowed(USER_WRITE)
-    public ResponseEntity<Void> updatePrimaryImage(@PathVariable UUID productId, @PathVariable @jakarta.validation.constraints.NotNull(message = "Image ID can not be null") Long imageId) {
+    public ResponseEntity<Void> updatePrimaryImage(@PathVariable UUID productId,
+           @PathVariable @jakarta.validation.constraints.NotNull(message = "Image ID can not be null") Long imageId) {
         productImageService.updatePrimaryImageStatus(productId, imageId);
         return ResponseEntity.ok().build();
     }
