@@ -23,6 +23,8 @@ public final class Alerts {
 
     public static final String CART_NOT_FOUND = "Shopping cart not found";
 
+    public static final String IMAGE_MAPPING_CREATE_FAILED = "Failed to create image mapping";
+
     public static final String CART_ITEM_NOT_FOUND = "Cart item not found";
 
     public static final String ORDER_NOT_FOUND = "Order not found";

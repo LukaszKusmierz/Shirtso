@@ -80,8 +80,12 @@ public class Product {
 
 
     public void addImage(ProductImage image, boolean isPrimary, int displayOrder) {
+        if (isPrimary) {
+            imageMappings.forEach(mapping -> mapping.setPrimary(false));
+        }
         ProductImageMapping mapping = new ProductImageMapping(this, image, isPrimary, displayOrder);
         imageMappings.add(mapping);
+        image.getProductMappings().add(mapping);
     }
 
     public Optional<ProductImage> getPrimaryImage() {

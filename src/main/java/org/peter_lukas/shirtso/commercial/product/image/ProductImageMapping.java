@@ -19,12 +19,14 @@ public class ProductImageMapping {
     @EmbeddedId
     private ProductImageMappingId id;
 
+    @MapsId("productId")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", insertable = false, updatable = false)
+    @JoinColumn(name = "product_id")
     private Product product;
 
+    @MapsId("imageId")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "image_id", insertable = false, updatable = false)
+    @JoinColumn(name = "image_id")
     private ProductImage image;
 
     private boolean isPrimary;
