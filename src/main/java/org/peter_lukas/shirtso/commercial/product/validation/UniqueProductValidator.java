@@ -22,7 +22,6 @@ public class UniqueProductValidator implements ConstraintValidator<UniqueProduct
                 newProductDto.description(),
                 newProductDto.price(),
                 newProductDto.currency(),
-                newProductDto.imageId(),
                 newProductDto.subcategoryId(),
                 newProductDto.supplier(),
                 newProductDto.stock(),

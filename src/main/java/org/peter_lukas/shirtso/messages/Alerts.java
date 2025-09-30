@@ -13,6 +13,12 @@ public final class Alerts {
 
     public static final String IMAGE_NOT_FOUND = "Image not found.";
 
+    public static final String IMAGE_ASSOCIATION_NOT_FOUND = "Image is not associated with this product";
+
+    public static final String IMAGE_IN_USE = "Cannot delete image that is used by other products";
+
+    public static final String IMAGE_ALREADY_ASSOCIATED = "Image is already associated with this product";
+
     public static final String INSUFFICIENT_STOCK = "Not enough stock available";
 
     public static final String CART_NOT_FOUND = "Shopping cart not found";

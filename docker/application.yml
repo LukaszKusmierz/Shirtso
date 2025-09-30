@@ -1,0 +1,58 @@
+spring:
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://dpg-d3bam9mmcj7s73eon2pg-a.frankfurt-postgres.render.com:5432/shirtso_db_p3l6}
+    username: ${DB_USERNAME:shirtso_db_p3l6_user}
+    password: ${PASSWORD:TczBZSkypeN95yqurisFOzPuXaE8qJL7}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: ${JPA_DDL_AUTO:validate}
+    show-sql: ${JPA_SHOW_SQL:false}
+  flyway:
+    locations: db/migration
+    schemas: public
+  web:
+    resources:
+      static-locations: classpath:/static/,classpath:/static/photos/
+  mvc:
+    static-path-pattern: /**
+  mail:
+    host: ${MAIL_HOST:mail.ibe.pl}
+    port: ${MAIL_PORT:465}
+    username: ${MAIL_USERNAME:shirtso@lukspeed.eu}
+    password: ${MAIL_PASSWORD:5#28mLa5d}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+            starttls:
+              enable: false
+            socketFactory:
+              class: javax.net.ssl.SSLSocketFactory
+              port: ${MAIL_PORT:465}
+            connectiontimeout: 5000
+            timeout: 5000
+            writetimeout: 5000
+
+server:
+  port: ${PORT:8080}
+
+app:
+  security:
+    jwt:
+      token:
+        secret: ${JWT_SECRET:ac6717b2200890a633458a304da98cb8ebf7c7d3baf21e2e585ba087c8af0ba309ac0f454fec2bd67d64029b6fceb3789166466a1571bf49c65cf71d1c23cd2b}
+        validity: ${JWT_VALIDITY:60m}
+  notification:
+    email:
+      from: shirtso@lukspeed.eu
+      enabled: true
+  cors:
+    allowed-origins: ${https://shirtso-frontend.onrender.com}
+    allowed-methods: ${CORS_METHODS:GET,POST,PUT,DELETE,OPTIONS}
+    allowed-headers: ${CORS_HEADERS:Authorization,Content-Type,X-Requested-With,Accept}
+    allow-credentials: ${CORS_ALLOW_CREDENTIALS:true}
+    max-age: ${CORS_MAX_AGE:3600}

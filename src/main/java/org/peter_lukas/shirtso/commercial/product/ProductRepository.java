@@ -77,7 +77,6 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             "(:description IS NULL OR p.description = :description) AND " +
             "(:price IS NULL OR p.price = :price) AND " +
             "(:currency IS NULL OR p.currency = :currency) AND " +
-            "(:imageId IS NULL OR p.imageId = :imageId) AND " +
             "(:subcategoryId IS NULL OR p.subcategoryId = :subcategoryId) AND " +
             "(:supplier IS NULL OR p.supplier = :supplier) AND " +
             "(:stock IS NULL OR p.stock = :stock) AND " +
@@ -87,7 +86,6 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             @Param("description") String description,
             @Param("price") BigDecimal price,
             @Param("currency") Currencies currency,
-            @Param("imageId") Long imageId,
             @Param("subcategoryId") Integer categoryId,
             @Param("supplier") String supplier,
             @Param("stock") Long stock,

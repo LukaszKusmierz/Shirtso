@@ -20,7 +20,6 @@ import java.util.*;
                 "description",
                 "price",
                 "currency",
-                "image_id",
                 "subcategory_id",
                 "supplier",
                 "stock",
@@ -48,8 +47,6 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private Currencies currency;
 
-    private Long imageId;
-
     @NotNull(message = "Category Id cannot be empty")
     private int subcategoryId;
 
@@ -69,13 +66,12 @@ public class Product {
     @Version
     private Long version;
 
-    public Product(String productName, String description, BigDecimal price, Currencies currency, Long imageId,
+    public Product(String productName, String description, BigDecimal price, Currencies currency,
                    int subcategoryId, String supplier, long stock, Sizes size) {
         this.productName = productName;
         this.description = description;
         this.price = price;
         this.currency = currency;
-        this.imageId = imageId;
         this.subcategoryId = subcategoryId;
         this.supplier = supplier;
         this.stock = stock;

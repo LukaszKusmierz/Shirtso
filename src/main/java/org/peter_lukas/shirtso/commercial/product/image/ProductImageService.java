@@ -6,8 +6,7 @@ import org.peter_lukas.shirtso.commercial.product.ProductRepository;
 import org.peter_lukas.shirtso.commercial.product.image.dto.AssociateImageRequestDto;
 import org.peter_lukas.shirtso.commercial.product.image.dto.CreateImageRequestDto;
 import org.peter_lukas.shirtso.commercial.product.image.dto.ProductImageDto;
-import org.peter_lukas.shirtso.commercial.product.validation.ImageNotFoundException;
-import org.peter_lukas.shirtso.commercial.product.validation.ProductNotFoundException;
+import org.peter_lukas.shirtso.commercial.product.validation.*;
 import org.peter_lukas.shirtso.messages.Alerts;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,14 +49,16 @@ public class ProductImageService {
                 .orElseThrow(() -> new ProductNotFoundException(Alerts.PRODUCT_NOT_FOUND));
         ProductImage image = imageRepository.findById(request.imageId())
                 .orElseThrow(() -> new ImageNotFoundException(Alerts.IMAGE_NOT_FOUND));
-        ProductImageMapping mapping = new ProductImageMapping(
-                product,
-                image,
-                request.isPrimary(),
-                request.displayOrder()
+        ProductImageMappingId mappingId = ProductImageMapping.createId(productId, request.imageId());
+        if (imageMappingRepository.existsById(mappingId)) {
+            throw new ImageAssociatedException(Alerts.IMAGE_ALREADY_ASSOCIATED);
+        }
+
+        ProductImageMapping mapping = new ProductImageMapping(product, image, request.isPrimary(), request.displayOrder()
         );
+
         if (request.isPrimary()) {
-            updatePrimaryImageStatus(productId, request.imageId());
+            clearCurrentPrimaryImage(productId);
         }
         ProductImageMapping savedMapping = imageMappingRepository.save(mapping);
         return imageMapper.mapToProductImageDto(savedMapping);
@@ -65,22 +66,19 @@ public class ProductImageService {
 
     @Transactional
     public void updatePrimaryImageStatus(UUID productId, @NotNull(message = "Image ID can not be null") Long newPrimaryImageId) {
-        imageMappingRepository.findByProduct_ProductIdAndIsPrimaryTrue(productId)
-                .ifPresent(mapping -> {
-                    mapping.setPrimary(false);
-                    imageMappingRepository.save(mapping);
-                });
-        ProductImageMappingId mappingId = new ProductImageMappingId(productId, newPrimaryImageId);
-        imageMappingRepository.findById(mappingId)
-                .ifPresent(mapping -> {
-                    mapping.setPrimary(true);
-                    imageMappingRepository.save(mapping);
-                });
+        ProductImageMappingId mappingId = ProductImageMapping.createId(productId, newPrimaryImageId);
+        ProductImageMapping newPrimaryMapping = imageMappingRepository.findById(mappingId)
+                .orElseThrow(() -> new ImageNotAssociatedException(Alerts.IMAGE_ASSOCIATION_NOT_FOUND));
+
+        clearCurrentPrimaryImage(productId);
+
+        newPrimaryMapping.setPrimary(true);
+        imageMappingRepository.save(newPrimaryMapping);
     }
 
     @Transactional
     public void removeImageFromProduct(UUID productId, Long imageId) {
-        ProductImageMappingId mappingId = new ProductImageMappingId(productId, imageId);
+        ProductImageMappingId mappingId = ProductImageMapping.createId(productId, imageId);
         imageMappingRepository.findById(mappingId)
                 .ifPresent(mapping -> {
                     boolean wasPrimary = mapping.isPrimary();
@@ -119,7 +117,7 @@ public class ProductImageService {
         ProductImage image = imageRepository.findById(imageId)
                 .orElseThrow(() -> new ImageNotFoundException(Alerts.IMAGE_NOT_FOUND));
         if (!image.getProductMappings().isEmpty()) {
-            throw new IllegalStateException("Cannot delete image that is used by products");
+            throw new ImageInUseException(Alerts.IMAGE_IN_USE);
         }
         imageRepository.delete(image);
     }
@@ -130,6 +128,37 @@ public class ProductImageService {
                         .map(mapping -> mapping.getProduct().getProductId())
                         .toList())
                 .orElse(List.of());
+    }
+
+    private void clearCurrentPrimaryImage(UUID productId) {
+        imageMappingRepository.findByProduct_ProductIdAndIsPrimaryTrue(productId)
+                .ifPresent(mapping -> {
+                    mapping.setPrimary(false);
+                    imageMappingRepository.save(mapping);
+                });
+    }
+
+    @Transactional
+    public void bulkRemoveImagesFromProduct(UUID productId, List<Long> imageIds) {
+        List<ProductImageMappingId> mappingIds = imageIds.stream()
+                .map(imageId -> ProductImageMapping.createId(productId, imageId))
+                .toList();
+
+        List<ProductImageMapping> mappingsToDelete = imageMappingRepository.findAllById(mappingIds);
+
+        boolean removingPrimary = mappingsToDelete.stream().anyMatch(ProductImageMapping::isPrimary);
+
+        imageMappingRepository.deleteAll(mappingsToDelete);
+
+        if (removingPrimary) {
+            List<ProductImageMapping> remainingImages =
+                    imageMappingRepository.findByProduct_ProductIdOrderByDisplayOrderAsc(productId);
+            if (!remainingImages.isEmpty()) {
+                ProductImageMapping newPrimary = remainingImages.get(0);
+                newPrimary.setPrimary(true);
+                imageMappingRepository.save(newPrimary);
+            }
+        }
     }
 
     public Optional<ProductImage> getImageById(Long imageId) {
