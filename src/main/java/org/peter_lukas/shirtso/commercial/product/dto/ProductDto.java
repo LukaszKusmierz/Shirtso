@@ -13,7 +13,6 @@ public record ProductDto (
         String description,
         BigDecimal price,
         Currencies currency,
-        Long imageId,
         int subcategoryId,
         String supplier,
         long stock,

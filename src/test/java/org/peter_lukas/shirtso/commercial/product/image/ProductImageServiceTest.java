@@ -11,6 +11,7 @@ import org.peter_lukas.shirtso.commercial.product.ProductRepository;
 import org.peter_lukas.shirtso.commercial.product.image.dto.AssociateImageRequestDto;
 import org.peter_lukas.shirtso.commercial.product.image.dto.CreateImageRequestDto;
 import org.peter_lukas.shirtso.commercial.product.image.dto.ProductImageDto;
+import org.peter_lukas.shirtso.commercial.product.validation.ImageInUseException;
 
 import java.util.*;
 
@@ -216,8 +217,8 @@ class ProductImageServiceTest {
 
         // when & then
         assertThatThrownBy(() -> testedProductImageService.deleteImage(testImageId))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("Cannot delete image that is used by products");
+                .isInstanceOf(ImageInUseException.class)
+                .hasMessageContaining("Cannot delete image that is used by other products");
 
         verify(testedImageRepository, never()).delete(any());
     }

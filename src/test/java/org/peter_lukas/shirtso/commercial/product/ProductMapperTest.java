@@ -16,7 +16,7 @@ class ProductMapperTest {
 //        given:
 
         Product entity = new Product("test-productname", "test-description",
-                new BigDecimal(180), Currencies.PLN, 4L, 45, "test-supplier",
+                new BigDecimal(180), Currencies.PLN, 45, "test-supplier",
                 50L, Sizes.XL);
 //        when:
 
@@ -28,7 +28,6 @@ class ProductMapperTest {
         assertThat(actualDto.description()).isEqualTo(entity.getDescription());
         assertThat(actualDto.price()).isEqualTo(entity.getPrice());
         assertThat(actualDto.currency()).isEqualTo(entity.getCurrency());
-        assertThat(actualDto.imageId()).isEqualTo(entity.getImageId());
         assertThat(actualDto.subcategoryId()).isEqualTo(entity.getSubcategoryId());
         assertThat(actualDto.supplier()).isEqualTo(entity.getSupplier());
         assertThat(actualDto.stock()).isEqualTo(entity.getStock());
@@ -40,7 +39,7 @@ class ProductMapperTest {
 //        given:
 
         NewProductDto dto = new NewProductDto("test-productname", "test-description",
-                new BigDecimal(100), Currencies.EUR, 1L, 2, "test-supplier",
+                new BigDecimal(100), Currencies.EUR, 2, "test-supplier",
                 50L, Sizes.S
         );
 //        when:
@@ -53,7 +52,6 @@ class ProductMapperTest {
         assertThat(actualEntity.getPrice()).isEqualTo(dto.price());
         assertThat(actualEntity.getCurrency()).isEqualTo(dto.currency());
         assertThat(actualEntity.getSize()).isEqualTo(dto.size());
-        assertThat(actualEntity.getImageId()).isEqualTo(dto.imageId());
         assertThat(actualEntity.getSubcategoryId()).isEqualTo(dto.subcategoryId());
         assertThat(actualEntity.getSupplier()).isEqualTo(dto.supplier());
         assertThat(actualEntity.getStock()).isEqualTo(dto.stock());

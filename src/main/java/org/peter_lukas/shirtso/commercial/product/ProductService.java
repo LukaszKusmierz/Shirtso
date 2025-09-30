@@ -43,7 +43,6 @@ public class ProductService {
                 newProduct.description(),
                 newProduct.price(),
                 newProduct.currency(),
-                newProduct.imageId(),
                 newProduct.subcategoryId(),
                 newProduct.supplier(),
                 newProduct.stock(),
