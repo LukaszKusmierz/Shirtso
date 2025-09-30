@@ -1,7 +1,9 @@
 package org.peter_lukas.shirtso.commercial.product;
 
+import jakarta.validation.Valid;
 import org.peter_lukas.shirtso.commercial.product.dto.NewProductDto;
 import org.peter_lukas.shirtso.commercial.product.dto.ProductDto;
+import org.peter_lukas.shirtso.commercial.product.dto.UpdateProductDto;
 import org.peter_lukas.shirtso.commercial.product.validation.ProductNotFoundException;
 import org.peter_lukas.shirtso.messages.Alerts;
 import org.peter_lukas.shirtso.commercial.product.validation.ProductDuplicationException;
@@ -124,5 +126,23 @@ public class ProductService {
         return productRepository.getProductsByCategoryIdWithImages(categoryId).stream()
                 .map(productMapper::mapProductEntityToDto)
                 .toList();
+    }
+
+    @Transactional
+    public ProductDto updateProduct(UUID productId, @Valid UpdateProductDto updateProduct) {
+        Product existingProduct = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException(Alerts.PRODUCT_NOT_FOUND));
+
+        existingProduct.setProductName(updateProduct.productName());
+        existingProduct.setDescription(updateProduct.description());
+        existingProduct.setPrice(updateProduct.price());
+        existingProduct.setCurrency(updateProduct.currency());
+        existingProduct.setSubcategoryId(updateProduct.subcategoryId());
+        existingProduct.setSupplier(updateProduct.supplier());
+        existingProduct.setStock(updateProduct.stock());
+        existingProduct.setSize(updateProduct.size());
+
+        Product updatedProduct = productRepository.save(existingProduct);
+        return productMapper.mapProductEntityToDto(updatedProduct);
     }
 }

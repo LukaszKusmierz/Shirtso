@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import org.peter_lukas.shirtso.analytics.LogExecutionTime;
 import org.peter_lukas.shirtso.commercial.product.dto.NewProductDto;
 import org.peter_lukas.shirtso.commercial.product.dto.ProductDto;
+import org.peter_lukas.shirtso.commercial.product.dto.UpdateProductDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +39,14 @@ public class ProductController {
     @PostMapping
     public ProductDto addNewProduct(@Valid @RequestBody NewProductDto newProduct) {
         return productService.addNewProduct(newProduct);
+    }
+
+    @RolesAllowed(USER_WRITE)
+    @PutMapping("/{productId}")
+    public ProductDto updateProduct(
+            @PathVariable UUID productId,
+            @Valid @RequestBody UpdateProductDto updateProduct) {
+        return productService.updateProduct(productId, updateProduct);
     }
 
     @GetMapping(params = {"subcategoryId"})
