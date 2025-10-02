@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import org.peter_lukas.shirtso.analytics.LogExecutionTime;
 import org.peter_lukas.shirtso.commercial.product.dto.NewProductDto;
 import org.peter_lukas.shirtso.commercial.product.dto.ProductDto;
+import org.peter_lukas.shirtso.commercial.product.dto.ProductVariantDto;
 import org.peter_lukas.shirtso.commercial.product.dto.UpdateProductDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -99,5 +100,39 @@ public class ProductController {
     @GetMapping(params = {"categoryId"})
     public List<ProductDto> getProductsByCategoryId(@RequestParam int categoryId) {
         return productService.getProductsByCategoryId(categoryId);
+    }
+
+    @LogExecutionTime
+    @GetMapping("/grouped")
+    public List<ProductVariantDto> getProductsGrouped() {
+        return productService.getAllProductsGrouped();
+    }
+
+    @GetMapping(value = "/grouped", params = {"subcategoryId"})
+    public List<ProductVariantDto> getProductsGroupedBySubcategory(@RequestParam int subcategoryId) {
+        return productService.getProductsGroupedBySubcategory(subcategoryId);
+    }
+
+    @GetMapping(value = "/grouped", params = {"categoryId"})
+    public List<ProductVariantDto> getProductsGroupedByCategory(@RequestParam int categoryId) {
+        return productService.getProductsGroupedByCategory(categoryId);
+    }
+
+    @GetMapping("/grouped/in-stock")
+    public List<ProductVariantDto> getProductsGroupedInStock() {
+        return productService.getProductsGroupedInStock();
+    }
+
+    @GetMapping(value = "/grouped", params = {"productName"})
+    public List<ProductVariantDto> getProductsGroupedByName(@RequestParam String productName) {
+        return productService.getProductsGroupedByName(productName);
+    }
+
+    @GetMapping("/grouped/{productName}/{description}")
+    public ProductVariantDto getProductVariant(
+            @PathVariable String productName,
+            @PathVariable String description
+    ) {
+        return productService.getProductVariantByName(productName, description);
     }
 }
