@@ -8,6 +8,8 @@ import org.peter_lukas.shirtso.commercial.product.dto.UpdateProductDto;
 import org.peter_lukas.shirtso.commercial.product.image.ProductImageMapping;
 import org.peter_lukas.shirtso.commercial.product.image.dto.ProductImageDto;
 import org.peter_lukas.shirtso.commercial.product.validation.ProductNotFoundException;
+import org.peter_lukas.shirtso.commercial.product.validation.SubcategoryNotFoundException;
+import org.peter_lukas.shirtso.commercial.subcategory.SubcategoryRepository;
 import org.peter_lukas.shirtso.messages.Alerts;
 import org.peter_lukas.shirtso.commercial.product.validation.ProductDuplicationException;
 import org.springframework.data.domain.Pageable;
@@ -24,10 +26,12 @@ import java.util.stream.Collectors;
 public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final SubcategoryRepository subcategoryRepository;
 
-    public ProductService(ProductRepository productRepository, ProductMapper productMapper) {
+    public ProductService(ProductRepository productRepository, ProductMapper productMapper, SubcategoryRepository subcategoryRepository) {
         this.productRepository = productRepository;
         this.productMapper = productMapper;
+        this.subcategoryRepository = subcategoryRepository;
     }
 
     @Transactional(readOnly = true)
@@ -137,13 +141,18 @@ public class ProductService {
     @Transactional
     public ProductDto updateProduct(UUID productId, @Valid UpdateProductDto updateProduct) {
         Product existingProduct = productRepository.findById(productId)
-                .orElseThrow(() -> new ProductNotFoundException(Alerts.PRODUCT_NOT_FOUND));
+                .orElseThrow(() -> new ProductNotFoundException(Alerts.PRODUCT_NOT_FOUND + productId));
+
+        if (existingProduct.getSubcategoryId() != updateProduct.subcategoryId()) {
+            var subcategory = subcategoryRepository.findById(updateProduct.subcategoryId())
+                    .orElseThrow(() -> new SubcategoryNotFoundException(Alerts.SUBCATEGORY_NOT_FOUND + updateProduct.subcategoryId()));
+            existingProduct.setSubcategory(subcategory);
+        }
 
         existingProduct.setProductName(updateProduct.productName());
         existingProduct.setDescription(updateProduct.description());
         existingProduct.setPrice(updateProduct.price());
         existingProduct.setCurrency(updateProduct.currency());
-        existingProduct.setSubcategoryId(updateProduct.subcategoryId());
         existingProduct.setSupplier(updateProduct.supplier());
         existingProduct.setStock(updateProduct.stock());
         existingProduct.setSize(updateProduct.size());
@@ -246,6 +255,7 @@ public class ProductService {
                 representative.getDescription(),
                 representative.getPrice(),
                 representative.getCurrency(),
+                representative.getCategoryId(),
                 representative.getSubcategoryId(),
                 representative.getSupplier(),
                 sizeVariants,

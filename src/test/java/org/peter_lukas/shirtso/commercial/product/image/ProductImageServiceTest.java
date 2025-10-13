@@ -11,7 +11,10 @@ import org.peter_lukas.shirtso.commercial.product.ProductRepository;
 import org.peter_lukas.shirtso.commercial.product.image.dto.AssociateImageRequestDto;
 import org.peter_lukas.shirtso.commercial.product.image.dto.CreateImageRequestDto;
 import org.peter_lukas.shirtso.commercial.product.image.dto.ProductImageDto;
+import org.peter_lukas.shirtso.commercial.product.validation.ImageAssociatedException;
 import org.peter_lukas.shirtso.commercial.product.validation.ImageInUseException;
+import org.peter_lukas.shirtso.commercial.product.validation.ImageNotFoundException;
+import org.peter_lukas.shirtso.commercial.product.validation.ProductNotFoundException;
 
 import java.util.*;
 
@@ -86,64 +89,6 @@ class ProductImageServiceTest {
                 true,
                 1
         );
-    }
-
-//    @Test
-//    void getProductImages_WhenProductExists_ReturnsImageList() {
-//        // given
-//        when(testedImageMappingRepository.findByProductIdWithImages(testProductId))
-//                .thenReturn(List.of(testMapping));
-//        when(testedImageMapper.mapToProductImageDto(testMapping)).thenReturn(testImageDto);
-//
-//        // when
-//        List<ProductImageDto> result = testedProductImageService.getProductImages(testProductId);
-//
-//        // then
-//        assertThat(result).hasSize(1);
-//        assertThat(result.get(0)).isEqualTo(testImageDto);
-//        verify(testedImageMappingRepository).findByProductIdWithImages(testProductId);
-//    }
-//
-//    @Test
-//    void getProductPrimaryImage_WhenPrimaryImageExists_ReturnsImage() {
-//        // given
-//        when(testedImageMappingRepository.findPrimaryImageByProductId(testProductId))
-//                .thenReturn(Optional.of(testMapping));
-//        when(testedImageMapper.mapToProductImageDto(testMapping)).thenReturn(testImageDto);
-//
-//        // when
-//        Optional<ProductImageDto> result = testedProductImageService.getProductPrimaryImage(testProductId);
-//
-//        // then
-//        assertThat(result).isPresent();
-//        assertThat(result.get()).isEqualTo(testImageDto);
-//        assertThat(result.get().isPrimary()).isTrue();
-//    }
-
-    @Test
-    void associateImageWithProduct_WhenValidData_ReturnsMappedImage() {
-        // given
-        Long newImageId = 2L;
-        ProductImage newImage = createTestImage();
-        newImage.setImageId(newImageId);
-
-        AssociateImageRequestDto request = new AssociateImageRequestDto(newImageId, true, 2);
-        ProductImageMapping newMapping = new ProductImageMapping();
-        ProductImageDto expectedDto = new ProductImageDto(newImageId, "url", "alt", true, 2);
-
-        when(testedProductRepository.findById(testProductId)).thenReturn(Optional.of(testProduct));
-        when(testedImageRepository.findById(newImageId)).thenReturn(Optional.of(newImage));
-        when(testedImageMappingRepository.save(any(ProductImageMapping.class))).thenReturn(newMapping);
-        when(testedImageMapper.mapToProductImageDto(newMapping)).thenReturn(expectedDto);
-
-        // when
-        ProductImageDto result = testedProductImageService.associateImageWithProduct(testProductId, request);
-
-        // then
-        assertThat(result).isNotNull();
-        assertThat(result.imageId()).isEqualTo(newImageId);
-        assertThat(result.isPrimary()).isTrue();
-        verify(testedImageMappingRepository).save(any(ProductImageMapping.class));
     }
 
     @Test
@@ -223,30 +168,159 @@ class ProductImageServiceTest {
         verify(testedImageRepository, never()).delete(any());
     }
 
-//    @Test
-//    void updatePrimaryImageStatus_WhenValidData_UpdatesPrimaryImage() {
-//        // given
-//        ProductImageMapping currentPrimary = new ProductImageMapping();
-//        currentPrimary.setPrimary(true);
-//
-//        ProductImageMapping newPrimary = new ProductImageMapping();
-//        newPrimary.setImage(testImage);
-//        newPrimary.setPrimary(false);
-//
-//        ProductImageMappingId mappingId = new ProductImageMappingId(testProductId, testImageId);
-//
-//        when(testedImageMappingRepository.findPrimaryImageByProductId(testProductId))
-//                .thenReturn(Optional.of(currentPrimary));
-//        when(testedImageMappingRepository.findById(mappingId))
-//                .thenReturn(Optional.of(newPrimary));
-//
-//        // when
-//        testedProductImageService.updatePrimaryImageStatus(testProductId, testImageId);
-//
-//        // then
-//        verify(testedImageMappingRepository, times(2)).save(any(ProductImageMapping.class));
-//        assertThat(currentPrimary.isPrimary()).isFalse();
-//        assertThat(newPrimary.isPrimary()).isTrue();
-//    }
+    @Test
+    void associateImageWithProduct_WhenValidData_ReturnsMappedImage() {
+        // given
+        Long newImageId = 2L;
+        ProductImage newImage = new ProductImage();
+        newImage.setImageId(newImageId);
+        newImage.setImageUrl("https://example.com/new.jpg");
+        newImage.setAltText("New Image");
+
+        AssociateImageRequestDto request = new AssociateImageRequestDto(newImageId, true, 2);
+
+        ProductImageMapping expectedMapping = new ProductImageMapping(testProduct, newImage, true, 2);
+
+        ProductImageDto expectedDto = new ProductImageDto(
+                newImageId,
+                "https://example.com/new.jpg",
+                "New Image",
+                true,
+                2
+        );
+
+        when(testedProductRepository.findById(testProductId)).thenReturn(Optional.of(testProduct));
+        when(testedImageRepository.findById(newImageId)).thenReturn(Optional.of(newImage));
+        when(testedImageMappingRepository.existsById(any(ProductImageMappingId.class))).thenReturn(false);
+        when(testedProductRepository.save(any(Product.class))).thenAnswer(invocation -> {
+            return invocation.<Product>getArgument(0);
+        });
+        when(testedImageMapper.mapToProductImageDto(any(ProductImageMapping.class))).thenReturn(expectedDto);
+
+        // when
+        ProductImageDto result = testedProductImageService.associateImageWithProduct(testProductId, request);
+
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result.imageId()).isEqualTo(newImageId);
+        assertThat(result.imageUrl()).isEqualTo("https://example.com/new.jpg");
+        assertThat(result.altText()).isEqualTo("New Image");
+        assertThat(result.isPrimary()).isTrue();
+        assertThat(result.displayOrder()).isEqualTo(2);
+
+        verify(testedProductRepository).findById(testProductId);
+        verify(testedImageRepository).findById(newImageId);
+        verify(testedImageMappingRepository).existsById(any(ProductImageMappingId.class));
+        verify(testedProductRepository).save(testProduct);
+
+        assertThat(testProduct.getImageMappings()).isNotEmpty();
+        assertThat(testProduct.getImageMappings())
+                .anySatisfy(mapping -> {
+                    assertThat(mapping.getImage().getImageId()).isEqualTo(newImageId);
+                    assertThat(mapping.isPrimary()).isTrue();
+                    assertThat(mapping.getDisplayOrder()).isEqualTo(2);
+                });
+
+        assertThat(newImage.getProductMappings())
+                .anySatisfy(mapping -> {
+                    assertThat(mapping.getProduct().getProductId()).isEqualTo(testProductId);
+                });
+
+        verify(testedImageMapper).mapToProductImageDto(any(ProductImageMapping.class));
+    }
+
+    @Test
+    void associateImageWithProduct_WhenPrimary_ClearsOtherPrimaryImages() {
+        // given
+        Long newImageId = 2L;
+        ProductImage newImage = new ProductImage();
+        newImage.setImageId(newImageId);
+        newImage.setImageUrl("https://example.com/new.jpg");
+        newImage.setAltText("New Primary Image");
+
+        ProductImage existingPrimaryImage = new ProductImage();
+        existingPrimaryImage.setImageId(1L);
+        ProductImageMapping existingPrimaryMapping = new ProductImageMapping(testProduct, existingPrimaryImage, true, 1);
+        testProduct.getImageMappings().add(existingPrimaryMapping);
+
+        AssociateImageRequestDto request = new AssociateImageRequestDto(newImageId, true, 2);
+
+        ProductImageDto expectedDto = new ProductImageDto(newImageId, "url", "alt", true, 2);
+
+        when(testedProductRepository.findById(testProductId)).thenReturn(Optional.of(testProduct));
+        when(testedImageRepository.findById(newImageId)).thenReturn(Optional.of(newImage));
+        when(testedImageMappingRepository.existsById(any(ProductImageMappingId.class))).thenReturn(false);
+        when(testedProductRepository.save(any(Product.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(testedImageMapper.mapToProductImageDto(any(ProductImageMapping.class))).thenReturn(expectedDto);
+
+        // when
+        ProductImageDto result = testedProductImageService.associateImageWithProduct(testProductId, request);
+
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result.isPrimary()).isTrue();
+        assertThat(existingPrimaryMapping.isPrimary()).isFalse();
+        long primaryCount = testProduct.getImageMappings().stream()
+                .filter(ProductImageMapping::isPrimary)
+                .count();
+        assertThat(primaryCount).isEqualTo(1);
+
+        verify(testedProductRepository).save(testProduct);
+    }
+
+    @Test
+    void associateImageWithProduct_WhenImageAlreadyAssociated_ThrowsException() {
+        // given
+        Long imageId = 2L;
+        ProductImage image = new ProductImage();
+        image.setImageId(imageId);
+
+        AssociateImageRequestDto request = new AssociateImageRequestDto(imageId, false, 1);
+
+        ProductImageMappingId mappingId = ProductImageMapping.createId(testProductId, imageId);
+
+        when(testedProductRepository.findById(testProductId)).thenReturn(Optional.of(testProduct));
+        when(testedImageRepository.findById(imageId)).thenReturn(Optional.of(image));
+        when(testedImageMappingRepository.existsById(mappingId)).thenReturn(true);
+
+        // when & then
+        assertThatThrownBy(() -> testedProductImageService.associateImageWithProduct(testProductId, request))
+                .isInstanceOf(ImageAssociatedException.class)
+                .hasMessageContaining("already associated");
+
+        verify(testedProductRepository, never()).save(any());
+    }
+
+    @Test
+    void associateImageWithProduct_WhenProductNotFound_ThrowsException() {
+        // given
+        UUID nonExistentProductId = UUID.randomUUID();
+        AssociateImageRequestDto request = new AssociateImageRequestDto(1L, false, 1);
+
+        when(testedProductRepository.findById(nonExistentProductId)).thenReturn(Optional.empty());
+
+        // when & then
+        assertThatThrownBy(() -> testedProductImageService.associateImageWithProduct(nonExistentProductId, request))
+                .isInstanceOf(ProductNotFoundException.class);
+
+        verify(testedProductRepository, never()).save(any());
+    }
+
+    @Test
+    void associateImageWithProduct_WhenImageNotFound_ThrowsException() {
+        // given
+        Long nonExistentImageId = 999L;
+        AssociateImageRequestDto request = new AssociateImageRequestDto(nonExistentImageId, false, 1);
+
+        when(testedProductRepository.findById(testProductId)).thenReturn(Optional.of(testProduct));
+        when(testedImageRepository.findById(nonExistentImageId)).thenReturn(Optional.empty());
+
+        // when & then
+        assertThatThrownBy(() -> testedProductImageService.associateImageWithProduct(testProductId, request))
+                .isInstanceOf(ImageNotFoundException.class);
+
+        verify(testedProductRepository, never()).save(any());
+    }
+
 }
 

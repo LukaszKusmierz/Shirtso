@@ -19,7 +19,7 @@ public record NewProductDto(
         BigDecimal price,
         @NotNull(message = "Currency cannot be empty")
         Currencies currency,
-        @NotNull(message = "Category cannot be empty")
+        @NotNull(message = "Subcategory cannot be empty")
         int subcategoryId,
         @NotBlank(message = "Supplier field cannot be empty")
         String supplier,
