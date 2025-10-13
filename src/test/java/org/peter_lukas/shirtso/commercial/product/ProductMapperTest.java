@@ -11,6 +11,7 @@ import org.peter_lukas.shirtso.commercial.product.Product;
 import org.peter_lukas.shirtso.commercial.product.Sizes;
 import org.peter_lukas.shirtso.commercial.product.dto.NewProductDto;
 import org.peter_lukas.shirtso.commercial.product.dto.ProductDto;
+import org.peter_lukas.shirtso.commercial.product.validation.SubcategoryNotFoundException;
 import org.peter_lukas.shirtso.commercial.subcategory.Subcategory;
 import org.peter_lukas.shirtso.commercial.subcategory.SubcategoryRepository;
 
@@ -124,10 +125,10 @@ class ProductMapperTest {
 
         when(subcategoryRepository.findById(999)).thenReturn(Optional.empty());
 
-        // when/then:
+        // when & then:
         assertThat(org.assertj.core.api.Assertions.catchThrowable(() ->
                 testedProductMapper.mapNewProductDtoToEntity(dto)))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(SubcategoryNotFoundException.class)
                 .hasMessageContaining("Subcategory not found: 999");
     }
 }
