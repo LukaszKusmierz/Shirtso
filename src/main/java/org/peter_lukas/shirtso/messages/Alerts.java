@@ -46,4 +46,6 @@ public final class Alerts {
     public static final String INVALID_PROMO_CODE = "Invalid promo code";
 
     public static final String EXPIRED_PROMO_CODE = "Promo code has expired";
+
+    public static final String SUBCATEGORY_NOT_FOUND = "Subcategory not found: ";
 }

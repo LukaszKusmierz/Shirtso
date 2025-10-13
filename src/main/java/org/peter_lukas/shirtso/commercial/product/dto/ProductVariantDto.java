@@ -13,6 +13,7 @@ public record ProductVariantDto(
         String description,
         BigDecimal price,
         Currencies currency,
+        int categoryId,
         int subcategoryId,
         String supplier,
         List<SizeVariant> sizeVariants,

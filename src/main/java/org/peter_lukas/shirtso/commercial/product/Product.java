@@ -5,6 +5,7 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import org.peter_lukas.shirtso.commercial.product.image.ProductImage;
 import org.peter_lukas.shirtso.commercial.product.image.ProductImageMapping;
+import org.peter_lukas.shirtso.commercial.subcategory.Subcategory;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -47,8 +48,10 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private Currencies currency;
 
-    @NotNull(message = "Category Id cannot be empty")
-    private int subcategoryId;
+    @NotNull(message = "Subcategory cannot be empty")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subcategory_id", nullable = false)
+    private Subcategory subcategory;
 
     @NotBlank(message = "Supplier cannot be empty")
     private String supplier;
@@ -67,17 +70,24 @@ public class Product {
     private Long version;
 
     public Product(String productName, String description, BigDecimal price, Currencies currency,
-                   int subcategoryId, String supplier, long stock, Sizes size) {
+                   Subcategory subcategory, String supplier, long stock, Sizes size) {
         this.productName = productName;
         this.description = description;
         this.price = price;
         this.currency = currency;
-        this.subcategoryId = subcategoryId;
+        this.subcategory = subcategory;
         this.supplier = supplier;
         this.stock = stock;
         this.size = size;
     }
 
+    public int getCategoryId() {
+        return subcategory.getCategory().getCategoryId();
+    }
+
+    public int getSubcategoryId() {
+        return subcategory.getSubcategoryId();
+    }
 
     public void addImage(ProductImage image, boolean isPrimary, int displayOrder) {
         if (isPrimary) {
