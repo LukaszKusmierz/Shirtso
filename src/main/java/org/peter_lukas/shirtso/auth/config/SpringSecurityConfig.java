@@ -52,8 +52,18 @@ public class SpringSecurityConfig {
 
     public static final String USER_READ = "USER_READ";
     public static final String USER_WRITE = "USER_WRITE";
-    private static final String[] URL_WHITELIST = {"/api/auth/register", "/api/auth/login", "/swagger-ui/**",
-            "/v3/api-docs/**", "/error", "/static/**", "/static/photos/** ", "/*.png", "/.jpg"};
+    private static final String[] URL_WHITELIST = {
+            "/api/auth/register",
+            "/api/auth/login",
+            "/api/auth/forgot-password",
+            "/api/auth/reset-password",
+            "/api/auth/validate-token/**",
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/error",
+            "/static/**",
+            "/static/photos/** ",
+            "/*.png", "/.jpg"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationEntryPoint authenticationEntryPoint, JWTReqFilter jwtFilter) throws Exception {
@@ -72,39 +82,6 @@ public class SpringSecurityConfig {
 
         return http.build();
     }
-
-//    @Bean
-//    public UserDetailsService userDetailsService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-//
-//        return usernameOrEmail -> {
-//
-//            Optional<User> userOpt = userRepository.findByEmail(usernameOrEmail);
-//
-////            if (userOpt.isEmpty()) {
-////                userOpt = userRepository.findByUserName(usernameOrEmail);
-////            }
-//
-//            return userOpt.map(u -> new UserDetails() {
-//                @Override
-//                public Collection<? extends GrantedAuthority> getAuthorities() {
-//                    return u.getRoles().stream()
-//                            .map(r -> new SimpleGrantedAuthority("ROLE_" + r.getName()))
-//                            .toList();
-//                }
-//
-//                @Override
-//                public String getPassword() {
-//                    return u.getPassword();
-//                }
-//
-//                @Override
-//                public String getUsername() {
-//                            return u.getUserName();
-//                        }
-//            })
-//            .orElseThrow(() -> new UsernameNotFoundException("User with " + usernameOrEmail + " not found"));
-//        };
-//    }
 
     @Bean
     WebSecurityCustomizer configureWebSecurity() {

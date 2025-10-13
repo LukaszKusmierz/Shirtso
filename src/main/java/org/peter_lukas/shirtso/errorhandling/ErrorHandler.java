@@ -1,5 +1,8 @@
 package org.peter_lukas.shirtso.errorhandling;
 
+import org.peter_lukas.shirtso.auth.password.validation.ExpiredTokenException;
+import org.peter_lukas.shirtso.auth.password.validation.InvalidTokenException;
+import org.peter_lukas.shirtso.auth.password.validation.UsedTokenException;
 import org.peter_lukas.shirtso.commercial.product.validation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.ObjectError;
@@ -12,15 +15,6 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ErrorHandler {
-
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException exception) {
-//        Map<String, String> errors = new HashMap<>();
-//        exception.getBindingResult().getFieldErrors().forEach(error ->
-//                errors.put(error.getField(), error.getDefaultMessage())
-//        );
-//        return ResponseEntity.badRequest().body(errors);
-//    }
 
     @ExceptionHandler(ProductDuplicationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -89,6 +83,24 @@ public class ErrorHandler {
     @ExceptionHandler(PaymentException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handlePaymentException(PaymentException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleInvalidTokenException(InvalidTokenException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler(ExpiredTokenException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleExpiredTokenException(ExpiredTokenException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler(UsedTokenException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleUsedTokenException(UsedTokenException e) {
         return new ErrorResponse(e.getMessage());
     }
 

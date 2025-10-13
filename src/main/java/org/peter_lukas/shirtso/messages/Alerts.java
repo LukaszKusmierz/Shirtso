@@ -48,4 +48,10 @@ public final class Alerts {
     public static final String EXPIRED_PROMO_CODE = "Promo code has expired";
 
     public static final String SUBCATEGORY_NOT_FOUND = "Subcategory not found: ";
+
+    public static final String INVALID_RESET_TOKEN = "Invalid password reset token";
+
+    public static final String EXPIRED_RESET_TOKEN = "Password reset token has expired";
+
+    public static final String TOKEN_ALREADY_USED = "Password reset token has already been used";
 }
