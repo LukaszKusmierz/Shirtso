@@ -6,7 +6,7 @@ import org.peter_lukas.shirtso.auth.jwt.JWTTokenService;
 import org.peter_lukas.shirtso.auth.registration.AuthService;
 import org.peter_lukas.shirtso.auth.registration.NewUserRegistrationDto;
 import org.peter_lukas.shirtso.auth.registration.RegisterUserDataDto;
-import org.peter_lukas.shirtso.auth.registration.UserNotFoundException;
+import org.peter_lukas.shirtso.auth.validation.UserNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

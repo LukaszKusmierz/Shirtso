@@ -1,6 +1,7 @@
 package org.peter_lukas.shirtso.commercial.order;
 
-import org.peter_lukas.shirtso.auth.registration.UserNotFoundException;
+import org.peter_lukas.shirtso.auth.user.CurrentUserService;
+import org.peter_lukas.shirtso.auth.validation.UserNotFoundException;
 import org.peter_lukas.shirtso.auth.user.User;
 import org.peter_lukas.shirtso.auth.user.UserRepository;
 import org.peter_lukas.shirtso.commercial.cart.ShoppingCart;
@@ -34,11 +35,10 @@ import static org.peter_lukas.shirtso.messages.Alerts.*;
 
 @Service
 public class OrderService {
+    private final CurrentUserService currentUserService;
     private final OrderRepository orderRepository;
-    private final OrderItemRepository orderItemRepository;
     private final ShoppingCartRepository cartRepository;
     private final ProductRepository productRepository;
-    private final UserRepository userRepository;
     private final OrderMapper orderMapper;
     private final NotificationService notificationService;
     private final ShippingMethodRepository shippingMethodRepository;
@@ -46,22 +46,20 @@ public class OrderService {
     private final PromoCodeService promoCodeService;
     private final AddressRepository addressRepository;
 
-    public OrderService(OrderRepository orderRepository,
-                        OrderItemRepository orderItemRepository,
+    public OrderService(CurrentUserService currentUserService,
+                        OrderRepository orderRepository,
                         ShoppingCartRepository cartRepository,
                         ProductRepository productRepository,
-                        UserRepository userRepository,
                         OrderMapper orderMapper,
                         NotificationService notificationService,
                         ShippingMethodRepository shippingMethodRepository,
                         PromoCodeRepository promoCodeRepository,
                         PromoCodeService promoCodeService,
                         AddressRepository addressRepository) {
+        this.currentUserService = currentUserService;
         this.orderRepository = orderRepository;
-        this.orderItemRepository = orderItemRepository;
         this.cartRepository = cartRepository;
         this.productRepository = productRepository;
-        this.userRepository = userRepository;
         this.orderMapper = orderMapper;
         this.notificationService = notificationService;
         this.shippingMethodRepository = shippingMethodRepository;
@@ -72,7 +70,7 @@ public class OrderService {
 
     @Transactional
     public OrderDto createOrderFromCart(CreateOrderRequestDto request) throws UserNotFoundException {
-        User currentUser = getCurrentUser();
+        User currentUser = currentUserService.getCurrentUser();
         ShoppingCart cart = cartRepository.findById(request.cartId())
                 .orElseThrow(() -> new CartNotFoundException(CART_NOT_FOUND));
 
@@ -141,7 +139,7 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public List<OrderSummaryDto> getUserOrders() throws UserNotFoundException {
-        User currentUser = getCurrentUser();
+        User currentUser = currentUserService.getCurrentUser();
 
         return orderRepository.findByUserIdOrderByCreatedAtDesc(currentUser.getUserId()).stream()
                 .map(orderMapper::mapToOrderSummaryDto)
@@ -150,7 +148,7 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public OrderDto getOrderDetails(Integer orderId) throws UserNotFoundException {
-        User currentUser = getCurrentUser();
+        User currentUser = currentUserService.getCurrentUser();
 
         Order order = orderRepository.findByOrderIdAndUserIdWithItems(orderId, currentUser.getUserId())
                 .orElseThrow(() -> new OrderNotFoundException(ORDER_NOT_FOUND));
@@ -173,7 +171,7 @@ public class OrderService {
 
     @Transactional
     public void cancelOrder(Integer orderId) throws UserNotFoundException {
-        User currentUser = getCurrentUser();
+        User currentUser = currentUserService.getCurrentUser();
 
         Order order = orderRepository.findByOrderIdAndUserIdWithItems(orderId, currentUser.getUserId())
                 .orElseThrow(() -> new OrderNotFoundException(ORDER_NOT_FOUND));
@@ -194,13 +192,13 @@ public class OrderService {
         notificationService.sendOrderStatusChangeNotification(order, previousStatus.toString());
         orderRepository.save(order);
     }
-
-    private User getCurrentUser() throws UserNotFoundException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
-    }
+//
+//    private User getCurrentUser() throws UserNotFoundException {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String email = authentication.getName();
+//
+//        return userRepository.findByEmail(email)
+//                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
+//    }
 }
 

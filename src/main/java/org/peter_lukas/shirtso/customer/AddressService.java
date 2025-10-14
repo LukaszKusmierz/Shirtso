@@ -1,6 +1,6 @@
 package org.peter_lukas.shirtso.customer;
 
-import org.peter_lukas.shirtso.auth.registration.UserNotFoundException;
+import org.peter_lukas.shirtso.auth.validation.UserNotFoundException;
 import org.peter_lukas.shirtso.auth.user.User;
 import org.peter_lukas.shirtso.auth.user.UserRepository;
 import org.peter_lukas.shirtso.commercial.product.validation.AddressNotFoundException;

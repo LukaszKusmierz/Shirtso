@@ -2,7 +2,7 @@ package org.peter_lukas.shirtso.commercial.cart;
 
 import jakarta.validation.Valid;
 import org.peter_lukas.shirtso.analytics.LogExecutionTime;
-import org.peter_lukas.shirtso.auth.registration.UserNotFoundException;
+import org.peter_lukas.shirtso.auth.validation.UserNotFoundException;
 import org.peter_lukas.shirtso.commercial.cart.dto.AddToCartDto;
 import org.peter_lukas.shirtso.commercial.cart.dto.CartDto;
 import org.peter_lukas.shirtso.commercial.cart.dto.UpdateCartItemDto;

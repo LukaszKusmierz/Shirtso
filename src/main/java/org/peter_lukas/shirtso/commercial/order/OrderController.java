@@ -3,7 +3,7 @@ package org.peter_lukas.shirtso.commercial.order;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import org.peter_lukas.shirtso.analytics.LogExecutionTime;
-import org.peter_lukas.shirtso.auth.registration.UserNotFoundException;
+import org.peter_lukas.shirtso.auth.validation.UserNotFoundException;
 import org.peter_lukas.shirtso.commercial.order.dto.CreateOrderRequestDto;
 import org.peter_lukas.shirtso.commercial.order.dto.OrderDto;
 import org.peter_lukas.shirtso.commercial.order.dto.OrderSummaryDto;

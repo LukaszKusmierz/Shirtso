@@ -1,17 +1,12 @@
 package org.peter_lukas.shirtso.commercial.cart;
 
-import org.instancio.Instancio;
-import org.instancio.junit.InstancioExtension;
-import org.instancio.junit.WithSettings;
-import org.instancio.settings.Keys;
-import org.instancio.settings.Settings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.peter_lukas.shirtso.auth.registration.UserNotFoundException;
+import org.peter_lukas.shirtso.auth.validation.UserNotFoundException;
 import org.peter_lukas.shirtso.auth.user.User;
 import org.peter_lukas.shirtso.commercial.cart.dto.AddToCartDto;
 import org.peter_lukas.shirtso.commercial.cart.dto.CartDto;
@@ -122,7 +117,7 @@ class ShoppingCartServiceTest {
     }
 
     @Test
-    void getOrCreateCart_WhenCartExists_ReturnsCart() throws org.peter_lukas.shirtso.auth.registration.UserNotFoundException {
+    void getOrCreateCart_WhenCartExists_ReturnsCart() throws UserNotFoundException {
         // given
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(testUser));
         when(cartRepository.findByUserIdWithItems(testUser.getUserId()))
@@ -253,6 +248,6 @@ class ShoppingCartServiceTest {
 
         // then
         assertThatThrownBy(() -> shoppingCartService.getOrCreateCart())
-                .isInstanceOf(org.peter_lukas.shirtso.auth.registration.UserNotFoundException.class);
+                .isInstanceOf(UserNotFoundException.class);
     }
 }
