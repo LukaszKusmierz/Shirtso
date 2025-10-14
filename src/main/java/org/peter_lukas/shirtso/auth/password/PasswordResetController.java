@@ -3,10 +3,9 @@ package org.peter_lukas.shirtso.auth.password;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.peter_lukas.shirtso.analytics.LogExecutionTime;
-import org.peter_lukas.shirtso.auth.password.dto.PasswordResetResponseDto;
-import org.peter_lukas.shirtso.auth.password.dto.RequestPasswordResetDto;
-import org.peter_lukas.shirtso.auth.password.dto.ResetPasswordDto;
+import org.peter_lukas.shirtso.auth.password.dto.*;
 import org.peter_lukas.shirtso.auth.password.validation.ExpiredTokenException;
+import org.peter_lukas.shirtso.auth.password.validation.IncorrectPasswordException;
 import org.peter_lukas.shirtso.auth.password.validation.InvalidTokenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,6 +53,25 @@ public class PasswordResetController {
 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new PasswordResetResponseDto(false, "An error occurred while resetting password"));
+        }
+    }
+
+    @PostMapping("/change-password")
+    @LogExecutionTime
+    public ResponseEntity<ChangePasswordResponseDto> changePassword(
+            @Valid @RequestBody ChangePasswordDto request) {
+        try {
+            ChangePasswordResponseDto response = passwordResetService.changePassword(request);
+            return ResponseEntity.ok(response);
+        } catch (IncorrectPasswordException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ChangePasswordResponseDto(false, e.getMessage()));
+        } catch (Exception e) {
+
+            log.error("Error changing password", e);
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ChangePasswordResponseDto(false, "An error occurred while changing password"));
         }
     }
 
