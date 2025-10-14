@@ -5,7 +5,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.peter_lukas.shirtso.auth.config.AuthConfigProperties;
 import org.peter_lukas.shirtso.utils.DateAdapter;
-import org.peter_lukas.shirtso.utils.LocalDateTimeToDateAdapter;
 
 import javax.crypto.SecretKey;
 import java.time.LocalDateTime;
@@ -28,20 +27,33 @@ public class JWTTokenService {
 
         return Jwts.builder()
                 .subject(username)
+                .claim("password_changed_at", passwordChangedAt.toString())
                 .issuedAt(dateAdapter.convertToDate(now))
                 .expiration(dateAdapter.convertToDate(expiration))
                 .signWith(getKey())
                 .compact();
     }
 
-    public boolean validateToken(String jwtToken, String springUserName) {
+    public boolean validateToken(String jwtToken, String springUserName, LocalDateTime userPasswordChangedAt) {
         String jwtUserName = getUserNameFromToken(jwtToken);
+        String jwtPasswordChangedAt = getPasswordChangedAtFromToken(jwtToken);
         boolean isExpired = getExpirationFromToken(jwtToken).before(new Date());
+
+        if (jwtPasswordChangedAt != null && userPasswordChangedAt != null) {
+            LocalDateTime tokenPasswordTime = LocalDateTime.parse(jwtPasswordChangedAt);
+            if (userPasswordChangedAt.isAfter(tokenPasswordTime)) {
+                return false;
+            }
+        }
         return !isExpired && jwtUserName.equals(springUserName);
     }
 
     public String getUserNameFromToken(String jwtToken) {
         return getClaims(jwtToken).getSubject();
+    }
+
+    public String getPasswordChangedAtFromToken(String jwtToken) {
+        return getClaims(jwtToken).get("password_changed_at", String.class);
     }
 
     public Date getExpirationFromToken(String jwtToken) {

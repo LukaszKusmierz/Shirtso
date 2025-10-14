@@ -1,6 +1,7 @@
 package org.peter_lukas.shirtso.auth.password;
 
 import lombok.extern.slf4j.Slf4j;
+import org.peter_lukas.shirtso.analytics.LogExecutionTime;
 import org.peter_lukas.shirtso.auth.password.dto.*;
 import org.peter_lukas.shirtso.auth.password.validation.ExpiredTokenException;
 import org.peter_lukas.shirtso.auth.password.validation.IncorrectPasswordException;
@@ -10,6 +11,7 @@ import org.peter_lukas.shirtso.auth.user.User;
 import org.peter_lukas.shirtso.auth.user.UserRepository;
 import org.peter_lukas.shirtso.notification.EmailService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,6 +51,7 @@ public class PasswordResetService {
     }
 
     @Transactional
+    @LogExecutionTime
     public PasswordResetResponseDto requestPasswordReset(RequestPasswordResetDto request) {
         Optional<User> userOpt = userRepository.findByEmail(request.email());
 
@@ -74,6 +77,8 @@ public class PasswordResetService {
     }
 
     @Transactional
+    @CacheEvict(value = "usersByEmail", key = "#result.user.email")
+    @LogExecutionTime
     public PasswordResetResponseDto resetPassword(ResetPasswordDto request) {
         PasswordResetToken resetToken = tokenRepository.findByToken(request.token())
                 .orElseThrow(() -> new InvalidTokenException(INVALID_RESET_TOKEN));
@@ -98,6 +103,8 @@ public class PasswordResetService {
     }
 
     @Transactional
+    @CacheEvict(value = "usersByEmail", key = "#result.user.email")
+    @LogExecutionTime
     public ChangePasswordResponseDto changePassword(ChangePasswordDto request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();

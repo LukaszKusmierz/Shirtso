@@ -32,6 +32,10 @@ public class User {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @CreationTimestamp
+    @Column(name = "password_changed_at", nullable = false, updatable = false)
+    private LocalDateTime passwordChangedAt;
+
     public User(String userName, String email, String password) {
         this.userName = userName;
         this.email = email;
@@ -46,5 +50,10 @@ public class User {
 
     public void addRole(Role role) {
         roles.add(role);
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+        this.passwordChangedAt = LocalDateTime.now();
     }
 }
