@@ -45,10 +45,7 @@ public class PasswordResetController {
         try {
             PasswordResetResponseDto response = passwordResetService.resetPassword(request);
             return ResponseEntity.ok(response);
-        } catch (InvalidTokenException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new PasswordResetResponseDto(false, e.getMessage()));
-        } catch (ExpiredTokenException e) {
+        } catch (InvalidTokenException | ExpiredTokenException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new PasswordResetResponseDto(false, e.getMessage()));
         } catch (Exception e) {
