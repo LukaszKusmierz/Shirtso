@@ -9,6 +9,7 @@ import org.peter_lukas.shirtso.auth.registration.RegisterUserDataDto;
 import org.peter_lukas.shirtso.auth.registration.UserNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -32,9 +33,7 @@ public class AuthController {
         var authToken = new UsernamePasswordAuthenticationToken(
                 jwtTokenRequest.username(), jwtTokenRequest.password()
         );
-
         authenticationManager.authenticate(authToken);
-
         return new JwtTokenResponseDto(jwtTokenService.createToken(jwtTokenRequest.username()));
     }
 
@@ -48,5 +47,11 @@ public class AuthController {
     @LogExecutionTime
     public RegisterUserDataDto getCurrentUser() throws UserNotFoundException {
         return authService.getCurrentUser();
+    }
+
+    @PostMapping("/logout")
+    @LogExecutionTime
+    public void logout() {
+        SecurityContextHolder.clearContext();
     }
 }
