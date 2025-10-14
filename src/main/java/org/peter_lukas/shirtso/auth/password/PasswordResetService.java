@@ -1,16 +1,19 @@
 package org.peter_lukas.shirtso.auth.password;
 
 import lombok.extern.slf4j.Slf4j;
-import org.peter_lukas.shirtso.auth.password.dto.PasswordResetResponseDto;
-import org.peter_lukas.shirtso.auth.password.dto.RequestPasswordResetDto;
-import org.peter_lukas.shirtso.auth.password.dto.ResetPasswordDto;
+import org.peter_lukas.shirtso.analytics.LogExecutionTime;
+import org.peter_lukas.shirtso.auth.password.dto.*;
 import org.peter_lukas.shirtso.auth.password.validation.ExpiredTokenException;
+import org.peter_lukas.shirtso.auth.password.validation.IncorrectPasswordException;
 import org.peter_lukas.shirtso.auth.password.validation.InvalidTokenException;
 import org.peter_lukas.shirtso.auth.password.validation.UsedTokenException;
 import org.peter_lukas.shirtso.auth.user.User;
 import org.peter_lukas.shirtso.auth.user.UserRepository;
 import org.peter_lukas.shirtso.notification.EmailService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +51,7 @@ public class PasswordResetService {
     }
 
     @Transactional
+    @LogExecutionTime
     public PasswordResetResponseDto requestPasswordReset(RequestPasswordResetDto request) {
         Optional<User> userOpt = userRepository.findByEmail(request.email());
 
@@ -73,6 +77,8 @@ public class PasswordResetService {
     }
 
     @Transactional
+    @CacheEvict(value = "usersByEmail", key = "#result.user.email")
+    @LogExecutionTime
     public PasswordResetResponseDto resetPassword(ResetPasswordDto request) {
         PasswordResetToken resetToken = tokenRepository.findByToken(request.token())
                 .orElseThrow(() -> new InvalidTokenException(INVALID_RESET_TOKEN));
@@ -94,6 +100,35 @@ public class PasswordResetService {
         log.info("Password successfully reset for user: {}", user.getEmail());
 
         return new PasswordResetResponseDto(true, "Password has been successfully reset");
+    }
+
+    @Transactional
+    @CacheEvict(value = "usersByEmail", key = "#result.user.email")
+    @LogExecutionTime
+    public ChangePasswordResponseDto changePassword(ChangePasswordDto request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalStateException("User not found"));
+
+        if (!passwordEncoder.matches(request.currentPassword(), user.getPassword())) {
+            log.warn("Failed password change attempt for user: {}", user.getEmail());
+            throw new IncorrectPasswordException("Current password is incorrect");
+        }
+
+        if (passwordEncoder.matches(request.newPassword(), user.getPassword())) {
+            return new ChangePasswordResponseDto(false,
+                    "New password must be different from the current password");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.newPassword()));
+        userRepository.save(user);
+        sendPasswordChangeConfirmationEmail(user);
+
+        log.info("Password successfully changed for user: {}", user.getEmail());
+
+        return new ChangePasswordResponseDto(true, "Password has been successfully changed");
     }
 
     @Transactional(readOnly = true)
@@ -145,6 +180,22 @@ public class PasswordResetService {
         emailService.sendEmail(
                 user.getEmail(),
                 "Password Reset Confirmation - Shirtso",
+                emailBody.toString()
+        );
+    }
+
+    private void sendPasswordChangeConfirmationEmail(User user) {
+        StringBuilder emailBody = new StringBuilder();
+        emailBody.append("Dear ").append(user.getUserName()).append(",\n\n");
+        emailBody.append("This is to confirm that your password has been successfully changed.\n\n");
+        emailBody.append("If you did not make this change, please contact our support team immediately ");
+        emailBody.append("and consider resetting your password.\n\n");
+        emailBody.append("Best regards,\n");
+        emailBody.append("Shirtso Team");
+
+        emailService.sendEmail(
+                user.getEmail(),
+                "Password Change Confirmation - Shirtso",
                 emailBody.toString()
         );
     }

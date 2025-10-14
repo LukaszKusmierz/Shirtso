@@ -2,7 +2,7 @@ package org.peter_lukas.shirtso.customer;
 
 import jakarta.validation.Valid;
 import org.peter_lukas.shirtso.analytics.LogExecutionTime;
-import org.peter_lukas.shirtso.auth.registration.UserNotFoundException;
+import org.peter_lukas.shirtso.auth.validation.UserNotFoundException;
 import org.peter_lukas.shirtso.commercial.product.validation.AddressNotFoundException;
 import org.peter_lukas.shirtso.customer.dto.AddressDto;
 import org.peter_lukas.shirtso.customer.dto.CreateAddressDto;

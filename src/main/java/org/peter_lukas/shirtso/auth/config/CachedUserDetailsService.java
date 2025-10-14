@@ -30,7 +30,7 @@ public class CachedUserDetailsService implements UserDetailsService {
         return new CustomUserDetails(user);
     }
 
-    private record CustomUserDetails(User user) implements UserDetails {
+    public record CustomUserDetails(User user) implements UserDetails {
 
         @Override
             public Collection<? extends GrantedAuthority> getAuthorities() {

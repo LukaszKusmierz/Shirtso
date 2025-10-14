@@ -51,7 +51,7 @@ public class JWTReqFilter extends OncePerRequestFilter {
         if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
 
-            if (jwtTokenService.validateToken(jwtToken, userName)) {
+            if (jwtTokenService.validateToken(jwtToken, userName, userDetails.getPasswordChangedAtFromToken())) {
                 var springAuthToken = new UsernamePasswordAuthenticationToken(
                         userDetails, userDetails.getPassword(), userDetails.getAuthorities()
                 );

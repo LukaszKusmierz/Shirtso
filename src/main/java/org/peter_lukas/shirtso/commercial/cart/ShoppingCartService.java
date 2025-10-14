@@ -1,6 +1,7 @@
 package org.peter_lukas.shirtso.commercial.cart;
 
-import org.peter_lukas.shirtso.auth.registration.UserNotFoundException;
+import org.peter_lukas.shirtso.auth.user.CurrentUserService;
+import org.peter_lukas.shirtso.auth.validation.UserNotFoundException;
 import org.peter_lukas.shirtso.auth.user.User;
 import org.peter_lukas.shirtso.auth.user.UserRepository;
 import org.peter_lukas.shirtso.commercial.cart.dto.AddToCartDto;
@@ -29,24 +30,24 @@ public class ShoppingCartService {
     private final ShoppingCartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
-    private final UserRepository userRepository;
+    private final CurrentUserService currentUserService;
     private final ShoppingCartMapper cartMapper;
 
     public ShoppingCartService(ShoppingCartRepository cartRepository,
                                CartItemRepository cartItemRepository,
                                ProductRepository productRepository,
-                               UserRepository userRepository,
+                               CurrentUserService currentUserService,
                                ShoppingCartMapper cartMapper) {
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
         this.productRepository = productRepository;
-        this.userRepository = userRepository;
+        this.currentUserService = currentUserService;
         this.cartMapper = cartMapper;
     }
 
     @Transactional
     public CartDto getOrCreateCart() throws UserNotFoundException {
-        User currentUser = getCurrentUser();
+        User currentUser = currentUserService.getCurrentUser();
         ShoppingCart cart = cartRepository.findByUserIdWithItems(currentUser.getUserId())
                 .orElseGet(() -> cartRepository.save(new ShoppingCart(currentUser)));
 
@@ -55,7 +56,7 @@ public class ShoppingCartService {
 
     @Transactional
     public CartDto addToCart(AddToCartDto addToCartDto) throws UserNotFoundException {
-        User currentUser = getCurrentUser();
+        User currentUser = currentUserService.getCurrentUser();
         Product product = productRepository.findById(addToCartDto.productId())
                 .orElseThrow(() -> new ProductNotFoundException(Alerts.PRODUCT_NOT_FOUND));
 
@@ -91,7 +92,7 @@ public class ShoppingCartService {
 
     @Transactional
     public CartDto updateCartItem(UpdateCartItemDto updateCartItemDto) throws UserNotFoundException {
-        User currentUser = getCurrentUser();
+        User currentUser = currentUserService.getCurrentUser();
         ShoppingCart cart = cartRepository.findByUserIdWithItems(currentUser.getUserId())
                 .orElseThrow(() -> new CartNotFoundException(CART_NOT_FOUND));
 
@@ -114,7 +115,7 @@ public class ShoppingCartService {
 
     @Transactional
     public CartDto removeCartItem(Integer cartItemId) throws UserNotFoundException {
-        User currentUser = getCurrentUser();
+        User currentUser = currentUserService.getCurrentUser();
         ShoppingCart cart = cartRepository.findByUserIdWithItems(currentUser.getUserId())
                 .orElseThrow(() -> new CartNotFoundException(CART_NOT_FOUND));
 
@@ -133,19 +134,19 @@ public class ShoppingCartService {
 
     @Transactional
     public void clearCart() throws UserNotFoundException {
-        User currentUser = getCurrentUser();
+        User currentUser = currentUserService.getCurrentUser();
         ShoppingCart cart = cartRepository.findByUserIdWithItems(currentUser.getUserId())
                 .orElseThrow(() -> new CartNotFoundException(CART_NOT_FOUND));
 
         cart.getItems().clear();
         cartRepository.save(cart);
     }
-
-    private User getCurrentUser() throws UserNotFoundException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
-    }
+//
+//    private User getCurrentUser() throws UserNotFoundException {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String email = authentication.getName();
+//
+//        return userRepository.findByEmail(email)
+//                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
+//    }
 }
