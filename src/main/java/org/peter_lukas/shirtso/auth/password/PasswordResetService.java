@@ -11,6 +11,8 @@ import org.peter_lukas.shirtso.auth.user.User;
 import org.peter_lukas.shirtso.auth.user.UserRepository;
 import org.peter_lukas.shirtso.notification.EmailService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,18 +36,21 @@ public class PasswordResetService {
     private final EmailService emailService;
     private final String frontendUrl;
     private final int tokenValidityHours;
+    private final CacheManager cacheManager;
 
     public PasswordResetService(
             PasswordResetTokenRepository tokenRepository,
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
             EmailService emailService,
+            CacheManager cacheManager,
             @Value("${app.frontend.url:http://localhost:3000}") String frontendUrl,
             @Value("${app.password-reset.token-validity-hours:24}") int tokenValidityHours) {
         this.tokenRepository = tokenRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
+        this.cacheManager = cacheManager;
         this.frontendUrl = frontendUrl;
         this.tokenValidityHours = tokenValidityHours;
     }
@@ -77,7 +82,6 @@ public class PasswordResetService {
     }
 
     @Transactional
-    @CacheEvict(value = "usersByEmail", key = "#result.user.email")
     @LogExecutionTime
     public PasswordResetResponseDto resetPassword(ResetPasswordDto request) {
         PasswordResetToken resetToken = tokenRepository.findByToken(request.token())
@@ -95,6 +99,7 @@ public class PasswordResetService {
         userRepository.save(user);
         resetToken.setUsed(true);
         tokenRepository.save(resetToken);
+        evictUserCache(user);
         sendPasswordResetConfirmationEmail(user);
 
         log.info("Password successfully reset for user: {}", user.getEmail());
@@ -103,7 +108,6 @@ public class PasswordResetService {
     }
 
     @Transactional
-    @CacheEvict(value = "usersByEmail", key = "#result.user.email")
     @LogExecutionTime
     public ChangePasswordResponseDto changePassword(ChangePasswordDto request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -124,6 +128,7 @@ public class PasswordResetService {
 
         user.setPassword(passwordEncoder.encode(request.newPassword()));
         userRepository.save(user);
+        evictUserCache(user);
         sendPasswordChangeConfirmationEmail(user);
 
         log.info("Password successfully changed for user: {}", user.getEmail());
@@ -198,5 +203,19 @@ public class PasswordResetService {
                 "Password Change Confirmation - Shirtso",
                 emailBody.toString()
         );
+    }
+
+    private void evictUserCache(User user) {
+        try {
+            Cache cache = cacheManager.getCache("usersByEmail");
+            if (cache != null) {
+                cache.evict(user.getEmail());
+                log.debug("Evicted cache for email: {}", user.getEmail());
+                cache.evict(user.getUserName());
+                log.debug("Evicted cache for username: {}", user.getUserName());
+            }
+        } catch (Exception e) {
+            log.warn("Failed to evict cache for user: {} ({})", user.getEmail(), user.getUserName(), e);
+        }
     }
 }
