@@ -8,6 +8,7 @@ import org.peter_lukas.shirtso.utils.DateAdapter;
 
 import javax.crypto.SecretKey;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 
@@ -21,26 +22,31 @@ public class JWTTokenService {
         this.dateAdapter = dateAdapter;
     }
 
-    public String createToken(String username) {
+    public String createToken(String username, LocalDateTime passwordChangedAt) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime expiration = now.plus(authConfigProperties.validity());
 
-        return Jwts.builder()
+        var jwtBuilder = Jwts.builder()
                 .subject(username)
-                .claim("password_changed_at", passwordChangedAt.toString())
                 .issuedAt(dateAdapter.convertToDate(now))
-                .expiration(dateAdapter.convertToDate(expiration))
-                .signWith(getKey())
-                .compact();
+                .expiration(dateAdapter.convertToDate(expiration));
+
+        if (passwordChangedAt != null) {
+            jwtBuilder.claim("password_changed_at", dateAdapter.convertToDate(passwordChangedAt));
+        }
+
+        return jwtBuilder.signWith(getKey()).compact();
     }
 
     public boolean validateToken(String jwtToken, String springUserName, LocalDateTime userPasswordChangedAt) {
         String jwtUserName = getUserNameFromToken(jwtToken);
-        String jwtPasswordChangedAt = getPasswordChangedAtFromToken(jwtToken);
+        Date jwtPasswordChangedAt = getPasswordChangedAtFromToken(jwtToken);
         boolean isExpired = getExpirationFromToken(jwtToken).before(new Date());
 
         if (jwtPasswordChangedAt != null && userPasswordChangedAt != null) {
-            LocalDateTime tokenPasswordTime = LocalDateTime.parse(jwtPasswordChangedAt);
+            LocalDateTime tokenPasswordTime = jwtPasswordChangedAt.toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
             if (userPasswordChangedAt.isAfter(tokenPasswordTime)) {
                 return false;
             }
@@ -52,8 +58,8 @@ public class JWTTokenService {
         return getClaims(jwtToken).getSubject();
     }
 
-    public String getPasswordChangedAtFromToken(String jwtToken) {
-        return getClaims(jwtToken).get("password_changed_at", String.class);
+    public Date getPasswordChangedAtFromToken(String jwtToken) {
+        return getClaims(jwtToken).get("password_changed_at", Date.class);
     }
 
     public Date getExpirationFromToken(String jwtToken) {

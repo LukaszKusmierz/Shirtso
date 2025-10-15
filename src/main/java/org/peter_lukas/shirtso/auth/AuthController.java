@@ -2,6 +2,7 @@ package org.peter_lukas.shirtso.auth;
 
 import jakarta.validation.Valid;
 import org.peter_lukas.shirtso.analytics.LogExecutionTime;
+import org.peter_lukas.shirtso.auth.config.CachedUserDetailsService;
 import org.peter_lukas.shirtso.auth.jwt.JWTTokenService;
 import org.peter_lukas.shirtso.auth.registration.AuthService;
 import org.peter_lukas.shirtso.auth.registration.NewUserRegistrationDto;
@@ -33,8 +34,16 @@ public class AuthController {
         var authToken = new UsernamePasswordAuthenticationToken(
                 jwtTokenRequest.username(), jwtTokenRequest.password()
         );
-        authenticationManager.authenticate(authToken);
-        return new JwtTokenResponseDto(jwtTokenService.createToken(jwtTokenRequest.username()));
+        var authentication = authenticationManager.authenticate(authToken);
+        CachedUserDetailsService.CustomUserDetails userDetails =
+                (CachedUserDetailsService.CustomUserDetails) authentication.getPrincipal();
+
+        return new JwtTokenResponseDto(
+                jwtTokenService.createToken(
+                        jwtTokenRequest.username(),
+                        userDetails.getPasswordChangedAt()
+                )
+        );
     }
 
     @PostMapping("/register")

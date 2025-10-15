@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Service
@@ -47,6 +48,10 @@ public class CachedUserDetailsService implements UserDetailsService {
             @Override
             public String getUsername() {
                 return user.getUserName();
+            }
+
+            public LocalDateTime getPasswordChangedAt() {
+                return user.getPasswordChangedAt();
             }
 
             @Override

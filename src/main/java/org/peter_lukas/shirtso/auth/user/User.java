@@ -32,8 +32,7 @@ public class User {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @CreationTimestamp
-    @Column(name = "password_changed_at", nullable = false, updatable = false)
+    @Column(name = "password_changed_at", nullable = false)
     private LocalDateTime passwordChangedAt;
 
     public User(String userName, String email, String password) {

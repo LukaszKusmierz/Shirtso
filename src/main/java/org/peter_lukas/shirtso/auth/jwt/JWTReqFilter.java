@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.peter_lukas.shirtso.auth.config.CachedUserDetailsService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +15,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @Slf4j
 public class JWTReqFilter extends OncePerRequestFilter {
@@ -50,8 +52,13 @@ public class JWTReqFilter extends OncePerRequestFilter {
     private void authenticateUser(HttpServletRequest request, String jwtToken, String userName) {
         if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
+            LocalDateTime passwordChangedAt = null;
 
-            if (jwtTokenService.validateToken(jwtToken, userName, userDetails.getPasswordChangedAtFromToken())) {
+            if (userDetails instanceof CachedUserDetailsService.CustomUserDetails customUserDetails) {
+                passwordChangedAt = customUserDetails.user().getPasswordChangedAt();
+            }
+
+            if (jwtTokenService.validateToken(jwtToken, userName, passwordChangedAt)) {
                 var springAuthToken = new UsernamePasswordAuthenticationToken(
                         userDetails, userDetails.getPassword(), userDetails.getAuthorities()
                 );
