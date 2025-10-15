@@ -75,7 +75,7 @@ public class JWTTokenService {
             log.warn("=== END DEBUG ===");
 
 
-            if (userPasswordChangedAt.isAfter(tokenPasswordTime)) {
+            if (userPasswordTimeSeconds.isAfter(tokenPasswordTime)) {
                 log.warn("Password changed after token was issued. Token invalid.");
                 return false;
             }
