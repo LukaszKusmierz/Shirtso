@@ -35,3 +35,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Secret configuration files ###
+secrets.properties
+*.secrets.properties
+secrets-*.properties
+
+# Keep the template ###
+!secrets.properties.template
