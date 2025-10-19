@@ -31,8 +31,8 @@ public class ProductMapper {
         Set<ProductImageMapping> imageMappings = entity.getImageMappings();
         boolean isInitialized = Hibernate.isInitialized(imageMappings);
 
-        if (isInitialized && entity.getImageMappings() != null && !entity.getImageMappings().isEmpty()) {
-            imageDtos = entity.getImageMappings().stream()
+        if (isInitialized && imageMappings != null && !imageMappings.isEmpty()) {
+            imageDtos = imageMappings.stream()
                     .sorted(Comparator.comparing(ProductImageMapping::getDisplayOrder))
                     .map(mapping -> new ProductImageDto(
                             mapping.getImage().getImageId(),
