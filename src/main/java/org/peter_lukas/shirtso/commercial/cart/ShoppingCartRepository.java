@@ -11,7 +11,14 @@ import java.util.UUID;
 @Repository
 public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Integer> {
 
-    @Query("SELECT sc FROM ShoppingCart sc LEFT JOIN FETCH sc.items WHERE sc.user.userId = :userId")
+    @Query("SELECT DISTINCT sc FROM ShoppingCart sc " +
+            "LEFT JOIN FETCH sc.items ci " +
+            "LEFT JOIN FETCH ci.product p " +
+            "LEFT JOIN FETCH p.imageMappings im " +
+            "LEFT JOIN FETCH im.image " +
+            "LEFT JOIN FETCH p.subcategory s " +
+            "LEFT JOIN FETCH s.category " +
+            "WHERE sc.user.userId = :userId")
     Optional<ShoppingCart> findByUserIdWithItems(UUID userId);
 
     Optional<ShoppingCart> findByUser(User user);
