@@ -1,4 +1,4 @@
-package org.peter_lukas.shirtso.auth.registration;
+package org.peter_lukas.shirtso.auth;
 
 import org.peter_lukas.shirtso.auth.validation.UserAlreadyExistsException;
 import org.springframework.http.HttpStatus;

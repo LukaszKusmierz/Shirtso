@@ -1,4 +1,4 @@
-package org.peter_lukas.shirtso.auth.registration;
+package org.peter_lukas.shirtso.auth;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

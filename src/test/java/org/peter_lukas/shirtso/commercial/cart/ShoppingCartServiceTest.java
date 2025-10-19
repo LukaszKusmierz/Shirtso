@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.peter_lukas.shirtso.auth.user.CurrentUserService;
 import org.peter_lukas.shirtso.auth.validation.UserNotFoundException;
 import org.peter_lukas.shirtso.auth.user.User;
 import org.peter_lukas.shirtso.commercial.cart.dto.AddToCartDto;
@@ -14,20 +15,13 @@ import org.peter_lukas.shirtso.commercial.cart.dto.UpdateCartItemDto;
 import org.peter_lukas.shirtso.commercial.product.Product;
 import org.peter_lukas.shirtso.commercial.product.ProductRepository;
 import org.peter_lukas.shirtso.commercial.product.validation.InsufficientStockException;
-import org.peter_lukas.shirtso.auth.user.UserRepository;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.math.BigDecimal;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.instancio.Select.field;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith({MockitoExtension.class})
@@ -43,7 +37,7 @@ class ShoppingCartServiceTest {
     private ProductRepository productRepository;
 
     @Mock
-    private UserRepository userRepository;
+    private CurrentUserService currentUserService;
 
     @Mock
     private ShoppingCartMapper cartMapper;
@@ -64,8 +58,6 @@ class ShoppingCartServiceTest {
         testCart = createTestCart();
         testCartItem = createTestCartItem();
         testCartDto = createTestCartDto();
-
-        setupSecurityContext();
     }
 
     private User createTestUser() {
@@ -108,18 +100,10 @@ class ShoppingCartServiceTest {
         );
     }
 
-    private void setupSecurityContext() {
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-                testUser.getEmail(), "password");
-        SecurityContext securityContext = mock(SecurityContext.class);
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        SecurityContextHolder.setContext(securityContext);
-    }
-
     @Test
     void getOrCreateCart_WhenCartExists_ReturnsCart() throws UserNotFoundException {
         // given
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(testUser));
+        when(currentUserService.getCurrentUser()).thenReturn(testUser);
         when(cartRepository.findByUserIdWithItems(testUser.getUserId()))
                 .thenReturn(Optional.of(testCart));
         when(cartMapper.mapCartToDto(testCart)).thenReturn(testCartDto);
@@ -137,7 +121,7 @@ class ShoppingCartServiceTest {
     @Test
     void getOrCreateCart_WhenCartDoesNotExist_CreatesNewCart() throws UserNotFoundException {
         // given
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(testUser));
+        when(currentUserService.getCurrentUser()).thenReturn(testUser);
         when(cartRepository.findByUserIdWithItems(testUser.getUserId()))
                 .thenReturn(Optional.empty());
         when(cartRepository.save(any(ShoppingCart.class))).thenReturn(testCart);
@@ -156,7 +140,7 @@ class ShoppingCartServiceTest {
     @Test
     void addToCart_WithNewItem_AddsItemToCart() throws UserNotFoundException {
         // given
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(testUser));
+        when(currentUserService.getCurrentUser()).thenReturn(testUser);
         when(productRepository.findById(testProduct.getProductId())).thenReturn(Optional.of(testProduct));
         when(cartRepository.findByUserIdWithItems(testUser.getUserId()))
                 .thenReturn(Optional.of(testCart));
@@ -173,9 +157,9 @@ class ShoppingCartServiceTest {
     }
 
     @Test
-    void addToCart_WithInsufficientStock_ThrowsException() {
+    void addToCart_WithInsufficientStock_ThrowsException() throws UserNotFoundException {
         // given
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(testUser));
+        when(currentUserService.getCurrentUser()).thenReturn(testUser);
         when(productRepository.findById(testProduct.getProductId())).thenReturn(Optional.of(testProduct));
         AddToCartDto addToCartDto = new AddToCartDto(testProduct.getProductId(), 20);
 
@@ -187,7 +171,7 @@ class ShoppingCartServiceTest {
     @Test
     void updateCartItem_WithValidData_UpdatesItem() throws UserNotFoundException {
         // given
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(testUser));
+        when(currentUserService.getCurrentUser()).thenReturn(testUser);
         when(cartRepository.findByUserIdWithItems(testUser.getUserId()))
                 .thenReturn(Optional.of(testCart));
         when(cartItemRepository.findById(testCartItem.getCartItemId()))
@@ -197,7 +181,6 @@ class ShoppingCartServiceTest {
 
         // when
         CartDto result = shoppingCartService.updateCartItem(updateDto);
-
 
         // then
         assertThat(result).isNotNull();
@@ -210,7 +193,7 @@ class ShoppingCartServiceTest {
     @Test
     void removeCartItem_WithValidItem_RemovesItem() throws UserNotFoundException {
         // given
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(testUser));
+        when(currentUserService.getCurrentUser()).thenReturn(testUser);
         when(cartRepository.findByUserIdWithItems(testUser.getUserId()))
                 .thenReturn(Optional.of(testCart));
         when(cartItemRepository.findById(testCartItem.getCartItemId()))
@@ -229,7 +212,7 @@ class ShoppingCartServiceTest {
     @Test
     void clearCart_WithExistingCart_RemovesAllItems() throws UserNotFoundException {
         // given
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(testUser));
+        when(currentUserService.getCurrentUser()).thenReturn(testUser);
         when(cartRepository.findByUserIdWithItems(testUser.getUserId()))
                 .thenReturn(Optional.of(testCart));
 
@@ -242,11 +225,11 @@ class ShoppingCartServiceTest {
     }
 
     @Test
-    void getCurrentUser_WhenUserNotFound_ThrowsException() {
-        // when
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
+    void getCurrentUser_WhenUserNotFound_ThrowsException() throws UserNotFoundException {
+        // given
+        when(currentUserService.getCurrentUser()).thenThrow(new UserNotFoundException("User not found"));
 
-        // then
+        // when & then
         assertThatThrownBy(() -> shoppingCartService.getOrCreateCart())
                 .isInstanceOf(UserNotFoundException.class);
     }
