@@ -1,14 +1,16 @@
 spring:
+  config:
+    import: optional:file:./secrets.properties
   datasource:
-    url: ${DATABASE_URL}
-    username: ${DB_USERNAME}
-    password: ${PASSWORD}
+    url: ${db.url}
+    username: ${db.username}
+    password: ${db.password}
     driver-class-name: org.postgresql.Driver
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: ${JPA_DDL_AUTO:validate}
-    show-sql: ${JPA_SHOW_SQL:true}
+      ddl-auto: ${jpa.ddl-auto}
+    show-sql: ${jpa.show-sql}
   flyway:
     locations: db/migration
     schemas: public
@@ -18,10 +20,10 @@ spring:
   mvc:
     static-path-pattern: /**
   mail:
-    host: ${MAIL_HOST}
-    port: ${MAIL_PORT}
-    username: ${MAIL_USERNAME}
-    password: ${MAIL_PASSWORD}
+    host: ${mail.host}
+    port: ${mail.port}
+    username: ${mail.username}
+    password: ${mail.password}
     properties:
       mail:
         smtp:
@@ -32,27 +34,39 @@ spring:
               enable: false
             socketFactory:
               class: javax.net.ssl.SSLSocketFactory
-              port: ${MAIL_PORT:465}
+              port: ${mail.port}
             connectiontimeout: 5000
             timeout: 5000
             writetimeout: 5000
 
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.hibernate.stat: DEBUG
+    org.peter_lukas.shirtso.auth.jwt.JWTReqFilter: DEBUG
+    org.springframework.security: DEBUG
+
 server:
-  port: ${SERVER_PORT}
+  port: ${server.port}
 
 app:
+  frontend:
+    url: ${frontend.url}
+  password-reset:
+    token-validity-hours: ${password.reset.token.validity}
   security:
     jwt:
       token:
-        secret: ${JWT_SECRET}
-        validity: ${JWT_VALIDITY}
+        secret: ${jwt.secret}
+        validity: ${jwt.validity}
   notification:
     email:
       from: shirtso@lukspeed.eu
       enabled: true
   cors:
-    allowed-origins: ${CORS_ORIGINS:http://localhost:3000}
-    allowed-methods: ${CORS_METHODS:GET,POST,PUT,DELETE,OPTIONS}
-    allowed-headers: ${CORS_HEADERS:Authorization,Content-Type,X-Requested-With,Accept}
-    allow-credentials: ${CORS_ALLOW_CREDENTIALS:true}
-    max-age: ${CORS_MAX_AGE:3600}
+    allowed-origins: ${cors.origins}
+    allowed-methods: ${cors.methods}
+    allowed-headers: ${cors.headers}
+    allow-credentials: ${cors.allow-credentials}
+    max-age: ${cors.max-age}
