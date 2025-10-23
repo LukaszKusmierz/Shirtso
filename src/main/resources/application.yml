@@ -2,15 +2,15 @@ spring:
   config:
     import: optional:file:./secrets.properties
   datasource:
-    url: ${db.url}
-    username: ${db.username}
-    password: ${db.password}
+    url: ${DATABASE_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: ${jpa.ddl-auto}
-    show-sql: ${jpa.show-sql}
+      ddl-auto: validate
+    show-sql: false
   flyway:
     locations: db/migration
     schemas: public
@@ -20,10 +20,10 @@ spring:
   mvc:
     static-path-pattern: /**
   mail:
-    host: ${mail.host}
-    port: ${mail.port}
-    username: ${mail.username}
-    password: ${mail.password}
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:
@@ -34,7 +34,7 @@ spring:
               enable: false
             socketFactory:
               class: javax.net.ssl.SSLSocketFactory
-              port: ${mail.port}
+              port: ${MAIL_PORT}
             connectiontimeout: 5000
             timeout: 5000
             writetimeout: 5000
@@ -48,25 +48,25 @@ logging:
     org.springframework.security: DEBUG
 
 server:
-  port: ${server.port}
+  port: ${PORT:8080}
 
 app:
   frontend:
-    url: ${frontend.url}
+    url: ${FRONTEND_URL}
   password-reset:
-    token-validity-hours: ${password.reset.token.validity}
+    token-validity-hours: ${PASSWORD_RESET_TOKEN_VALIDITY_HOURS}
   security:
     jwt:
       token:
-        secret: ${jwt.secret}
-        validity: ${jwt.validity}
+        secret: ${JWT_SECRET}
+        validity: ${JWT_VALIDITY}
   notification:
     email:
-      from: shirtso@lukspeed.eu
-      enabled: true
+      from: ${EMAIL_FROM}
+      enabled: ${EMAIL_ENABLED}
   cors:
-    allowed-origins: ${cors.origins}
-    allowed-methods: ${cors.methods}
-    allowed-headers: ${cors.headers}
-    allow-credentials: ${cors.allow-credentials}
-    max-age: ${cors.max-age}
+    allowed-origins: ${CORS_ALLOWED_ORIGINS}
+    allowed-methods: ${CORS_ALLOWED_METHODS}
+    allowed-headers: ${CORS_ALLOWED_HEADERS}
+    allow-credentials: ${CORS_ALLOW_CREDENTIALS}
+    max-age: ${CORS_MAX_AGE}
