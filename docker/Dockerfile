@@ -3,4 +3,4 @@ WORKDIR /app
 COPY ./target/Shirtso*.jar ./shirtso.jar
 COPY ./docker/application.yml ./application.yml
 EXPOSE 8080
-CMD ["java", "-jar", "./shirtso.jar"]
+CMD ["java", "-jar", "./shirtso.jar", "--spring.config.location=file:./application.yml"]
