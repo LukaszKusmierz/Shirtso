@@ -27,9 +27,6 @@ public class WebConfig implements WebMvcConfigurer {
         configuration.setMaxAge(properties.getMaxAge());
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/**", configuration);
-        source.registerCorsConfiguration("/resources/static/**", configuration);
-        source.registerCorsConfiguration("/photos/**", configuration);
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
