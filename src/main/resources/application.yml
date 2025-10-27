@@ -1,6 +1,4 @@
 spring:
-  config:
-    import: optional:file:./secrets.properties
   datasource:
     url: ${DATABASE_URL}
     username: ${DB_USERNAME}
