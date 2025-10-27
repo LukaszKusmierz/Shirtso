@@ -27,9 +27,9 @@ spring:
         smtp:
           auth: true
           ssl:
-            enable: false
-          starttls:
             enable: true
+          starttls:
+            enable: false
           socketFactory:
             class: javax.net.ssl.SSLSocketFactory
             port: ${MAIL_PORT}
