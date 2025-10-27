@@ -17,26 +17,6 @@ spring:
       static-locations: classpath:/static/,classpath:/static/photos/
   mvc:
     static-path-pattern: /**
-  mail:
-    host: ${MAIL_HOST}
-    port: ${MAIL_PORT}
-    username: ${MAIL_USERNAME}
-    password: ${MAIL_PASSWORD}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          ssl:
-            enable: true
-          starttls:
-            enable: false
-          socketFactory:
-            class: javax.net.ssl.SSLSocketFactory
-            port: ${MAIL_PORT}
-          connectiontimeout: 5000
-          timeout: 5000
-          writetimeout: 5000
-
 logging:
   level:
     org.hibernate.SQL: DEBUG
@@ -62,6 +42,8 @@ app:
     email:
       from: ${EMAIL_FROM}
       enabled: ${EMAIL_ENABLED}
+      resend:
+        api-key: ${RESEND_API_KEY}
   cors:
     allowed-origins: ${CORS_ALLOWED_ORIGINS}
     allowed-methods: ${CORS_ALLOWED_METHODS}
