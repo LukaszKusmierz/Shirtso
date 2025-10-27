@@ -27,15 +27,15 @@ spring:
         smtp:
           auth: true
           ssl:
+            enable: false
+          starttls:
             enable: true
-            starttls:
-              enable: false
-            socketFactory:
-              class: javax.net.ssl.SSLSocketFactory
-              port: ${MAIL_PORT}
-            connectiontimeout: 5000
-            timeout: 5000
-            writetimeout: 5000
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+            port: ${MAIL_PORT}
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
 
 logging:
   level:
