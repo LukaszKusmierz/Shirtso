@@ -20,7 +20,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(properties.getAllowedOriginsList());
+        configuration.setAllowedOriginPatterns(properties.getAllowedOriginsList());
         configuration.setAllowedMethods(properties.getAllowedMethodsList());
         configuration.setAllowedHeaders(properties.getAllowedHeadersList());
         configuration.setAllowCredentials(properties.isAllowCredentials());
@@ -30,6 +30,7 @@ public class WebConfig implements WebMvcConfigurer {
         source.registerCorsConfiguration("/api/**", configuration);
         source.registerCorsConfiguration("/resources/static/**", configuration);
         source.registerCorsConfiguration("/photos/**", configuration);
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
