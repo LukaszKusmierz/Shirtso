@@ -50,3 +50,7 @@ app:
     allowed-headers: ${CORS_ALLOWED_HEADERS}
     allow-credentials: ${CORS_ALLOW_CREDENTIALS}
     max-age: ${CORS_MAX_AGE}
+  unsplash:
+    access-key: ${UNSPLASH_ACCESS_KEY}
+    secret-key: ${UNSPLASH_SECRET_KEY:}
+    api-url: https://api.unsplash.com

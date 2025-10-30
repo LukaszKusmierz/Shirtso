@@ -73,7 +73,7 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers(URL_WHITELIST).permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/products/**", "/api/categories/**",
-                                "/api/subcategories/**").permitAll()
+                                "/api/subcategories/**", "/api/unsplash/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
