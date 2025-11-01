@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import org.peter_lukas.shirtso.commercial.unsplash.dto.UnsplashPhotoDto;
 import org.peter_lukas.shirtso.commercial.unsplash.dto.UnsplashSearchResultDto;
 import org.peter_lukas.shirtso.config.UnsplashConfigProperties;
@@ -43,7 +44,11 @@ public class UnsplashService {
                 throw new IOException("Unexpected response from Unsplash API: " + response);
             }
 
-            String responseBody = response.body().string();
+            ResponseBody body = response.body();
+            if (body == null) {
+                throw new IOException("Response body is null");
+            }
+            String responseBody = body.string();
             return gson.fromJson(responseBody, UnsplashSearchResultDto.class);
         }
     }
@@ -62,7 +67,11 @@ public class UnsplashService {
                 throw new IOException("Unexpected response from Unsplash API: " + response);
             }
 
-            String responseBody = response.body().string();
+            ResponseBody body = response.body();
+            if (body == null) {
+                throw new IOException("Empty response body from Unsplash API");
+            }
+            String responseBody = body.string();
             return gson.fromJson(responseBody, UnsplashPhotoDto.class);
         }
     }

@@ -42,6 +42,7 @@ build/
 secrets.properties
 *.secrets.properties
 secrets-*.properties
+.env
 
 # Keep the template ###
 !secrets.properties.template
