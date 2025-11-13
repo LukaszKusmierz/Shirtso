@@ -40,4 +40,48 @@ public class PaymentController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
+    @GetMapping("/order/{orderId}")
+    @LogExecutionTime
+    public ResponseEntity<PaymentResponseDto> getPaymentByOrderId(@PathVariable Integer orderId) {
+        try {
+            PaymentResponseDto response = paymentService.getPaymentByOrderId(orderId);
+            return ResponseEntity.ok(response);
+        } catch (OrderNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @GetMapping("/{paymentId}")
+    @LogExecutionTime
+    public ResponseEntity<PaymentResponseDto> getPaymentById(@PathVariable Integer paymentId) {
+        try {
+            PaymentResponseDto response = paymentService.getPaymentById(paymentId);
+            return ResponseEntity.ok(response);
+        } catch (PaymentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PostMapping("/{paymentId}/retry")
+    @LogExecutionTime
+    public ResponseEntity<PaymentResponseDto> retryFailedPayment(@PathVariable Integer paymentId) {
+        try {
+            PaymentResponseDto response = paymentService.retryFailedPayment(paymentId);
+            return ResponseEntity.ok(response);
+        } catch (PaymentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @GetMapping("/order/{orderId}/status")
+    @LogExecutionTime
+    public ResponseEntity<Boolean> isOrderPaid(@PathVariable Integer orderId) {
+        try {
+            boolean isPaid = paymentService.isOrderPaid(orderId);
+            return ResponseEntity.ok(isPaid);
+        } catch (OrderNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 }
