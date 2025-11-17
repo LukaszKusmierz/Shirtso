@@ -34,7 +34,7 @@ public class ProductImageController {
     @LogExecutionTime
     @RolesAllowed(USER_WRITE)
     public ProductImage createImage(@Valid @RequestBody CreateImageRequestDto request) {
-        return productImageService.createImage(request);
+        return productImageService.createImageIfNotExists(request);
     }
 
     @GetMapping("/{imageId}")

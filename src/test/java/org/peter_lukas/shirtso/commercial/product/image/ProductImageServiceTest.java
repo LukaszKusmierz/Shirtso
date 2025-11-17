@@ -106,7 +106,7 @@ class ProductImageServiceTest {
         when(testedImageRepository.save(any(ProductImage.class))).thenReturn(createdImage);
 
         // when
-        ProductImage result = testedProductImageService.createImage(request);
+        ProductImage result = testedProductImageService.createImageIfNotExists(request);
 
         // then
         assertThat(result).isNotNull();
