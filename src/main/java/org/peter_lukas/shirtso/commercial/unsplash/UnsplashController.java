@@ -32,7 +32,7 @@ public class UnsplashController {
     public ResponseEntity<UnsplashSearchResultDto> searchPhotos(
             @RequestParam String query,
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "20") int perPage) {
+            @RequestParam(defaultValue = "12") int perPage) {
         try {
             UnsplashSearchResultDto result = unsplashService.searchPhotos(query, page, perPage);
             return ResponseEntity.ok(result);
@@ -53,7 +53,6 @@ public class UnsplashController {
     }
 
     @PostMapping("/photos/{photoId}/save")
-    @ResponseStatus(HttpStatus.CREATED)
     @LogExecutionTime
     @RolesAllowed(USER_WRITE)
     public ResponseEntity<ProductImage> savePhotoAsProductImage(@PathVariable String photoId) {
@@ -72,7 +71,7 @@ public class UnsplashController {
                     photo.altDescription() != null ? photo.altDescription() : photo.description()
             );
 
-            ProductImage savedImage = productImageService.createImage(createImageRequest);
+            ProductImage savedImage = productImageService.createImageIfNotExists(createImageRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedImage);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

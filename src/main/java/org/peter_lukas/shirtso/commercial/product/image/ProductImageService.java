@@ -109,11 +109,14 @@ public class ProductImageService {
     }
 
     @Transactional
-    public ProductImage createImage(CreateImageRequestDto request) {
-        ProductImage image = new ProductImage();
-        image.setImageUrl(request.imageUrl());
-        image.setAltText(request.altText());
-        return imageRepository.save(image);
+    public ProductImage createImageIfNotExists(CreateImageRequestDto request) {
+        return imageRepository.findByImageUrl(request.imageUrl())
+                .orElseGet(() -> {
+                    ProductImage image = new ProductImage();
+                    image.setImageUrl(request.imageUrl());
+                    image.setAltText(request.altText());
+                    return imageRepository.save(image);
+                });
     }
 
     @Transactional
