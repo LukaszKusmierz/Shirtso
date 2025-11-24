@@ -207,6 +207,24 @@ public class ProductService {
         return grouped.isEmpty() ? null : grouped.get(0);
     }
 
+    @Transactional(readOnly = true)
+    public List<ProductVariantDto> getProductsGroupedBySize(Sizes size) {
+        List<Product> products = productRepository.findAllBySizeWithImages(size);
+        return groupProductsByVariant(products);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProductVariantDto> getProductsGroupedBySizeAndCategory(Sizes size, int categoryId) {
+        List<Product> products = productRepository.findProductsBySizeAndCategoryIdWithImages(size, categoryId);
+        return groupProductsByVariant(products);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProductVariantDto> getProductsGroupedBySizeAndSubcategory(Sizes size, int subcategoryId) {
+        List<Product> products = productRepository.findProductsBySizeAndSubcategoryIdWithImages(size, subcategoryId);
+        return groupProductsByVariant(products);
+    }
+
     private List<ProductVariantDto> groupProductsByVariant(List<Product> products) {
         Map<String, List<Product>> groupedProducts = products.stream()
                 .collect(Collectors.groupingBy(p ->
