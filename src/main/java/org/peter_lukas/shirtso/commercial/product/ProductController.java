@@ -128,6 +128,25 @@ public class ProductController {
         return productService.getProductsGroupedByName(productName);
     }
 
+    @GetMapping(value = "/grouped", params = {"size"})
+    public List<ProductVariantDto> getProductsGroupedBySize(@RequestParam Sizes size) {
+        return productService.getProductsGroupedBySize(size);
+    }
+
+    @GetMapping(value = "/grouped", params = {"size", "categoryId"})
+    public List<ProductVariantDto> getProductsGroupedBySizeAndCategory(
+            @RequestParam Sizes size,
+            @RequestParam int categoryId) {
+        return productService.getProductsGroupedBySizeAndCategory(size, categoryId);
+    }
+
+    @GetMapping(value = "/grouped", params = {"size", "subcategoryId"})
+    public List<ProductVariantDto> getProductsGroupedBySizeAndSubcategory(
+            @RequestParam Sizes size,
+            @RequestParam int subcategoryId) {
+        return productService.getProductsGroupedBySizeAndSubcategory(size, subcategoryId);
+    }
+
     @GetMapping("/grouped/{productName}/{description}")
     public ProductVariantDto getProductVariant(
             @PathVariable String productName,
