@@ -11,6 +11,7 @@ public record OrderSummaryDto(
         String discount,
         String tax,
         String total,
+        String currency,
         int itemCount,
         String shippingMethodName,
         String shippingAddress

@@ -19,6 +19,7 @@ public record OrderDto(
         BigDecimal discountAmount,
         BigDecimal taxAmount,
         BigDecimal totalAmount,
+        String currency,
         String promoCode,
         ShippingMethodDto shippingMethod,
         AddressDto shippingAddress,

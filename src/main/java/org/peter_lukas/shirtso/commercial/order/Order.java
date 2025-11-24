@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.peter_lukas.shirtso.auth.user.User;
 import org.peter_lukas.shirtso.commercial.payment.Payment;
+import org.peter_lukas.shirtso.commercial.product.Currencies;
 import org.peter_lukas.shirtso.commercial.shipping.ShippingMethod;
 import org.peter_lukas.shirtso.customer.Address;
 
@@ -51,6 +52,10 @@ public class Order {
     @Column(name = "total_amount", nullable = false)
     private BigDecimal totalAmount = BigDecimal.ZERO;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "currency", nullable = false)
+    private Currencies currency;
+
     @Column(name = "promo_code")
     private String promoCode;
 
@@ -77,7 +82,9 @@ public class Order {
 
     public void addItem(OrderItem item) {
         items.add(item);
-        item.setOrder(this);
+        item.setOrder(this);if (this.currency == null && item.getCurrency() != null) {
+            this.currency = item.getCurrency();
+        }
         recalculateSubtotalAmount();
         recalculateTotalAmount();
     }

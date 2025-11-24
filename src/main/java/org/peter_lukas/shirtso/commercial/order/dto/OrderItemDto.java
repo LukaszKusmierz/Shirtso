@@ -9,6 +9,7 @@ public record OrderItemDto(
         String productName,
         Integer quantity,
         BigDecimal price,
-        BigDecimal total
+        BigDecimal total,
+        String currency
 ) {
 }

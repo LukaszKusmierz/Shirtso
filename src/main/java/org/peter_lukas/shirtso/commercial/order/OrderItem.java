@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.peter_lukas.shirtso.commercial.product.Currencies;
 import org.peter_lukas.shirtso.commercial.product.Product;
 
 import java.math.BigDecimal;
@@ -34,11 +35,16 @@ public class OrderItem {
     @Column(nullable = false)
     private BigDecimal price;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Currencies currency;
+
     public OrderItem(Order order, Product product, Integer quantity) {
         this.order = order;
         this.product = product;
         this.quantity = quantity;
         this.price = product.getPrice();
+        this.currency = product.getCurrency();
     }
 }
 
