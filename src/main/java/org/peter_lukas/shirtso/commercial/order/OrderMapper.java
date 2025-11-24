@@ -52,6 +52,7 @@ public class OrderMapper {
                 order.getDiscountAmount(),
                 order.getTaxAmount(),
                 order.getTotalAmount(),
+                order.getCurrency().name(),
                 order.getPromoCode(),
                 shippingMethodDto,
                 addressDto,
@@ -69,7 +70,8 @@ public class OrderMapper {
                 item.getProduct().getProductName(),
                 item.getQuantity(),
                 item.getPrice(),
-                total
+                total,
+                item.getCurrency().name()
         );
     }
 
@@ -86,6 +88,9 @@ public class OrderMapper {
             shippingAddressText = formatAddress(order.getShippingAddress());
         }
 
+        String currency = order.getItems().isEmpty() ? "" :
+                order.getItems().iterator().next().getCurrency().name();
+
         return new OrderSummaryDto(
                 order.getOrderId(),
                 order.getOrderStatus(),
@@ -95,6 +100,7 @@ public class OrderMapper {
                 order.getDiscountAmount().toString(),
                 order.getTaxAmount().toString(),
                 order.getTotalAmount().toString(),
+                currency,
                 itemCount,
                 shippingMethodName,
                 shippingAddressText
