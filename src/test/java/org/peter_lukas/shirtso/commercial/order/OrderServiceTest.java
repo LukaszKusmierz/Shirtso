@@ -152,7 +152,7 @@ class OrderServiceTest {
         OrderDto expectedDto = new OrderDto(
                 1, testUser.getUserId(), testUser.getUserName(),
                 OrderStatus.NEW, BigDecimal.ZERO, BigDecimal.ZERO,
-                BigDecimal.ZERO, BigDecimal.ZERO, new BigDecimal("59.98"),
+                BigDecimal.ZERO, BigDecimal.ZERO, new BigDecimal("59.98"), "USD",
                 null, null, null, null, List.of()
         );
 
