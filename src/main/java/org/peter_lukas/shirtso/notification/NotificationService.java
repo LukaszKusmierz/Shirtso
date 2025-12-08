@@ -41,12 +41,13 @@ public class NotificationService {
                 .append(" has been received and is currently being processed.\n\n");
         emailBody.append("Order Details:\n");
         emailBody.append("Date: ").append(order.getCreatedAt()).append("\n");
-        emailBody.append("Total Amount: ").append(order.getTotalAmount()).append("\n\n");
+        emailBody.append("Total Amount: ").append(order.getTotalAmount()).append(" ").append(order.getCurrency()).append("\n\n");
         emailBody.append("Items:\n");
         order.getItems().forEach(item -> {
             emailBody.append("- ").append(item.getProduct().getProductName())
                     .append(" (Qty: ").append(item.getQuantity())
                     .append(") - ").append(item.getPrice().multiply(new java.math.BigDecimal(item.getQuantity())))
+                    .append(" ").append(order.getCurrency())
                     .append("\n");
         });
         emailBody.append("\nPlease proceed to payment to complete your order.\n\n");
@@ -62,7 +63,7 @@ public class NotificationService {
                 .append(" has been successfully processed.\n\n");
         emailBody.append("Order Details:\n");
         emailBody.append("Date: ").append(order.getCreatedAt()).append("\n");
-        emailBody.append("Total Amount: ").append(order.getTotalAmount()).append("\n\n");
+        emailBody.append("Total Amount: ").append(order.getTotalAmount()).append(" ").append(order.getCurrency()).append("\n\n");
         emailBody.append("Your order is now being prepared for shipping. You will receive another notification when your order ships.\n\n");
         emailBody.append("Thank you for shopping with us!\n");
         emailBody.append("Shirtso Team");
