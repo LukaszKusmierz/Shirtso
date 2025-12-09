@@ -16,7 +16,7 @@ import java.util.UUID;
 @Slf4j
 @Component
 @Primary
-@ConditionalOnProperty(name = "app.payment.payu.enabled", havingValue = "true")
+@ConditionalOnProperty(name = "app.payu.enabled", havingValue = "true")
 public class PayUPaymentGateway implements PaymentGateway {
 
     private static final String DEFAULT_CURRENCY = "PLN";
