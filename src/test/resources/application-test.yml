@@ -1,0 +1,81 @@
+# Test configuration for Shirtso application
+spring:
+  # H2 in-memory database for tests
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=PostgreSQL
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    database-platform: org.hibernate.dialect.H2Dialect
+
+  # Disable Flyway for tests (schema created by Hibernate)
+  flyway:
+    enabled: false
+
+  web:
+    resources:
+      static-locations: classpath:/static/,classpath:/static/photos/
+
+  mvc:
+    static-path-pattern: /**
+
+logging:
+  level:
+    org.hibernate.SQL: WARN
+    org.hibernate.type.descriptor.sql.BasicBinder: WARN
+    org.hibernate.stat: WARN
+    org.peter_lukas.shirtso.auth.jwt.JWTReqFilter: WARN
+    org.springframework.security: WARN
+    org.peter_lukas.shirtso: INFO
+
+server:
+  port: 8080
+
+app:
+  frontend:
+    url: http://localhost:3000
+
+  password-reset:
+    token-validity-hours: 24
+
+  security:
+    jwt:
+      token:
+        secret: 07229da0e5edf887af7c837c5d46bf9f1566d083476a8277890276e8a797d3aa023919c1c026ab57a82346a9012813905150653276824cb7268be36a276a4b5a
+        validity: 1h
+
+  notification:
+    email:
+      from: test@example.com
+      enabled: false
+      resend:
+        api-key: test-api-key
+
+  cors:
+    allowed-origins: http://localhost:3000
+    allowed-methods: GET,POST,PUT,DELETE,PATCH,OPTIONS
+    allowed-headers: "*"
+    allow-credentials: true
+    max-age: 3600
+
+  unsplash:
+    access-key: test-unsplash-access-key
+    secret-key: test-unsplash-secret-key
+    api-url: https://api.unsplash.com
+
+  payu:
+    enabled: false
+    base-url: https://secure.snd.payu.com
+    pos-id: 123456
+    second-key: test-second-key
+    client-id: test-client-id
+    client-secret: test-client-secret
+    notify-url: http://localhost:8080/api/payments/payu/notify
+    continue-url: http://localhost:3000/payment/success
+    currency-code: PLN

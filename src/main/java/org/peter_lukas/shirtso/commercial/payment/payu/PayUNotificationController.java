@@ -20,7 +20,7 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequestMapping("/api/payu")
-@ConditionalOnProperty(name = "app.payment.payu.enabled", havingValue = "true")
+@ConditionalOnProperty(name = "app.payu.enabled", havingValue = "true")
 public class PayUNotificationController {
 
     private final PaymentRepository paymentRepository;
