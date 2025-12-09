@@ -102,7 +102,7 @@ class PaymentServiceTest {
             when(orderRepository.findByOrderIdWithItems(1)).thenReturn(Optional.of(testOrder));
             when(paymentRepository.findByOrderOrderId(1)).thenReturn(Optional.empty());
             when(paymentRepository.save(any(Payment.class))).thenReturn(testPayment);
-            when(paymentGateway.processPayment(any(), any(), any())).thenReturn(transactionId);
+            when(paymentGateway.processPayment(any(), any(), any())).thenReturn(new PaymentGateway.PaymentResult(transactionId));
             when(paymentMapper.mapToDto(any(Payment.class))).thenReturn(expectedResponse);
 
             // when
@@ -223,7 +223,7 @@ class PaymentServiceTest {
             when(orderRepository.findByOrderIdWithItems(1)).thenReturn(Optional.of(testOrder));
             when(paymentRepository.findByOrderOrderId(1)).thenReturn(Optional.empty());
             when(paymentRepository.save(any(Payment.class))).thenReturn(testPayment);
-            when(paymentGateway.processPayment(any(), any(), any())).thenReturn(transactionId);
+            when(paymentGateway.processPayment(any(), any(), any())).thenReturn(new PaymentGateway.PaymentResult(transactionId));
             when(paymentMapper.mapToDto(any(Payment.class))).thenReturn(mock(PaymentResponseDto.class));
 
             // when
@@ -249,7 +249,7 @@ class PaymentServiceTest {
             when(orderRepository.findByOrderIdWithItems(1)).thenReturn(Optional.of(testOrder));
             when(paymentRepository.findByOrderOrderId(1)).thenReturn(Optional.empty());
             when(paymentRepository.save(any(Payment.class))).thenReturn(testPayment);
-            when(paymentGateway.processPayment(any(), any(), any())).thenReturn(transactionId);
+            when(paymentGateway.processPayment(any(), any(), any())).thenReturn(new PaymentGateway.PaymentResult(transactionId));
             when(paymentMapper.mapToDto(any(Payment.class))).thenReturn(mock(PaymentResponseDto.class));
 
             // when
@@ -277,7 +277,7 @@ class PaymentServiceTest {
             when(orderRepository.findByOrderIdWithItems(1)).thenReturn(Optional.of(testOrder));
             when(paymentRepository.findByOrderOrderId(1)).thenReturn(Optional.empty());
             when(paymentRepository.save(any(Payment.class))).thenReturn(testPayment);
-            when(paymentGateway.processPayment(any(), any(), any())).thenReturn(transactionId);
+            when(paymentGateway.processPayment(any(), any(), any())).thenReturn(new PaymentGateway.PaymentResult(transactionId));
             when(paymentMapper.mapToDto(any(Payment.class))).thenReturn(mock(PaymentResponseDto.class));
 
             // when
@@ -352,7 +352,7 @@ class PaymentServiceTest {
             );
 
             when(paymentRepository.findById(1)).thenReturn(Optional.of(testPayment));
-            when(paymentGateway.processPayment(any(), any(), any())).thenReturn(newTransactionId);
+            when(paymentGateway.processPayment(any(), any(), any())).thenReturn(new PaymentGateway.PaymentResult(newTransactionId));
             when(paymentMapper.mapToDto(any(Payment.class))).thenReturn(expectedResponse);
 
             // when

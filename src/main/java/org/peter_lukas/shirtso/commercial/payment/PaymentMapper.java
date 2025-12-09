@@ -14,7 +14,21 @@ public class PaymentMapper {
                 payment.getStatus(),
                 payment.getPaymentMethod(),
                 payment.getTransactionId(),
-                payment.getPaymentDate()
+                payment.getPaymentDate(),
+                null
+        );
+    }
+
+    public PaymentResponseDto mapToDtoWithRedirect(Payment payment, String redirectUrl) {
+        return new PaymentResponseDto(
+                payment.getPaymentId(),
+                payment.getOrder().getOrderId(),
+                payment.getAmount(),
+                payment.getStatus(),
+                payment.getPaymentMethod(),
+                payment.getTransactionId(),
+                payment.getPaymentDate(),
+                redirectUrl
         );
     }
 }

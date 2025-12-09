@@ -32,7 +32,7 @@ public class PayUPaymentGateway implements PaymentGateway {
     }
 
     @Override
-    public String processPayment(PaymentMethod method, BigDecimal amount, PaymentDetails details) {
+    public PaymentResult processPayment(PaymentMethod method, BigDecimal amount, PaymentDetails details) {
         log.info("Processing PayU payment: method={}, amount={}", method, amount);
 
         String extOrderId = generateExtOrderId();
@@ -65,9 +65,10 @@ public class PayUPaymentGateway implements PaymentGateway {
             }
 
             String transactionId = response.orderId();
-            log.info("PayU payment successful: orderId={}, extOrderId={}", transactionId, extOrderId);
+            String redirectUrl = response.redirectUri();
+            log.info("PayU payment successful: orderId={}, extOrderId={}, redirectUrl={}", transactionId, extOrderId, redirectUrl);
 
-            return transactionId;
+            return new PaymentResult(transactionId, redirectUrl);
 
         } catch (PayUApiException e) {
             log.error("PayU payment processing failed: {}", e.getMessage());

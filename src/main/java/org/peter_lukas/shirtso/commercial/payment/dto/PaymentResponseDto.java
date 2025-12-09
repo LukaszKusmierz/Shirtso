@@ -13,6 +13,18 @@ public record PaymentResponseDto(
         PaymentStatus status,
         PaymentMethod paymentMethod,
         String transactionId,
-        LocalDateTime paymentDate
+        LocalDateTime paymentDate,
+        String redirectUrl
 ) {
+    public PaymentResponseDto(
+            Integer paymentId,
+            Integer orderId,
+            BigDecimal amount,
+            PaymentStatus status,
+            PaymentMethod paymentMethod,
+            String transactionId,
+            LocalDateTime paymentDate
+    ) {
+        this(paymentId, orderId, amount, status, paymentMethod, transactionId, paymentDate, null);
+    }
 }
