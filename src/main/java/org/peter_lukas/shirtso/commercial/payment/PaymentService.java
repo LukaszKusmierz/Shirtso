@@ -56,7 +56,7 @@ public class PaymentService {
         log.info("Payment record created with ID: {}", payment.getPaymentId());
 
         try {
-            String transactionId = paymentGateway.processPayment(
+            PaymentGateway.PaymentResult result = paymentGateway.processPayment(
                     request.paymentMethod(),
                     order.getTotalAmount(),
                     PaymentDetails.builder()
@@ -66,12 +66,36 @@ public class PaymentService {
                             .cvv(request.cvv())
                             .build()
             );
-            payment.markAsPaid(transactionId);
+
+            // Check if this is a redirect-based payment (PayU)
+            if (result.requiresRedirect()) {
+                // Payment initiated but not yet completed - user needs to be redirected
+                payment.setStatus(PaymentStatus.PENDING);
+                payment.setTransactionId(result.transactionId());
+                paymentRepository.save(payment);
+
+                log.info("PayU payment initiated for order {}, redirect required to: {}",
+                        order.getOrderId(), result.redirectUrl());
+
+                // Return response with redirect URL
+                return new PaymentResponseDto(
+                        payment.getPaymentId(),
+                        order.getOrderId(),
+                        payment.getAmount(),
+                        payment.getStatus(),
+                        payment.getPaymentMethod(),
+                        result.transactionId(),
+                        payment.getPaymentDate(),
+                        result.redirectUrl()
+                );
+            }
+            // Direct payment completed successfully (mock gateway)
+            payment.markAsPaid(result.transactionId());
             order.setOrderStatus(OrderStatus.PROCESSING);
             paymentRepository.save(payment);
             orderRepository.save(order);
             log.info("Payment processed successfully for order {} with transaction ID {}",
-                    order.getOrderId(), transactionId);
+                    order.getOrderId(), result.transactionId());
             notificationService.sendOrderPaidNotification(order);
             return paymentMapper.mapToDto(payment);
         } catch (Exception e) {
@@ -122,22 +146,42 @@ public class PaymentService {
 
         try {
             // Retry payment through gateway
-            String transactionId = paymentGateway.processPayment(
+            PaymentGateway.PaymentResult result = paymentGateway.processPayment(
                     payment.getPaymentMethod(),
                     payment.getAmount(),
                     PaymentDetails.builder()
                             .build() // Note: Card details should be securely stored or re-entered
             );
 
+            // Check if redirect is required
+            if (result.requiresRedirect()) {
+                payment.setStatus(PaymentStatus.PENDING);
+                payment.setTransactionId(result.transactionId());
+                paymentRepository.save(payment);
+
+                log.info("Payment retry initiated, redirect required");
+
+                return new PaymentResponseDto(
+                        payment.getPaymentId(),
+                        order.getOrderId(),
+                        payment.getAmount(),
+                        payment.getStatus(),
+                        payment.getPaymentMethod(),
+                        result.transactionId(),
+                        payment.getPaymentDate(),
+                        result.redirectUrl()
+                );
+            }
+
             // Mark payment as successful
-            payment.markAsPaid(transactionId);
+            payment.markAsPaid(result.transactionId());
             payment.setStatus(PaymentStatus.COMPLETED);
             order.setOrderStatus(OrderStatus.PROCESSING);
 
             paymentRepository.save(payment);
             orderRepository.save(order);
 
-            log.info("Payment retry successful. Transaction ID: {}", transactionId);
+            log.info("Payment retry successful. Transaction ID: {}", result.transactionId());
 
             // Send notification
             notificationService.sendOrderPaidNotification(order);

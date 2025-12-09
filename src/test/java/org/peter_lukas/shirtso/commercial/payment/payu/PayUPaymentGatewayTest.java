@@ -7,6 +7,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.peter_lukas.shirtso.commercial.payment.PaymentDetails;
+import org.peter_lukas.shirtso.commercial.payment.PaymentGateway;
 import org.peter_lukas.shirtso.commercial.payment.PaymentMethod;
 import org.peter_lukas.shirtso.commercial.payment.payu.dto.*;
 
@@ -61,10 +62,10 @@ class PayUPaymentGatewayTest {
         when(payUClient.createOrder(any(PayUOrderRequestDto.class))).thenReturn(response);
 
         // when
-        String transactionId = paymentGateway.processPayment(PaymentMethod.CREDIT_CARD, amount, details);
+        PaymentGateway.PaymentResult transactionId = paymentGateway.processPayment(PaymentMethod.CREDIT_CARD, amount, details);
 
         // then
-        assertThat(transactionId).isEqualTo("PAYU-ORDER-123");
+        assertThat(transactionId.transactionId()).isEqualTo("PAYU-ORDER-123");
 
         ArgumentCaptor<PayUOrderRequestDto> captor = ArgumentCaptor.forClass(PayUOrderRequestDto.class);
         verify(payUClient).createOrder(captor.capture());
@@ -156,10 +157,10 @@ class PayUPaymentGatewayTest {
         when(payUClient.createOrder(any(PayUOrderRequestDto.class))).thenReturn(response);
 
         // when
-        String transactionId = paymentGateway.processPayment(PaymentMethod.CREDIT_CARD, amount, details);
+        PaymentGateway.PaymentResult transactionId = paymentGateway.processPayment(PaymentMethod.CREDIT_CARD, amount, details);
 
         // then
-        assertThat(transactionId).isEqualTo("3DS-ORDER-123");
+        assertThat(transactionId.transactionId()).isEqualTo("3DS-ORDER-123");
     }
 
     @Test
@@ -179,10 +180,10 @@ class PayUPaymentGatewayTest {
         when(payUClient.createOrder(any(PayUOrderRequestDto.class))).thenReturn(response);
 
         // when
-        String transactionId = paymentGateway.processPayment(PaymentMethod.BANK_TRANSFER, amount, details);
+        PaymentGateway.PaymentResult transactionId = paymentGateway.processPayment(PaymentMethod.BANK_TRANSFER, amount, details);
 
         // then
-        assertThat(transactionId).isEqualTo("REDIRECT-ORDER-123");
+        assertThat(transactionId.transactionId()).isEqualTo("REDIRECT-ORDER-123");
     }
 
     @Test

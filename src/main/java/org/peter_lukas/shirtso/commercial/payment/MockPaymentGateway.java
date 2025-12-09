@@ -9,13 +9,13 @@ import java.util.UUID;
 public class MockPaymentGateway implements PaymentGateway {
 
     @Override
-    public String processPayment(PaymentMethod method, BigDecimal amount, PaymentDetails details) {
+    public PaymentResult processPayment(PaymentMethod method, BigDecimal amount, PaymentDetails details) {
         // In a real implementation, this would integrate with a payment provider
         // For testing, we'll simulate card validation and processing
 
         if (details.getCardNumber() != null && details.getCardNumber().equals("4111111111111111")) {
             // Test card that always succeeds
-            return UUID.randomUUID().toString();
+            return new PaymentResult(UUID.randomUUID().toString());
         } else if (details.getCardNumber() != null && details.getCardNumber().equals("4242424242424242")) {
             // Test card that always fails
             throw new RuntimeException("Payment declined by issuer");
@@ -26,8 +26,8 @@ public class MockPaymentGateway implements PaymentGateway {
         boolean success = System.currentTimeMillis() % 2 == 0;
 
         if (success) {
-            // Generate a transaction ID
-            return UUID.randomUUID().toString();
+            // Generate a transaction ID (no redirect for mock gateway)
+            return new PaymentResult(UUID.randomUUID().toString());
         } else {
             throw new RuntimeException("Payment processing failed");
         }
