@@ -58,6 +58,8 @@ public class SpringSecurityConfig {
             "/api/auth/forgot-password",
             "/api/auth/reset-password",
             "/api/auth/validate-token/**",
+            "/api/payu/notify",
+            "/api/payments/payu/continue",
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/error",

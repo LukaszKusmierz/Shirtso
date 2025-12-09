@@ -26,7 +26,7 @@ logging:
     org.springframework.security: DEBUG
 
 server:
-  port: ${PORT:8080}
+  port: ${SERVER_PORT:8080}
 
 app:
   frontend:
@@ -53,4 +53,14 @@ app:
   unsplash:
     access-key: ${UNSPLASH_ACCESS_KEY}
     secret-key: ${UNSPLASH_SECRET_KEY:}
-    api-url: https://api.unsplash.com
+    api-url: ${UNSPLASH_API_URL}
+  payu:
+    enabled: ${PAYU_ENABLED:true}
+    base-url: ${PAYU_BASE_URL}
+    pos-id: ${PAYU_POS_ID}
+    second-key: ${PAYU_SECOND_KEY}
+    client-id: ${PAYU_CLIENT_ID}
+    client-secret: ${PAYU_CLIENT_SECRET}
+    notify-url: ${PAYU_NOTIFY_URL}
+    continue-url: ${PAYU_CONTINUE_URL}
+    currency-code: ${PAYU_CURRENCY_CODE:PLN}
