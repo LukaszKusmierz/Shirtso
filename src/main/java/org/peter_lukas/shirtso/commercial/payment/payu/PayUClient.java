@@ -67,6 +67,7 @@ public class PayUClient {
                     PayUOAuthResponseDto.class
             );
 
+            log.error("PayU OAuth raw body: {}", response.getBody());
             if (response.getBody() == null) {
                 throw new PayUApiException("Empty OAuth response from PayU");
             }
