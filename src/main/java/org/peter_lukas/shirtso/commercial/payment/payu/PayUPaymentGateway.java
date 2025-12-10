@@ -37,7 +37,7 @@ public class PayUPaymentGateway implements PaymentGateway {
 
         String extOrderId = generateExtOrderId();
         String amountInMinorUnits = convertToMinorUnits(amount);
-        String continueUrlWithOrderId = properties.continueUrl() + "/" + orderId;
+        String continueUrlWithOrderId = properties.continueUrl() + "?orderId=" + orderId;
 
         PayUOrderRequestDto.PayUPayMethod payMethod = createPayMethod(method, details);
 

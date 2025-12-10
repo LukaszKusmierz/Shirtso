@@ -76,7 +76,7 @@ class PayUPaymentGatewayTest {
         assertThat(capturedRequest.currencyCode()).isEqualTo("PLN");
         assertThat(capturedRequest.merchantPosId()).isEqualTo("300746");
         assertThat(capturedRequest.notifyUrl()).isEqualTo("https://example.com/api/payu/notify");
-        assertThat(capturedRequest.continueUrl()).isEqualTo("https://example.com/payment/continue");
+        assertThat(capturedRequest.continueUrl()).isEqualTo("https://example.com/payment/continue?orderId=123");
         assertThat(capturedRequest.extOrderId()).startsWith("SHIRTSO-");
     }
 

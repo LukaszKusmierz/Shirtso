@@ -34,6 +34,13 @@ public class NotificationService {
         emailService.sendEmail(user.getEmail(), subject, message);
     }
 
+    public void sendOrderRefundedNotification(Order order) {
+        User user = order.getUser();
+        String subject = "Refund Processed - Order #" + order.getOrderId();
+        String message = buildOrderRefundEmail(order);
+        emailService.sendEmail(user.getEmail(), subject, message);
+    }
+
     private String buildOrderConfirmationEmail(Order order) {
         StringBuilder emailBody = new StringBuilder();
         emailBody.append("Dear ").append(order.getUser().getUserName()).append(",\n\n");
@@ -91,6 +98,27 @@ public class NotificationService {
         }
         emailBody.append("\nThank you for shopping with us!\n");
         emailBody.append("Shirtso Team");
+        return emailBody.toString();
+    }
+
+    private String buildOrderRefundEmail(Order order) {
+        StringBuilder emailBody = new StringBuilder();
+        emailBody.append("Dear ").append(order.getUser().getUserName()).append(",\n\n");
+        emailBody.append("We would like to inform you that a refund has been successfully processed ")
+                .append("for your order #").append(order.getOrderId()).append(".\n\n");
+
+        emailBody.append("Refund Details:\n");
+        emailBody.append("Refunded Amount: ").append(order.getTotalAmount())
+                .append(" ").append(order.getCurrency()).append("\n");
+        emailBody.append("Order Date: ").append(order.getCreatedAt()).append("\n\n");
+
+        emailBody.append("The refunded amount should appear in your account within a few business days, ")
+                .append("depending on your payment provider.\n\n");
+
+        emailBody.append("If you have any questions, feel free to contact our support team.\n\n");
+        emailBody.append("Thank you,\n");
+        emailBody.append("Shirtso Team");
+
         return emailBody.toString();
     }
 }
