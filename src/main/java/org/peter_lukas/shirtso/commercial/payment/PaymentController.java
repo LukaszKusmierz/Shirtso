@@ -1,6 +1,7 @@
 package org.peter_lukas.shirtso.commercial.payment;
 
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.peter_lukas.shirtso.analytics.LogExecutionTime;
 import org.peter_lukas.shirtso.commercial.payment.dto.PaymentResponseDto;
 import org.peter_lukas.shirtso.commercial.payment.dto.ProcessPaymentRequestDto;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/payments")
 public class PaymentController {
@@ -82,5 +84,12 @@ public class PaymentController {
         } catch (OrderNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @PostMapping("/{paymentId}/refund")
+    @LogExecutionTime
+    public ResponseEntity<PaymentResponseDto> refundPayment(@PathVariable Integer paymentId) {
+        log.info("Refund request received for payment {}", paymentId);
+        return ResponseEntity.ok(paymentService.refundPayment(paymentId));
     }
 }

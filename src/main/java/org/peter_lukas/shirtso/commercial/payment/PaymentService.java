@@ -211,6 +211,118 @@ public class PaymentService {
 
         return paid;
     }
+
+    @Transactional
+    public void updatePaymentStatusFromPayU(String transactionId,
+                                            String extOrderId,
+                                            String payuStatus) {
+
+        Integer localOrderId = null;
+        try {
+            localOrderId = Integer.valueOf(extOrderId);
+        } catch (Exception e) {
+            log.error("Invalid extOrderId '{}', cannot parse to Integer", extOrderId);
+            return;
+        }
+
+        Payment payment = paymentRepository.findByTransactionId(transactionId)
+                .orElse(null);
+
+        if (payment == null) {
+            log.warn("No payment found for PayU transactionId={}", transactionId);
+            return;
+        }
+
+        Order order = payment.getOrder();
+
+        if (!order.getOrderId().equals(localOrderId)) {
+            log.error("Mismatch extOrderId={} but payment.orderId={}", extOrderId, order.getOrderId());
+            return;
+        }
+
+        log.info("Updating payment {} for order {} based on PayU status {}",
+                payment.getPaymentId(), order.getOrderId(), payuStatus);
+
+        switch (payuStatus) {
+
+            case "COMPLETED" -> {
+                if (payment.getStatus() != PaymentStatus.COMPLETED) {
+                    payment.setStatus(PaymentStatus.COMPLETED);
+                    order.setOrderStatus(OrderStatus.PROCESSING);
+
+                    notificationService.sendOrderPaidNotification(order);
+
+                    log.info("Order {} marked as PAID based on PayU COMPLETED", order.getOrderId());
+                } else {
+                    log.info("Payment {} already COMPLETED — ignoring duplicate", payment.getPaymentId());
+                }
+            }
+
+            case "PENDING" -> {
+                if (payment.getStatus() == PaymentStatus.NEW) {
+                    payment.setStatus(PaymentStatus.PENDING);
+                }
+                log.info("Payment {} set to PENDING", payment.getPaymentId());
+            }
+
+            case "CANCELED", "REJECTED" -> {
+                if (payment.getStatus() != PaymentStatus.COMPLETED) {
+                    payment.setStatus(PaymentStatus.FAILED);
+                    log.info("Payment {} marked FAILED due to PayU status {}", payment.getPaymentId(), payuStatus);
+                } else {
+                    log.info("Ignoring FAILED status because payment is already COMPLETED");
+                }
+            }
+
+            default -> log.warn("Unknown PayU status received: {}", payuStatus);
+        }
+
+        paymentRepository.save(payment);
+        orderRepository.save(order);
+    }
+
+    @Transactional
+    public PaymentResponseDto refundPayment(Integer paymentId) {
+        log.info("Processing refund for payment {}", paymentId);
+
+        Payment payment = paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new PaymentException("Payment not found"));
+
+        if (payment.getStatus() != PaymentStatus.COMPLETED) {
+            throw new PaymentException("Only completed payments can be refunded");
+        }
+
+        Order order = payment.getOrder();
+
+        try {
+            boolean success = paymentGateway.refundPayment(
+                    payment.getTransactionId(),
+                    payment.getAmount()
+            );
+
+            if (!success) {
+                log.error("Refund failed for payment {}", paymentId);
+                throw new PaymentException("Refund operation rejected by gateway");
+            }
+
+            // Mark refunded
+            payment.setStatus(PaymentStatus.REFUNDED);
+            order.setOrderStatus(OrderStatus.REFUNDED);
+
+            paymentRepository.save(payment);
+            orderRepository.save(order);
+
+            log.info("Refund successful for payment {}", paymentId);
+
+            notificationService.sendOrderRefundedNotification(order);
+
+            return paymentMapper.mapToDto(payment);
+
+        } catch (Exception e) {
+            log.error("Refund exception: {}", e.getMessage());
+            throw new PaymentException("Refund failed: " + e.getMessage());
+        }
+    }
 }
 
 //TODO: exceptions and messages
