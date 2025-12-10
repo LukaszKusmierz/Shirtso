@@ -47,7 +47,7 @@ public class PayUClient {
 
             log.info("Requesting new PayU OAuth token");
 
-            String url = properties.baseUrl() + "/pl/standard/user/oauth/authorize";
+            String url = properties.baseUrl() + "/pl/standard/user/oauth/token";
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
