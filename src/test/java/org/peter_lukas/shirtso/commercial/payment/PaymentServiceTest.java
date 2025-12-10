@@ -102,7 +102,7 @@ class PaymentServiceTest {
             when(orderRepository.findByOrderIdWithItems(1)).thenReturn(Optional.of(testOrder));
             when(paymentRepository.findByOrderOrderId(1)).thenReturn(Optional.empty());
             when(paymentRepository.save(any(Payment.class))).thenReturn(testPayment);
-            when(paymentGateway.processPayment(any(), any(), any())).thenReturn(new PaymentGateway.PaymentResult(transactionId));
+            when(paymentGateway.processPayment(any(), any(), any(),any() )).thenReturn(new PaymentGateway.PaymentResult(transactionId));
             when(paymentMapper.mapToDto(any(Payment.class))).thenReturn(expectedResponse);
 
             // when
@@ -114,7 +114,8 @@ class PaymentServiceTest {
             verify(paymentGateway).processPayment(
                     eq(PaymentMethod.CREDIT_CARD),
                     eq(new BigDecimal("99.99")),
-                    any(PaymentDetails.class)
+                    any(PaymentDetails.class),
+                    any(Integer.class)
             );
             verify(notificationService).sendOrderPaidNotification(testOrder);
             assertThat(testOrder.getOrderStatus()).isEqualTo(OrderStatus.PROCESSING);
@@ -135,7 +136,7 @@ class PaymentServiceTest {
                     .isInstanceOf(OrderNotFoundException.class);
 
             verify(paymentRepository, never()).save(any());
-            verify(paymentGateway, never()).processPayment(any(), any(), any());
+            verify(paymentGateway, never()).processPayment(any(), any(), any(), any());
         }
 
         @Test
@@ -150,7 +151,7 @@ class PaymentServiceTest {
                     .isInstanceOf(PaymentException.class)
                     .hasMessageContaining("NEW status");
 
-            verify(paymentGateway, never()).processPayment(any(), any(), any());
+            verify(paymentGateway, never()).processPayment(any(), any(), any(), any());
         }
 
         @Test
@@ -165,7 +166,7 @@ class PaymentServiceTest {
                     .isInstanceOf(PaymentException.class)
                     .hasMessageContaining("already exists");
 
-            verify(paymentGateway, never()).processPayment(any(), any(), any());
+            verify(paymentGateway, never()).processPayment(any(), any(), any(), any());
         }
 
         @Test
@@ -175,7 +176,7 @@ class PaymentServiceTest {
             when(orderRepository.findByOrderIdWithItems(1)).thenReturn(Optional.of(testOrder));
             when(paymentRepository.findByOrderOrderId(1)).thenReturn(Optional.empty());
             when(paymentRepository.save(any(Payment.class))).thenReturn(testPayment);
-            when(paymentGateway.processPayment(any(), any(), any()))
+            when(paymentGateway.processPayment(any(), any(), any(), any()))
                     .thenThrow(new RuntimeException("Payment declined"));
 
             // when & then
@@ -194,7 +195,7 @@ class PaymentServiceTest {
             when(orderRepository.findByOrderIdWithItems(1)).thenReturn(Optional.of(testOrder));
             when(paymentRepository.findByOrderOrderId(1)).thenReturn(Optional.empty());
             when(paymentRepository.save(any(Payment.class))).thenReturn(testPayment);
-            when(paymentGateway.processPayment(any(), any(), any()))
+            when(paymentGateway.processPayment(any(), any(), any(), any()))
                     .thenThrow(new PayUApiException("PayU service unavailable"));
 
             // when & then
@@ -223,7 +224,7 @@ class PaymentServiceTest {
             when(orderRepository.findByOrderIdWithItems(1)).thenReturn(Optional.of(testOrder));
             when(paymentRepository.findByOrderOrderId(1)).thenReturn(Optional.empty());
             when(paymentRepository.save(any(Payment.class))).thenReturn(testPayment);
-            when(paymentGateway.processPayment(any(), any(), any())).thenReturn(new PaymentGateway.PaymentResult(transactionId));
+            when(paymentGateway.processPayment(any(), any(), any(), any())).thenReturn(new PaymentGateway.PaymentResult(transactionId));
             when(paymentMapper.mapToDto(any(Payment.class))).thenReturn(mock(PaymentResponseDto.class));
 
             // when
@@ -233,7 +234,8 @@ class PaymentServiceTest {
             verify(paymentGateway).processPayment(
                     eq(PaymentMethod.PAYPAL),
                     any(),
-                    any(PaymentDetails.class)
+                    any(PaymentDetails.class),
+                    any(Integer.class)
             );
         }
 
@@ -249,7 +251,7 @@ class PaymentServiceTest {
             when(orderRepository.findByOrderIdWithItems(1)).thenReturn(Optional.of(testOrder));
             when(paymentRepository.findByOrderOrderId(1)).thenReturn(Optional.empty());
             when(paymentRepository.save(any(Payment.class))).thenReturn(testPayment);
-            when(paymentGateway.processPayment(any(), any(), any())).thenReturn(new PaymentGateway.PaymentResult(transactionId));
+            when(paymentGateway.processPayment(any(), any(), any(), any())).thenReturn(new PaymentGateway.PaymentResult(transactionId));
             when(paymentMapper.mapToDto(any(Payment.class))).thenReturn(mock(PaymentResponseDto.class));
 
             // when
@@ -260,7 +262,8 @@ class PaymentServiceTest {
             verify(paymentGateway).processPayment(
                     eq(PaymentMethod.BANK_TRANSFER),
                     eq(new BigDecimal("99.99")),
-                    detailsCaptor.capture()
+                    detailsCaptor.capture(),
+                    any(Integer.class)
             );
 
             PaymentDetails capturedDetails = detailsCaptor.getValue();
@@ -277,7 +280,7 @@ class PaymentServiceTest {
             when(orderRepository.findByOrderIdWithItems(1)).thenReturn(Optional.of(testOrder));
             when(paymentRepository.findByOrderOrderId(1)).thenReturn(Optional.empty());
             when(paymentRepository.save(any(Payment.class))).thenReturn(testPayment);
-            when(paymentGateway.processPayment(any(), any(), any())).thenReturn(new PaymentGateway.PaymentResult(transactionId));
+            when(paymentGateway.processPayment(any(), any(), any(), any())).thenReturn(new PaymentGateway.PaymentResult(transactionId));
             when(paymentMapper.mapToDto(any(Payment.class))).thenReturn(mock(PaymentResponseDto.class));
 
             // when
@@ -288,7 +291,8 @@ class PaymentServiceTest {
             verify(paymentGateway).processPayment(
                     eq(PaymentMethod.CREDIT_CARD),
                     eq(new BigDecimal("99.99")),
-                    detailsCaptor.capture()
+                    detailsCaptor.capture(),
+                    any(Integer.class)
             );
 
             PaymentDetails capturedDetails = detailsCaptor.getValue();
@@ -352,7 +356,7 @@ class PaymentServiceTest {
             );
 
             when(paymentRepository.findById(1)).thenReturn(Optional.of(testPayment));
-            when(paymentGateway.processPayment(any(), any(), any())).thenReturn(new PaymentGateway.PaymentResult(newTransactionId));
+            when(paymentGateway.processPayment(any(), any(), any(), any())).thenReturn(new PaymentGateway.PaymentResult(newTransactionId));
             when(paymentMapper.mapToDto(any(Payment.class))).thenReturn(expectedResponse);
 
             // when
@@ -360,7 +364,7 @@ class PaymentServiceTest {
 
             // then
             assertThat(result.status()).isEqualTo(PaymentStatus.COMPLETED);
-            verify(paymentGateway).processPayment(any(), any(), any());
+            verify(paymentGateway).processPayment(any(), any(), any(), any());
             verify(notificationService).sendOrderPaidNotification(testOrder);
         }
 
@@ -397,7 +401,7 @@ class PaymentServiceTest {
             // given
             testPayment.setStatus(PaymentStatus.FAILED);
             when(paymentRepository.findById(1)).thenReturn(Optional.of(testPayment));
-            when(paymentGateway.processPayment(any(), any(), any()))
+            when(paymentGateway.processPayment(any(), any(), any(), any()))
                     .thenThrow(new RuntimeException("Payment declined again"));
 
             // when & then

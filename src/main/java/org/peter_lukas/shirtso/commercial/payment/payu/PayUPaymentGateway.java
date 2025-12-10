@@ -32,17 +32,18 @@ public class PayUPaymentGateway implements PaymentGateway {
     }
 
     @Override
-    public PaymentResult processPayment(PaymentMethod method, BigDecimal amount, PaymentDetails details) {
+    public PaymentResult processPayment(PaymentMethod method, BigDecimal amount, PaymentDetails details, Integer orderId) {
         log.info("Processing PayU payment: method={}, amount={}", method, amount);
 
         String extOrderId = generateExtOrderId();
         String amountInMinorUnits = convertToMinorUnits(amount);
+        String continueUrlWithOrderId = properties.continueUrl() + "?dbOrderId=" + orderId;
 
         PayUOrderRequestDto.PayUPayMethod payMethod = createPayMethod(method, details);
 
         PayUOrderRequestDto orderRequest = new PayUOrderRequestDto(
                 properties.notifyUrl(),
-                properties.continueUrl(),
+                continueUrlWithOrderId,
                 "127.0.0.1",
                 properties.posId(),
                 DEFAULT_DESCRIPTION,

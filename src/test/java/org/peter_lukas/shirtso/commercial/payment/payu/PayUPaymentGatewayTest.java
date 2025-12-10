@@ -44,6 +44,7 @@ class PayUPaymentGatewayTest {
     void processPayment_WithCreditCard_CreatesOrderSuccessfully() {
         // given
         BigDecimal amount = new BigDecimal("99.99");
+        Integer orderId = 123;
         PaymentDetails details = PaymentDetails.builder()
                 .cardNumber("4111111111111111")
                 .cardHolderName("John Doe")
@@ -62,7 +63,7 @@ class PayUPaymentGatewayTest {
         when(payUClient.createOrder(any(PayUOrderRequestDto.class))).thenReturn(response);
 
         // when
-        PaymentGateway.PaymentResult transactionId = paymentGateway.processPayment(PaymentMethod.CREDIT_CARD, amount, details);
+        PaymentGateway.PaymentResult transactionId = paymentGateway.processPayment(PaymentMethod.CREDIT_CARD, amount, details, orderId);
 
         // then
         assertThat(transactionId.transactionId()).isEqualTo("PAYU-ORDER-123");
@@ -83,6 +84,7 @@ class PayUPaymentGatewayTest {
     void processPayment_WithCardData_IncludesPayMethodInRequest() {
         // given
         BigDecimal amount = new BigDecimal("50.00");
+        Integer orderId = 123;
         PaymentDetails details = PaymentDetails.builder()
                 .cardNumber("4111111111111111")
                 .cardHolderName("Jane Smith")
@@ -96,7 +98,7 @@ class PayUPaymentGatewayTest {
         when(payUClient.createOrder(any(PayUOrderRequestDto.class))).thenReturn(response);
 
         // when
-        paymentGateway.processPayment(PaymentMethod.CREDIT_CARD, amount, details);
+        paymentGateway.processPayment(PaymentMethod.CREDIT_CARD, amount, details, orderId);
 
         // then
         ArgumentCaptor<PayUOrderRequestDto> captor = ArgumentCaptor.forClass(PayUOrderRequestDto.class);
@@ -115,6 +117,7 @@ class PayUPaymentGatewayTest {
     void processPayment_WithoutCardDetails_DoesNotIncludePayMethod() {
         // given
         BigDecimal amount = new BigDecimal("25.00");
+        Integer orderId = 123;
         PaymentDetails details = PaymentDetails.builder()
                 .cardHolderName("PayPal User")
                 .build();
@@ -125,7 +128,7 @@ class PayUPaymentGatewayTest {
         when(payUClient.createOrder(any(PayUOrderRequestDto.class))).thenReturn(response);
 
         // when
-        paymentGateway.processPayment(PaymentMethod.PAYPAL, amount, details);
+        paymentGateway.processPayment(PaymentMethod.PAYPAL, amount, details, orderId);
 
         // then
         ArgumentCaptor<PayUOrderRequestDto> captor = ArgumentCaptor.forClass(PayUOrderRequestDto.class);
@@ -139,6 +142,7 @@ class PayUPaymentGatewayTest {
     void processPayment_With3DSRequired_ReturnsTransactionId() {
         // given
         BigDecimal amount = new BigDecimal("100.00");
+        Integer orderId = 123;
         PaymentDetails details = PaymentDetails.builder()
                 .cardNumber("4111111111111111")
                 .cardHolderName("3DS User")
@@ -157,7 +161,7 @@ class PayUPaymentGatewayTest {
         when(payUClient.createOrder(any(PayUOrderRequestDto.class))).thenReturn(response);
 
         // when
-        PaymentGateway.PaymentResult transactionId = paymentGateway.processPayment(PaymentMethod.CREDIT_CARD, amount, details);
+        PaymentGateway.PaymentResult transactionId = paymentGateway.processPayment(PaymentMethod.CREDIT_CARD, amount, details, orderId);
 
         // then
         assertThat(transactionId.transactionId()).isEqualTo("3DS-ORDER-123");
@@ -167,6 +171,7 @@ class PayUPaymentGatewayTest {
     void processPayment_WithRedirectRequired_ReturnsTransactionId() {
         // given
         BigDecimal amount = new BigDecimal("75.50");
+        Integer orderId = 123;
         PaymentDetails details = PaymentDetails.builder().build();
 
         PayUOrderResponseDto.PayUStatus status = new PayUOrderResponseDto.PayUStatus("WARNING_CONTINUE_REDIRECT", null);
@@ -180,7 +185,7 @@ class PayUPaymentGatewayTest {
         when(payUClient.createOrder(any(PayUOrderRequestDto.class))).thenReturn(response);
 
         // when
-        PaymentGateway.PaymentResult transactionId = paymentGateway.processPayment(PaymentMethod.BANK_TRANSFER, amount, details);
+        PaymentGateway.PaymentResult transactionId = paymentGateway.processPayment(PaymentMethod.BANK_TRANSFER, amount, details, orderId);
 
         // then
         assertThat(transactionId.transactionId()).isEqualTo("REDIRECT-ORDER-123");
@@ -190,6 +195,7 @@ class PayUPaymentGatewayTest {
     void processPayment_WhenPayUFails_ThrowsException() {
         // given
         BigDecimal amount = new BigDecimal("50.00");
+        Integer orderId = 123;
         PaymentDetails details = PaymentDetails.builder().build();
 
         PayUOrderResponseDto.PayUStatus status = new PayUOrderResponseDto.PayUStatus("ERROR", "Insufficient funds");
@@ -198,7 +204,7 @@ class PayUPaymentGatewayTest {
         when(payUClient.createOrder(any(PayUOrderRequestDto.class))).thenReturn(response);
 
         // when & then
-        assertThatThrownBy(() -> paymentGateway.processPayment(PaymentMethod.CREDIT_CARD, amount, details))
+        assertThatThrownBy(() -> paymentGateway.processPayment(PaymentMethod.CREDIT_CARD, amount, details, orderId))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("Payment processing failed");
     }
@@ -207,13 +213,14 @@ class PayUPaymentGatewayTest {
     void processPayment_WhenPayUClientThrowsException_PropagatesException() {
         // given
         BigDecimal amount = new BigDecimal("50.00");
+        Integer orderId = 123;
         PaymentDetails details = PaymentDetails.builder().build();
 
         when(payUClient.createOrder(any(PayUOrderRequestDto.class)))
                 .thenThrow(new PayUApiException("Connection timeout"));
 
         // when & then
-        assertThatThrownBy(() -> paymentGateway.processPayment(PaymentMethod.CREDIT_CARD, amount, details))
+        assertThatThrownBy(() -> paymentGateway.processPayment(PaymentMethod.CREDIT_CARD, amount, details, orderId))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("Payment processing failed")
                 .hasMessageContaining("Connection timeout");
@@ -223,6 +230,7 @@ class PayUPaymentGatewayTest {
     void processPayment_ConvertsAmountToMinorUnitsCorrectly() {
         // given
         BigDecimal amount = new BigDecimal("123.45");
+        Integer orderId = 123;
         PaymentDetails details = PaymentDetails.builder().build();
 
         PayUOrderResponseDto.PayUStatus status = new PayUOrderResponseDto.PayUStatus("SUCCESS", null);
@@ -231,7 +239,7 @@ class PayUPaymentGatewayTest {
         when(payUClient.createOrder(any(PayUOrderRequestDto.class))).thenReturn(response);
 
         // when
-        paymentGateway.processPayment(PaymentMethod.CREDIT_CARD, amount, details);
+        paymentGateway.processPayment(PaymentMethod.CREDIT_CARD, amount, details, orderId);
 
         // then
         ArgumentCaptor<PayUOrderRequestDto> captor = ArgumentCaptor.forClass(PayUOrderRequestDto.class);
@@ -244,6 +252,7 @@ class PayUPaymentGatewayTest {
     void processPayment_ParsesCardHolderNameCorrectly() {
         // given
         BigDecimal amount = new BigDecimal("10.00");
+        Integer orderId = 123;
         PaymentDetails details = PaymentDetails.builder()
                 .cardHolderName("John Michael Doe")
                 .build();
@@ -254,7 +263,7 @@ class PayUPaymentGatewayTest {
         when(payUClient.createOrder(any(PayUOrderRequestDto.class))).thenReturn(response);
 
         // when
-        paymentGateway.processPayment(PaymentMethod.CREDIT_CARD, amount, details);
+        paymentGateway.processPayment(PaymentMethod.CREDIT_CARD, amount, details, orderId);
 
         // then
         ArgumentCaptor<PayUOrderRequestDto> captor = ArgumentCaptor.forClass(PayUOrderRequestDto.class);
@@ -328,6 +337,7 @@ class PayUPaymentGatewayTest {
     void processPayment_WithTwoDigitExpiryYear_ConvertsToFourDigit() {
         // given
         BigDecimal amount = new BigDecimal("10.00");
+        Integer orderId = 123;
         PaymentDetails details = PaymentDetails.builder()
                 .cardNumber("4111111111111111")
                 .expiryDate("03/26")
@@ -340,7 +350,7 @@ class PayUPaymentGatewayTest {
         when(payUClient.createOrder(any(PayUOrderRequestDto.class))).thenReturn(response);
 
         // when
-        paymentGateway.processPayment(PaymentMethod.CREDIT_CARD, amount, details);
+        paymentGateway.processPayment(PaymentMethod.CREDIT_CARD, amount, details, orderId);
 
         // then
         ArgumentCaptor<PayUOrderRequestDto> captor = ArgumentCaptor.forClass(PayUOrderRequestDto.class);

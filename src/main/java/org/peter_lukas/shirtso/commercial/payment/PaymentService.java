@@ -64,7 +64,8 @@ public class PaymentService {
                             .cardHolderName(request.cardHolderName())
                             .expiryDate(request.expiryDate())
                             .cvv(request.cvv())
-                            .build()
+                            .build(),
+                    order.getOrderId()
             );
 
             // Check if this is a redirect-based payment (PayU)
@@ -150,7 +151,8 @@ public class PaymentService {
                     payment.getPaymentMethod(),
                     payment.getAmount(),
                     PaymentDetails.builder()
-                            .build() // Note: Card details should be securely stored or re-entered
+                            .build(), // Note: Card details should be securely stored or re-entered
+                    order.getOrderId()
             );
 
             // Check if redirect is required
