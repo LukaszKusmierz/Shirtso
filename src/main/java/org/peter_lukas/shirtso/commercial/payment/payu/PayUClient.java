@@ -47,7 +47,7 @@ public class PayUClient {
 
             log.info("Requesting new PayU OAuth token");
 
-            String url = properties.baseUrl() + "/pl/standard/user/oauth/token";
+            String url = properties.baseUrl() + "/pl/standard/user/oauth/authorize";
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -67,7 +67,7 @@ public class PayUClient {
                     PayUOAuthResponseDto.class
             );
 
-            log.error("PayU OAuth raw body: {}", response.getBody());
+            log.debug("PayU OAuth response: {}", response.getBody());
             if (response.getBody() == null) {
                 throw new PayUApiException("Empty OAuth response from PayU");
             }
