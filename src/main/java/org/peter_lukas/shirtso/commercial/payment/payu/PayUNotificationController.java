@@ -43,9 +43,7 @@ public class PayUNotificationController {
 
         String payuOrderId = notification.order().orderId();
 
-        Optional<Payment> paymentOpt = paymentRepository.findAll().stream()
-                .filter(p -> payuOrderId.equals(p.getTransactionId()))
-                .findFirst();
+        Optional<Payment> paymentOpt = paymentRepository.findByTransactionId(payuOrderId);
 
         if (paymentOpt.isEmpty()) {
             log.warn("Payment not found for PayU orderId: {}", payuOrderId);
@@ -72,9 +70,7 @@ public class PayUNotificationController {
                 log.info("Payment rejected for order: {}", order.getOrderId());
                 payment.setStatus(PaymentStatus.FAILED);
             }
-            case "PENDING" -> {
-                log.info("Payment pending for order: {}", order.getOrderId());
-            }
+            case "PENDING" -> log.info("Payment pending for order: {}", order.getOrderId());
             default -> log.warn("Unknown PayU status: {}", status);
         }
 

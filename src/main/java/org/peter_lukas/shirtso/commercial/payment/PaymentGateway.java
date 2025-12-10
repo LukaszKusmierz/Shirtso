@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public interface PaymentGateway {
 
-    PaymentResult processPayment(PaymentMethod method, BigDecimal amount, PaymentDetails details);
+    PaymentResult processPayment(PaymentMethod method, BigDecimal amount, PaymentDetails details, Integer orderId);
 
     boolean refundPayment(String transactionId, BigDecimal amount);
 

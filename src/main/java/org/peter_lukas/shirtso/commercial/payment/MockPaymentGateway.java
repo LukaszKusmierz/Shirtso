@@ -9,7 +9,7 @@ import java.util.UUID;
 public class MockPaymentGateway implements PaymentGateway {
 
     @Override
-    public PaymentResult processPayment(PaymentMethod method, BigDecimal amount, PaymentDetails details) {
+    public PaymentResult processPayment(PaymentMethod method, BigDecimal amount, PaymentDetails details, Integer orderId) {
         // In a real implementation, this would integrate with a payment provider
         // For testing, we'll simulate card validation and processing
 
