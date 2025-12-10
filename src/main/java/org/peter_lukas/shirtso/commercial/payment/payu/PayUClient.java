@@ -59,6 +59,7 @@ public class PayUClient {
 
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
 
+            log.info("About to call PayU with URL = {}", url);
             ResponseEntity<PayUOAuthResponseDto> response = restTemplate.exchange(
                     url,
                     HttpMethod.POST,
